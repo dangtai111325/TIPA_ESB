@@ -1,0 +1,4 @@
+﻿# Archify visual-check evidence (local only)
+diagrams/*.visual-check.*
+diagrams/_*.json
+diagrams/_*.txt

@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Thứ tự nâng cấp MDP theo benchmark",
+    "output": "mdp-upgrade-priority.workflow.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1100,
+      680
+    ],
+    "views": [
+      {
+        "id": "g1",
+        "label": "GĐ1 tin cậy",
+        "focus": [
+          "baseline",
+          "qd5",
+          "qd4",
+          "gate_trust"
+        ],
+        "note": "Upsert PROD + watchdog trước khi scale."
+      },
+      {
+        "id": "g2",
+        "label": "GĐ2 tốc độ",
+        "focus": [
+          "qd3",
+          "qd2",
+          "gate_t2"
+        ],
+        "note": "Index/curated rồi replica; đo lại T2 tại mỗi bước."
+      },
+      {
+        "id": "g3",
+        "label": "GĐ3 mở rộng",
+        "focus": [
+          "qd1",
+          "stable"
+        ],
+        "note": "Queue chỉ khi có bằng chứng áp lực ghi."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "trust",
+      "label": "GĐ1 · Tin cậy"
+    },
+    {
+      "id": "speed",
+      "label": "GĐ2 · Tốc độ"
+    },
+    {
+      "id": "ops",
+      "label": "Đo / gate"
+    },
+    {
+      "id": "scale",
+      "label": "GĐ3 · Sau",
+      "variant": "exception"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p1",
+      "label": "Tin cậy",
+      "fromCol": 0,
+      "toCol": 1,
+      "variant": "emphasis"
+    },
+    {
+      "id": "p2",
+      "label": "Tốc độ",
+      "fromCol": 2,
+      "toCol": 3
+    },
+    {
+      "id": "p3",
+      "label": "Ổn định",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "baseline",
+    "qd5",
+    "gate_trust",
+    "qd3",
+    "qd2",
+    "gate_t2",
+    "stable"
+  ],
+  "nodes": [
+    {
+      "id": "baseline",
+      "lane": "ops",
+      "col": 0,
+      "type": "external",
+      "label": "Baseline",
+      "sublabel": "T2 FAIL",
+      "tag": "08-27"
+    },
+    {
+      "id": "qd4",
+      "lane": "trust",
+      "col": 0,
+      "type": "security",
+      "label": "QĐ4 Watchdog",
+      "sublabel": "lag · alert"
+    },
+    {
+      "id": "qd5",
+      "lane": "trust",
+      "col": 1,
+      "type": "security",
+      "label": "QĐ5 Upsert",
+      "sublabel": "PROD",
+      "tag": "ưu tiên 1"
+    },
+    {
+      "id": "gate_trust",
+      "lane": "ops",
+      "col": 1,
+      "type": "backend",
+      "label": "Gate tin cậy",
+      "sublabel": "smoke",
+      "tag": "blocking"
+    },
+    {
+      "id": "qd3",
+      "lane": "speed",
+      "col": 2,
+      "type": "database",
+      "label": "QĐ3 Index",
+      "sublabel": "đo lại T2",
+      "tag": "trước ×2"
+    },
+    {
+      "id": "qd2",
+      "lane": "speed",
+      "col": 3,
+      "type": "cloud",
+      "label": "QĐ2 ×2",
+      "sublabel": "Backend",
+      "tag": "nếu chậm"
+    },
+    {
+      "id": "gate_t2",
+      "lane": "ops",
+      "col": 4,
+      "type": "backend",
+      "label": "Gate T2",
+      "sublabel": "100 VU"
+    },
+    {
+      "id": "stable",
+      "lane": "ops",
+      "col": 5,
+      "type": "cloud",
+      "label": "Ổn định",
+      "sublabel": "soak"
+    },
+    {
+      "id": "qd1",
+      "lane": "scale",
+      "col": 4,
+      "type": "messagebus",
+      "label": "QĐ1 Job",
+      "sublabel": "áp lực ghi",
+      "tag": "tùy chọn"
+    },
+    {
+      "id": "jde_real",
+      "lane": "scale",
+      "col": 5,
+      "type": "external",
+      "label": "JDE + QĐ6",
+      "sublabel": "JDE thật"
+    }
+  ],
+  "edges": [
+    {
+      "from": "baseline",
+      "to": "qd5",
+      "label": "ưu tiên 1",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "qd4",
+      "to": "qd5",
+      "variant": "dashed"
+    },
+    {
+      "from": "qd5",
+      "to": "gate_trust",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "gate_trust",
+      "to": "qd3",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "qd3",
+      "to": "qd2",
+      "label": "còn chậm",
+      "labelDy": 58
+    },
+    {
+      "from": "qd2",
+      "to": "gate_t2",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "gate_t2",
+      "to": "stable",
+      "label": "PASS",
+      "variant": "emphasis"
+    },
+    {
+      "from": "gate_t2",
+      "to": "qd1",
+      "label": "áp lực ghi",
+      "variant": "security",
+      "role": "error",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "qd1",
+      "to": "jde_real",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Không làm trước",
+      "items": [
+        "PgBouncer — pool 13/100 chưa cần",
+        "QĐ1 job table — T5/T6 chưa báo nghẽn queue"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Làm ngay (GĐ1)",
+      "items": [
+        "QĐ5 upsert trên PROD với khóa thật",
+        "QĐ4 watchdog lag/fail trước khi scale đọc"
+      ]
+    }
+  ]
+}

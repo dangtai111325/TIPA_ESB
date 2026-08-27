@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Outbound @100 VU — nút thắt",
+    "output": "mdp-outbound-bottleneck.sequence.html",
+    "quality_profile": "showcase",
+    "viewBox": [980, 580],
+    "views": [
+      { "id": "edge", "label": "Vào cổng", "focus": ["client", "caddy", "api"], "note": "Client → Caddy → Backend×1." },
+      { "id": "db", "label": "Truy vấn DB", "focus": ["api", "pg"], "note": "Hot path SQL — p95 phình." },
+      { "id": "return", "label": "Trả lời", "focus": ["pg", "api", "caddy", "client"], "note": "p95 vượt 500ms." }
+    ]
+  },
+  "participants": [
+    { "id": "client", "type": "external", "label": "Client", "sublabel": "k6" },
+    { "id": "caddy", "type": "cloud", "label": "Caddy", "sublabel": ":8457" },
+    { "id": "api", "type": "backend", "label": "Backend×1", "sublabel": "API" },
+    { "id": "pg", "type": "database", "label": "Postgres", "sublabel": "DB" }
+  ],
+  "segments": [
+    { "from": 140, "to": 240, "label": "Nhận request" },
+    { "from": 260, "to": 390, "label": "Truy vấn" },
+    { "from": 410, "to": 520, "label": "Phản hồi" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "client", "to": "caddy", "y": 170, "label": "GET outbound", "variant": "emphasis" },
+    { "id": "m2", "from": "caddy", "to": "api", "y": 210, "label": "proxy", "variant": "default" },
+    { "id": "m3", "from": "api", "to": "pg", "y": 290, "label": "SQL SELECT", "variant": "emphasis" },
+    { "id": "m4", "from": "pg", "to": "api", "y": 340, "label": "rows chậm", "variant": "return" },
+    { "id": "m5", "from": "api", "to": "caddy", "y": 440, "label": "JSON", "variant": "return" },
+    { "id": "m6", "from": "caddy", "to": "client", "y": 490, "label": "200 p95>2s FAIL", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "caddy", "from": 165, "to": 500, "type": "cloud" },
+    { "participant": "api", "from": 205, "to": 455, "type": "backend" },
+    { "participant": "pg", "from": 285, "to": 355, "type": "database" }
+  ],
+  "cards": [
+    { "dot": "rose", "title": "T2 FAIL", "items": ["Local p95 2.26s · tipa 2.69s", "Ngưỡng PASS p95 <500ms"] },
+    { "dot": "orange", "title": "Hướng xử lý", "items": ["QĐ3 index/curated trước", "QĐ2 Backend×2 sau đo lại"] }
+  ]
+}

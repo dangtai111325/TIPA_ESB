@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Avenue MDP — Kiến trúc hiện trạng (AS-IS)",
+    "output": "mdp-as-is.architecture.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1180,
+      680
+    ],
+    "views": [
+      {
+        "id": "hub",
+        "label": "Hub MDP",
+        "focus": [
+          "caddy",
+          "backend",
+          "postgres",
+          "grafana"
+        ],
+        "note": "Một máy: Caddy → Backend ×1 → PostgreSQL; Grafana đọc DB."
+      },
+      {
+        "id": "sources",
+        "label": "Nguồn vào",
+        "focus": [
+          "jde",
+          "mes",
+          "backend"
+        ],
+        "note": "JDE kéo watermark; MES push inbound."
+      },
+      {
+        "id": "consumers",
+        "label": "Tiêu thụ",
+        "focus": [
+          "tipa",
+          "caddy",
+          "backend",
+          "postgres"
+        ],
+        "note": "Consumer đọc qua outbound API."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "jde",
+      "type": "external",
+      "label": "JDE Oracle",
+      "sublabel": "kéo watermark",
+      "pos": [
+        40,
+        120
+      ],
+      "size": [
+        130,
+        64
+      ],
+      "tag": "pull"
+    },
+    {
+      "id": "mes",
+      "type": "external",
+      "label": "MES / OCR",
+      "sublabel": "push inbound",
+      "pos": [
+        40,
+        280
+      ],
+      "size": [
+        130,
+        64
+      ],
+      "tag": "API key"
+    },
+    {
+      "id": "tipa",
+      "type": "external",
+      "label": "TIPA / iHUB",
+      "sublabel": "GET outbound",
+      "pos": [
+        40,
+        440
+      ],
+      "size": [
+        140,
+        64
+      ],
+      "tag": "consumer"
+    },
+    {
+      "id": "caddy",
+      "type": "cloud",
+      "label": "Caddy",
+      "sublabel": "cổng :8457",
+      "pos": [
+        280,
+        280
+      ],
+      "size": [
+        130,
+        64
+      ],
+      "tag": "TLS"
+    },
+    {
+      "id": "admin",
+      "type": "frontend",
+      "label": "Admin UI",
+      "sublabel": "Next.js",
+      "pos": [
+        500,
+        120
+      ],
+      "size": [
+        140,
+        60
+      ]
+    },
+    {
+      "id": "backend",
+      "type": "backend",
+      "label": "Backend ×1",
+      "sublabel": "FastAPI",
+      "pos": [
+        500,
+        280
+      ],
+      "size": [
+        140,
+        64
+      ],
+      "tag": "nút thắt"
+    },
+    {
+      "id": "postgres",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "5 schema lớp",
+      "pos": [
+        760,
+        280
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "tag": "staging→serve"
+    },
+    {
+      "id": "grafana",
+      "type": "backend",
+      "label": "Grafana",
+      "sublabel": "đọc RO",
+      "pos": [
+        760,
+        440
+      ],
+      "size": [
+        150,
+        60
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Máy MDP (1 host · 1 replica backend)",
+      "wraps": [
+        "caddy",
+        "backend",
+        "admin",
+        "postgres",
+        "grafana"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "jde-pull",
+      "from": "jde",
+      "to": "backend",
+      "label": "ora2pg / streaming",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "mes-push",
+      "from": "mes",
+      "to": "caddy",
+      "label": "HTTPS inbound",
+      "variant": "emphasis"
+    },
+    {
+      "id": "tipa-get",
+      "from": "tipa",
+      "to": "caddy",
+      "label": "GET outbound",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "id": "caddy-api",
+      "from": "caddy",
+      "to": "backend"
+    },
+    {
+      "id": "ui-api",
+      "from": "admin",
+      "to": "backend",
+      "label": "Admin API",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "api-sql",
+      "from": "backend",
+      "to": "postgres",
+      "label": "SQL",
+      "variant": "emphasis"
+    },
+    {
+      "id": "grafana-ro",
+      "from": "grafana",
+      "to": "postgres",
+      "label": "RO SQL",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDy": -40
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Điểm nghẽn đã đo",
+      "items": [
+        "Backend chỉ 1 tiến trình phục vụ cả đọc lẫn ghi",
+        "T2 outbound @100 VU: p95 2.26s (local) / 2.69s (tipa) — FAIL"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Đã ổn ở mức đo",
+      "items": [
+        "Inbound burst ~34 msg/s PASS · mất mát 0",
+        "Soak 30 phút p95 81ms · fail 0%"
+      ]
+    }
+  ]
+}

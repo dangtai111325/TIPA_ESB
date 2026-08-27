@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "JDE streaming mock — watermark",
+    "output": "mdp-jde-streaming.sequence.html",
+    "quality_profile": "showcase",
+    "viewBox": [980, 580],
+    "views": [
+      { "id": "wm", "label": "Watermark", "focus": ["sched", "ora"], "note": "Đọc watermark rồi kéo delta." },
+      { "id": "pull", "label": "Kéo & ghi", "focus": ["ora", "api", "pg"], "note": "ora2pg ghi staging." },
+      { "id": "lag", "label": "Lag", "focus": ["pg", "sched"], "note": "Mock G7 lag ~2s; J04/J08 N/A." }
+    ]
+  },
+  "participants": [
+    { "id": "sched", "type": "backend", "label": "Scheduler", "sublabel": "job" },
+    { "id": "ora", "type": "external", "label": "Oracle Free", "sublabel": "mock" },
+    { "id": "api", "type": "backend", "label": "Backend", "sublabel": "sync" },
+    { "id": "pg", "type": "database", "label": "Postgres", "sublabel": "stg" }
+  ],
+  "segments": [
+    { "from": 140, "to": 230, "label": "Đọc WM" },
+    { "from": 250, "to": 380, "label": "Kéo delta" },
+    { "from": 400, "to": 520, "label": "Ghi & WM" }
+  ],
+  "messages": [
+    { "id": "s1", "from": "sched", "to": "pg", "y": 170, "label": "đọc watermark", "variant": "dashed" },
+    { "id": "s2", "from": "pg", "to": "sched", "y": 210, "label": "WM hiện tại", "variant": "return" },
+    { "id": "s3", "from": "sched", "to": "ora", "y": 280, "label": "SELECT delta", "variant": "emphasis" },
+    { "id": "s4", "from": "ora", "to": "api", "y": 330, "label": "rows mock", "variant": "default" },
+    { "id": "s5", "from": "api", "to": "pg", "y": 430, "label": "INSERT + advance WM", "variant": "emphasis" },
+    { "id": "s6", "from": "pg", "to": "api", "y": 480, "label": "OK no-dup · lag ~2s", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "sched", "from": 165, "to": 490, "type": "backend" },
+    { "participant": "api", "from": 325, "to": 490, "type": "backend" },
+    { "participant": "pg", "from": 165, "to": 490, "type": "database" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Mock G7 PASS", "items": ["S04 PASS · lag ~2s · J07 no-dup", "Watermark sequence tiến"] },
+    { "dot": "orange", "title": "Không suy ra PROD", "items": ["Oracle Free ≠ JDE thật", "J04/J05/J08 = N/A trên mock"] }
+  ]
+}

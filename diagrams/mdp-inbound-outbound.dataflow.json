@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Avenue MDP — Luồng inbound / outbound hiện tại",
+    "output": "mdp-inbound-outbound.dataflow.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      640
+    ],
+    "views": [
+      {
+        "id": "inbound",
+        "label": "Luồng ghi",
+        "focus": [
+          "source",
+          "edge",
+          "api_in",
+          "stg"
+        ],
+        "note": "Push inbound đồng bộ — PASS ở ~34 msg/s."
+      },
+      {
+        "id": "outbound",
+        "label": "Luồng đọc",
+        "focus": [
+          "client",
+          "edge",
+          "api_out",
+          "curated"
+        ],
+        "note": "Outbound @100 VU là nút thắt p95 >2s."
+      },
+      {
+        "id": "serve",
+        "label": "Lớp phục vụ",
+        "focus": [
+          "curated",
+          "matview",
+          "grafana"
+        ],
+        "note": "Matview/Grafana nằm trên lớp phục vụ."
+      }
+    ]
+  },
+  "stages": [
+    {
+      "label": "Nguồn"
+    },
+    {
+      "label": "Cổng"
+    },
+    {
+      "label": "API"
+    },
+    {
+      "label": "Lưu trữ"
+    },
+    {
+      "label": "Phục vụ"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "source",
+      "type": "external",
+      "label": "MES / OCR",
+      "sublabel": "push inbound",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "client",
+      "type": "external",
+      "label": "TIPA client",
+      "sublabel": "đọc outbound",
+      "stage": 0,
+      "row": 3
+    },
+    {
+      "id": "edge",
+      "type": "cloud",
+      "label": "Caddy",
+      "sublabel": "cổng :8457",
+      "stage": 1,
+      "row": 1
+    },
+    {
+      "id": "api_in",
+      "type": "backend",
+      "label": "Inbound API",
+      "sublabel": "đồng bộ PASS",
+      "stage": 2,
+      "row": 0
+    },
+    {
+      "id": "api_out",
+      "type": "backend",
+      "label": "Outbound API",
+      "sublabel": "FAIL T2",
+      "stage": 2,
+      "row": 3
+    },
+    {
+      "id": "stg",
+      "type": "database",
+      "label": "Staging",
+      "sublabel": "mdp_staging",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "curated",
+      "type": "database",
+      "label": "Curated",
+      "sublabel": "hợp đồng đọc",
+      "stage": 3,
+      "row": 3
+    },
+    {
+      "id": "matview",
+      "type": "database",
+      "label": "Matview",
+      "sublabel": "refresh",
+      "stage": 4,
+      "row": 1
+    },
+    {
+      "id": "grafana",
+      "type": "backend",
+      "label": "Grafana",
+      "sublabel": "SQL RO",
+      "stage": 4,
+      "row": 3
+    }
+  ],
+  "flows": [
+    {
+      "id": "push",
+      "from": "source",
+      "to": "edge",
+      "label": "POST inbound",
+      "classification": "ghi",
+      "variant": "emphasis"
+    },
+    {
+      "id": "read-req",
+      "from": "client",
+      "to": "edge",
+      "label": "GET outbound",
+      "classification": "đọc"
+    },
+    {
+      "id": "to-in",
+      "from": "edge",
+      "to": "api_in",
+      "label": "route ghi",
+      "classification": "sync"
+    },
+    {
+      "id": "to-out",
+      "from": "edge",
+      "to": "api_out",
+      "label": "route đọc",
+      "classification": "hot path",
+      "variant": "emphasis"
+    },
+    {
+      "id": "write-stg",
+      "from": "api_in",
+      "to": "stg",
+      "label": "INSERT",
+      "classification": "durable"
+    },
+    {
+      "id": "read-cur",
+      "from": "api_out",
+      "to": "curated",
+      "label": "query p95>2s",
+      "classification": "nút thắt",
+      "variant": "emphasis"
+    },
+    {
+      "id": "stg-cur",
+      "from": "stg",
+      "to": "curated",
+      "label": "view / ETL",
+      "classification": "lớp",
+      "variant": "dashed"
+    },
+    {
+      "id": "cur-mv",
+      "from": "curated",
+      "to": "matview",
+      "label": "REFRESH",
+      "classification": "batch",
+      "variant": "dashed"
+    },
+    {
+      "id": "mv-graf",
+      "from": "matview",
+      "to": "grafana",
+      "label": "SQL RO",
+      "classification": "dashboard"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Inbound PASS",
+      "items": [
+        "T5 ~34 msg/s · mất mát 0"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Outbound FAIL T2",
+      "items": [
+        "p95 2.26s / 2.69s · ưu tiên QĐ3"
+      ]
+    }
+  ]
+}

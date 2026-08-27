@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIPA ESB — Đánh giá & Phương án Nâng cấp Kiến trúc</title>
+<title>Avenue MDP — Hồ sơ Quyết định Kiến trúc Nâng cấp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
   :root{
     --brand:#dc2626; --brand-dark:#991b1b;
     --blue:#2563eb; --blue-bg:#eff6ff; --blue-bd:#bfdbfe;
@@ -16,29 +19,40 @@
     --bg:#f8fafc; --card:#ffffff; --line:#e2e8f0;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  body{font-family:'Plus Jakarta Sans','Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  a,button,.diagram-open{cursor:pointer}
+  a:focus-visible,.diagram-open:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 
   header.hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#450a0a 100%);color:#fff;padding:48px 0 40px}
   .hero h1{font-size:29px;font-weight:800;letter-spacing:-.5px}
   .hero h1 span{color:#f87171}
-  .hero p.sub{margin-top:8px;color:#cbd5e1;font-size:15px;max-width:820px}
+  .hero p.sub{margin-top:8px;color:#cbd5e1;font-size:15px;max-width:860px}
   .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
   .badge{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:4px 14px;font-size:12.5px;color:#e2e8f0}
 
   nav.toc{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 3px rgba(15,23,42,.05)}
   nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding:10px 24px}
-  nav.toc a{white-space:nowrap;font-size:13px;color:var(--slate);text-decoration:none;padding:6px 12px;border-radius:8px}
+  nav.toc a{white-space:nowrap;font-size:13px;color:var(--slate);text-decoration:none;padding:6px 12px;border-radius:8px;cursor:pointer}
   nav.toc a:hover{background:#f1f5f9;color:var(--brand)}
+  nav.toc a:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+  .diagram-embed{margin-top:16px;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+  .diagram-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);background:#f8fafc}
+  .diagram-caption{font-size:12.5px;color:var(--muted)}
+  .diagram-open{font-size:12.5px;font-weight:700;color:var(--brand);text-decoration:none;cursor:pointer}
+  .diagram-open:hover{text-decoration:underline}
+  .diagram-frame{display:block;width:100%;height:560px;border:0;background:#fff}
 
   section{padding:44px 0 8px}
   .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
   .sec-num{font-size:13px;font-weight:700;color:var(--brand);background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:2px 10px;white-space:nowrap}
   h2{font-size:22px;font-weight:800;letter-spacing:-.3px}
   h3.sub-h{font-size:15px;font-weight:700;margin:22px 0 10px}
-  .sec-desc{color:var(--muted);font-size:14px;margin-bottom:20px}
+  .sec-desc{color:var(--muted);font-size:14px;margin-bottom:20px;max-width:960px}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .card + .card{margin-top:16px}
 
   .node{border-radius:12px;padding:12px 14px;text-align:center;font-size:13.5px;font-weight:600;border:1.5px solid var(--line);background:#fff}
   .node small{display:block;font-weight:500;font-size:11.5px;color:var(--muted);margin-top:3px}
@@ -76,18 +90,6 @@
   .exec-item b{display:block;font-size:14px;margin-bottom:3px}
   .exec-item span{font-size:12.5px;color:var(--muted)}
 
-  /* scorecard */
-  .score-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  .chip-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-  .chip{font-size:12px;font-weight:600;border-radius:999px;padding:5px 13px;border:1.5px solid}
-  .chip.ok{background:var(--green-bg);border-color:var(--green-bd);color:#065f46}
-  .gap-list{display:flex;flex-direction:column;gap:9px;margin-top:12px}
-  .gap{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;background:#fff;font-size:13px}
-  .sev{flex-shrink:0;font-size:10px;font-weight:800;border-radius:6px;padding:3px 8px;color:#fff;margin-top:1px;white-space:nowrap}
-  .sev.cao{background:var(--brand)}
-  .sev.tb{background:var(--amber)}
-  .sev.thap{background:#94a3b8}
-
   /* tables */
   table.tbl{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border-radius:12px;overflow:hidden}
   table.tbl th{background:#0f172a;color:#fff;text-align:left;padding:10px 14px;font-size:12px;font-weight:700}
@@ -100,8 +102,53 @@
   .tag.later{background:#94a3b8}
   .tag.no{background:var(--brand)}
 
-  /* layers (DW answer) */
-  .layer-stack{display:flex;flex-direction:column;gap:8px;max-width:620px;margin:0 auto}
+  /* constraint cards */
+  .cons-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .cons{border:1.5px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+  .cons .ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;background:var(--slate);margin-bottom:10px}
+  .cons b{display:block;font-size:13.5px;margin-bottom:4px}
+  .cons span{font-size:12px;color:var(--muted)}
+
+  /* decision area template */
+  .problem{border:2px solid var(--brand);border-radius:14px;padding:18px;background:#fff}
+  .problem .p-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--brand);margin-bottom:6px}
+  .problem p{font-size:13.5px}
+  .scenario{margin-top:12px;background:#0f172a;color:#cbd5e1;border-radius:12px;padding:14px 16px;font-size:13px}
+  .scenario b{color:#fbbf24}
+
+  .opt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:16px}
+  .opt{border:1.5px solid var(--line);border-radius:14px;padding:16px;background:#fff;position:relative}
+  .opt.win{border-color:var(--green);box-shadow:0 0 0 3px rgba(5,150,105,.12)}
+  .opt-name{font-weight:800;font-size:14px;padding-right:80px}
+  .opt-verdict{position:absolute;top:15px;right:14px;font-size:10px;font-weight:800;padding:3px 9px;border-radius:6px;color:#fff;white-space:nowrap}
+  .v-win{background:var(--green)}
+  .v-rej{background:#94a3b8}
+  .v-later{background:var(--amber)}
+  .v-never{background:var(--brand)}
+  .mini-flow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:10px 0 4px;font-size:11px}
+  .mini-flow .mn{border-radius:8px;border:1px solid var(--line);padding:4px 9px;background:#f8fafc;font-weight:600;white-space:nowrap}
+  .mini-flow .mn.hl{background:var(--blue-bg);border-color:var(--blue-bd);color:#1e40af}
+  .mini-flow .ma{color:#94a3b8;font-weight:700}
+  .pc{display:flex;gap:8px;font-size:12.5px;margin-top:5px;align-items:flex-start}
+  .pc .plus{color:var(--green);font-weight:800;flex-shrink:0}
+  .pc .minus{color:var(--brand);font-weight:800;flex-shrink:0}
+
+  .decision{margin-top:18px;border:2px solid var(--green);background:var(--green-bg);border-radius:14px;padding:18px}
+  .decision .d-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:6px}
+  .decision p, .decision li{font-size:13.5px;color:#064e3b}
+  .decision ul{margin:8px 0 0 18px}
+  .tradeoff{margin-top:12px;border:1.5px solid var(--amber-bd);background:var(--amber-bg);border-radius:12px;padding:14px 16px;font-size:13px;color:#78350f}
+  .tradeoff b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;color:var(--amber)}
+  .revisit{margin-top:12px;border:1.5px solid var(--blue-bd);background:var(--blue-bg);border-radius:12px;padding:14px 16px;font-size:13px;color:#1e3a8a}
+  .revisit b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;color:var(--blue)}
+
+  .effort{display:inline-block;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 8px;white-space:nowrap}
+  .e-s{background:var(--green-bg);color:#065f46;border:1px solid var(--green-bd)}
+  .e-m{background:var(--amber-bg);color:#92400e;border:1px solid var(--amber-bd)}
+  .e-l{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+
+  /* layers */
+  .layer-stack{display:flex;flex-direction:column;gap:8px;max-width:680px;margin:0 auto}
   .layer{border-radius:12px;padding:13px 18px;border:1.5px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13.5px;font-weight:600}
   .layer em{font-style:normal;font-size:11px;font-weight:500;color:var(--muted);text-align:right}
 
@@ -118,110 +165,32 @@
   /* step chain */
   .chain{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch}
   .chain .step{flex:1 1 130px;min-width:126px;position:relative;border-radius:12px;padding:12px 12px 12px 14px;border:1.5px solid var(--line);background:#fff}
-  .chain .step .num{position:absolute;top:-11px;left:10px;width:22px;height:22px;border-radius:50%;background:var(--slate);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
-  .chain .step b{display:block;font-size:12.5px;margin-bottom:2px}
-  .chain .step span{font-size:11px;color:var(--muted);display:block}
-  .chain .sep{display:flex;align-items:center;color:#94a3b8;font-size:18px;font-weight:700}
-  .s-blue{border-color:var(--blue-bd)!important;background:var(--blue-bg)!important}
-  .s-blue .num{background:var(--blue)}
-  .s-amber{border-color:var(--amber-bd)!important;background:var(--amber-bg)!important}
-  .s-amber .num{background:var(--amber)}
-  .s-red{border-color:#fecaca!important;background:#fef2f2!important}
-  .s-red .num{background:var(--brand)}
-  .s-green{border-color:var(--green-bd)!important;background:var(--green-bg)!important}
-  .s-green .num{background:var(--green)}
-  .s-purple{border-color:var(--purple-bd)!important;background:var(--purple-bg)!important}
-  .s-purple .num{background:var(--purple)}
-  .s-teal{border-color:var(--teal-bd)!important;background:var(--teal-bg)!important}
-  .s-teal .num{background:var(--teal)}
-
-  /* decision tree */
-  .tree{display:flex;flex-direction:column;gap:4px;align-items:center}
-  .tree .q{background:#0f172a;color:#fff;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:600;text-align:center}
-  .tree .branches{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;margin-top:4px}
-  .tree .branch{display:flex;flex-direction:column;gap:4px;align-items:center}
-  .tree .lbl{font-size:11px;font-weight:700;padding:2px 12px;border-radius:999px}
-  .lbl.yes{background:var(--green-bg);color:#065f46;border:1px solid var(--green-bd)}
-  .lbl.no2{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+  .chain .step .no{font-size:10px;font-weight:800;color:var(--brand)}
+  .chain .step b{display:block;font-size:12.5px;margin:2px 0}
+  .chain .step span{font-size:11px;color:var(--muted)}
 
   /* roadmap */
-  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .phase{border-radius:16px;border:1.5px solid var(--line);background:#fff;overflow:hidden;display:flex;flex-direction:column}
-  .phase-head{padding:14px 18px;color:#fff}
-  .phase-head b{font-size:15px;display:block}
-  .phase-head span{font-size:11.5px;opacity:.9}
-  .phase-body{padding:14px 18px;display:flex;flex-direction:column;gap:7px;flex:1}
-  .phase-body .it{font-size:12.5px;padding-left:18px;position:relative}
-  .phase-body .it::before{content:"▸";position:absolute;left:2px;color:var(--muted)}
-  .phase-foot{padding:10px 18px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted)}
+  .phase{border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:18px;margin-top:14px}
+  .phase-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+  .phase-no{font-size:12px;font-weight:800;color:#fff;background:var(--slate);border-radius:8px;padding:4px 12px}
+  .phase-head b{font-size:15px}
+  .phase-head .dur{font-size:12px;color:var(--muted);margin-left:auto}
+  .phase ul{margin:4px 0 0 18px}
+  .phase li{font-size:13px;margin-top:6px}
 
-  .check-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .check{display:flex;gap:10px;align-items:flex-start;font-size:13px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px 13px}
-  .check .bx{flex-shrink:0;width:18px;height:18px;border:2px solid #94a3b8;border-radius:5px;margin-top:1px}
+  /* glossary */
+  .gloss{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .gl{border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;background:#fff;font-size:12.5px}
+  .gl b{display:block;font-size:13px;margin-bottom:3px;color:var(--brand-dark)}
 
-  footer{margin-top:56px;padding:26px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  footer{margin-top:56px;background:#0f172a;color:#94a3b8;padding:26px 0;font-size:12.5px}
+  footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
-  @media(max-width:960px){
-    .exec,.score-grid,.check-grid{grid-template-columns:1fr}
+  @media(max-width:900px){
+    .exec,.cons-grid,.gloss{grid-template-columns:1fr}
     .target{grid-template-columns:1fr}
-    .target .arrow-r{transform:rotate(90deg);padding:2px 0}
-    .phases{grid-template-columns:1fr}
+    .arrow-r{transform:rotate(90deg);padding:4px 0}
     .mid-row{grid-template-columns:1fr}
-    .tree .branches{grid-template-columns:1fr}
-  }
-</style>
-<style id="theme-pro">
-  /* ===== ui-ux-pro-max overlay: Exaggerated Minimalism · navy + blue accent · IBM Plex ===== */
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
-  :root{
-    --accent:#0369a1; --accent-strong:#075985; --accent-bg:#f0f9ff; --accent-bd:#bae6fd;
-    --font-sans:'IBM Plex Sans','Inter','Segoe UI',system-ui,sans-serif;
-    --font-mono:'IBM Plex Mono',Consolas,'Courier New',monospace;
-    --sh-md:0 1px 2px rgba(2,6,23,.05),0 10px 28px -14px rgba(2,6,23,.14);
-  }
-  html{scroll-behavior:smooth}
-  body{font-family:var(--font-sans);font-size:15px;line-height:1.6;color:#0f172a;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  code{font-family:var(--font-mono)}
-
-  header.hero{background:linear-gradient(140deg,#020617 0%,#0f172a 55%,#082f49 100%);border-top:4px solid #dc2626;padding:60px 0 48px}
-  .hero .kicker{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#7dd3fc;margin-bottom:12px}
-  .hero h1{font-size:clamp(27px,3.2vw,38px);font-weight:700;letter-spacing:-.02em}
-  .hero h1 span{color:#38bdf8}
-  .hero p.sub{margin-top:12px;color:#94a3b8;font-size:15.5px;line-height:1.65;max-width:820px}
-  .badges{margin-top:22px}
-  .badge{background:rgba(56,189,248,.08);border:1px solid rgba(125,211,252,.22);color:#bae6fd;font-weight:500}
-
-  nav.toc{background:rgba(255,255,255,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-  nav.toc a{font-weight:500;color:#475569;cursor:pointer;transition:background .18s ease,color .18s ease}
-  nav.toc a:hover{background:var(--accent-bg);color:var(--accent-strong)}
-  nav.toc a.act{background:var(--accent-bg);color:var(--accent-strong);font-weight:600}
-  nav.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-
-  section{padding:52px 0 10px;scroll-margin-top:64px}
-  .sec-num{color:var(--accent-strong);background:var(--accent-bg);border:1px solid var(--accent-bd);border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 12px}
-  h2{font-size:24px;font-weight:700;letter-spacing:-.02em}
-  .card{border-radius:16px;border-color:#e5eaf1;box-shadow:var(--sh-md)}
-  .exec-item,.gap,.lane,.zone,.phase,.check,.risk{border-color:#e5eaf1}
-  .exec-item{transition:box-shadow .2s ease}
-  .exec-item:hover{box-shadow:var(--sh-md)}
-  .exec-item .n{background:#0f172a}
-
-  table.tbl th{font-family:var(--font-sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
-  table.tbl tbody tr:hover td,table.tbl tr:hover td{background:#fafcfe}
-  .tree .q{background:#0f172a}
-  .n-dark{background:#0f172a;border-color:#0f172a}
-  footer{color:#94a3b8;padding:32px 0 44px}
-
-  @media (prefers-reduced-motion: no-preference){
-    .rv{opacity:0;transform:translateY(14px);transition:opacity .4s ease-out,transform .4s ease-out}
-    .rv.in{opacity:1;transform:none}
-  }
-  @media print{
-    nav.toc{display:none}
-    body{background:#fff}
-    .card{box-shadow:none}
-    header.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-    .rv{opacity:1 !important;transform:none !important}
   }
 </style>
 </head>
@@ -229,386 +198,880 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="kicker">Đề xuất nâng cấp kiến trúc · 26/08/2026</div>
-    <h1>Nâng cấp TIPA ESB <span>·</span> Đánh giá & Phương án Kiến trúc</h1>
-    <p class="sub">Baseline: mã nguồn TIPA_V2.0 — bản v2.2.0 đang chạy PROD (.63), nhánh v2.3.0 chờ phát hành. Đánh giá khách quan + kế hoạch cuộc họp · trả lời câu hỏi "Data Warehouse" · phương án message queue, load balancing · kiến trúc mục tiêu và lộ trình 3 giai đoạn.</p>
+    <h1>Avenue MDP — <span>Hồ sơ Quyết định Kiến trúc Nâng cấp</span></h1>
+    <p class="sub">Tổng hợp toàn bộ quá trình khảo sát mã nguồn v2.x, phân tích dữ liệu vận hành thật, và các phiên thảo luận phương án.
+    Mỗi quyết định trong tài liệu này đều trình bày đủ: <b>vấn đề → các phương án đã cân nhắc → so sánh → lý do chọn/loại → đánh đổi → điều kiện xem xét lại</b>.</p>
     <div class="badges">
-      <span class="badge">Vai trò: Kiến trúc sư hệ thống</span>
-      <span class="badge">Nguồn: mã nguồn TIPA_V2.0 + tài liệu vận hành + biên bản họp</span>
-      <span class="badge">Ngày: 26/08/2026</span>
+      <span class="badge">MDP v2.2.0 PROD · v2.3.0 chờ phát hành</span>
+      <span class="badge">Benchmark 27/08/2026</span>
+      <span class="badge">Ưu tiên theo số đo</span>
+      <span class="badge">6 khu vực quyết định</span>
+      <span class="badge">Lộ trình 3 giai đoạn</span>
+      <span class="badge">Kèm ước lượng công sức</span>
     </div>
   </div>
 </header>
 
 <nav class="toc">
   <div class="wrap">
-    <a href="#s0">Tóm tắt</a><a href="#s1">Đánh giá hiện trạng</a><a href="#s2">Data Warehouse?</a>
-    <a href="#s3">Đánh giá kế hoạch họp</a><a href="#s4">Kiến trúc mục tiêu</a><a href="#s5">Luồng inbound mới</a>
-    <a href="#s6">Load balancing</a><a href="#s7">Message queue</a><a href="#s8">Lộ trình</a>
-    <a href="#s9">Test plan</a><a href="#s10">Checklist</a>
+    <a href="#exec">Tóm tắt</a>
+    <a href="#baseline">Hiện trạng &amp; số đo</a>
+    <a href="#baseline">Sơ đồ</a>
+    <a href="#constraints">4 ràng buộc</a>
+    <a href="#d1">QĐ1 · Queue</a>
+    <a href="#d2">QĐ2 · Load balancing</a>
+    <a href="#d3">QĐ3 · Hiệu năng DB</a>
+    <a href="#d4">QĐ4 · Giám sát</a>
+    <a href="#d5">QĐ5 · Inbound</a>
+    <a href="#d6">QĐ6 · Kiến trúc DB</a>
+    <a href="#fastlane">Làn nhanh JDE</a>
+    <a href="#target">Kiến trúc đích</a>
+    <a href="#roadmap">Lộ trình</a>
+    <a href="#testing">Đo kiểm</a>
+    <a href="#glossary">Thuật ngữ</a>
   </div>
 </nav>
 
-<div class="wrap">
+<main>
 
-<!-- ============ 0. EXECUTIVE SUMMARY ============ -->
-<section id="s0">
-  <div class="sec-head"><span class="sec-num">Phần 0</span><h2>Tóm tắt cho người ra quyết định</h2></div>
-  <p class="sec-desc">6 kết luận quan trọng nhất — chi tiết và căn cứ ở các phần sau.</p>
-  <div class="exec">
-    <div class="exec-item"><span class="n">1</span><div><b>Hướng đi trong họp là ĐÚNG: củng cố trước, mở rộng sau</b><span>Nền tảng v2.x đã trưởng thành hơn nhiều so với MVP: streaming sync, matview, function service đều chạy thật. Harden vận hành trước khi nối MES/App là quyết định chuẩn.</span></div></div>
-    <div class="exec-item"><span class="n">2</span><div><b>Không dùng Kafka — và CDC log-based đã đóng cửa vĩnh viễn</b><span>Oracle nguồn tắt ARCHIVELOG, không được restart production → LogMiner/Debezium/Flink-CDC bị loại hẳn. Đồng bộ chốt là ora2pg + query watermark; queue bắt đầu từ PostgreSQL job table.</span></div></div>
-    <div class="exec-item"><span class="n">3</span><div><b>"Kho dữ liệu mini" đã HIỆN THỰC — chưa cần Data Warehouse riêng</b><span>Staging 40 bảng → 26 curated view → matview (~80× nhanh hơn) → Grafana 8 dashboard đã chạy trên DEV. Việc còn lại là promote lên PROD + retention, không phải xây DW mới.</span></div></div>
-    <div class="exec-item"><span class="n">4</span><div><b>Load balancing: điều kiện tốt hơn dự kiến</b><span>API stateless; các vòng nền (streaming, matview) đã có advisory lock chống chạy trùng. Còn 2 việc: trạng thái verify-batch đang nằm trong RAM từng process, và tính lại pool kết nối DB.</span></div></div>
-    <div class="exec-item"><span class="n">5</span><div><b>Việc cấp bách nhất: phát hành v2.3.0 xuống PROD + audit watermark ngày</b><span>Fix chống trùng inbound (upsert theo business key) đã xong trên nhánh DEV nhưng PROD chưa có. Watermark theo cột ngày có thể mất dòng âm thầm — 2 rủi ro dữ liệu P0 cần đóng trước tiên.</span></div></div>
-    <div class="exec-item"><span class="n">6</span><div><b>Thêm nguồn MES/App: không cần viết lại — dùng 2 mẫu có sẵn + queue</b><span>Nguồn push dùng Type A + API Key + business key; nguồn batch dùng staging + streaming + Type B. Kiến trúc lõi đã đúng, chỉ cần thêm lớp chịu tải và giám sát.</span></div></div>
-  </div>
-</section>
+<section id="exec">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">PHẦN 1</span><h2>Tóm tắt điều hành</h2></div>
+    <p class="sec-desc">Đọc 1 phút: hệ thống đang ở đâu, sắp làm gì, và vì sao. Chi tiết từng quyết định nằm ở các phần sau.</p>
 
-<!-- ============ 1. ASSESSMENT ============ -->
-<section id="s1">
-  <div class="sec-head"><span class="sec-num">Phần 1</span><h2>Đánh giá hiện trạng — khách quan</h2></div>
-  <p class="sec-desc">Dựa trên khảo sát mã nguồn TIPA_V2.0 (19 router API, streaming service, matview, Grafana), tài liệu vận hành và audit bug tiềm ẩn v2.2.0.</p>
-  <div class="score-grid">
     <div class="card">
-      <b style="color:var(--green)">✔ Điểm mạnh — nên giữ nguyên</b>
-      <div class="chip-wrap">
-        <span class="chip ok">Phân lớp đúng: nguồn → staging → curated → matview → API</span>
-        <span class="chip ok">Consumer không chạm DB nguồn</span>
-        <span class="chip ok">Streaming watermark trong hub · 38/40 bảng</span>
-        <span class="chip ok">Advisory lock chống job chạy trùng</span>
-        <span class="chip ok">Xác thực 2 làn · scope rỗng = từ chối</span>
-        <span class="chip ok">Audit log + envelope chuẩn</span>
-        <span class="chip ok">Matview ~80× cho báo cáo nặng</span>
-        <span class="chip ok">Dashboard-as-code + role grafana_ro</span>
-        <span class="chip ok">~38 module test offline + quy trình prompt/report</span>
+      <p style="font-size:14px;max-width:980px">
+        Avenue MDP đang chạy ổn định bản <b>v2.2.0</b> trên môi trường sản xuất: đồng bộ JDE theo watermark (38/40 bảng),
+        materialized view tăng tốc đọc ~80 lần, API outbound có hàm tính toán sẵn, phân quyền API key theo phạm vi.
+        Mục tiêu giai đoạn tới <b>không phải thêm tính năng</b>, mà là <b>gia cố (harden)</b> để sẵn sàng
+        tích hợp thêm nguồn mới (MES, App nội bộ, OCR mở rộng) và chịu tải thật.
+        Toàn bộ quyết định trong tài liệu này tuân theo một nguyên tắc: <b>quyết định theo số đo, không theo trào lưu công nghệ</b> —
+        mỗi phương án bị loại đều có lý do gắn với ràng buộc thực tế, và mỗi phương án được chọn đều có điều kiện xem xét lại bằng con số.
+        Thứ tự dưới đây phản ánh <b>baseline load test 27/08/2026</b> (T2 outbound FAIL; T5/T6 inbound/soak PASS).
+      </p>
+      <div class="exec" style="margin-top:18px">
+        <div class="exec-item"><div class="n">1</div><div><b>QĐ5 · Upsert PROD (v2.3.0) — khẩn cấp nhất</b><span>DEV đã có unique/idempotent; PROD v2.2.0 gửi trùng vẫn sinh dòng trùng. Phát hành upsert là việc số 1 của GĐ1. Chi tiết ở QĐ5.</span></div></div>
+        <div class="exec-item"><div class="n">2</div><div><b>QĐ4 · Watchdog + cảnh báo — tai mắt vận hành</b><span>Streaming lỗi chỉ ghi log → sự cố chạy ngầm. Watchdog + Telegram tuần đầu, sau đó Prometheus/Grafana. Chi tiết ở QĐ4.</span></div></div>
+        <div class="exec-item"><div class="n">3</div><div><b>QĐ3 · Index / curated / matview — nút thắt T2</b><span>T2 @100 VU FAIL (local p95 2.26s · tipa 2.69s). EXPLAIN → index đúng chỗ + lớp đọc → đo lại T2. Việc đầu GĐ2. Chi tiết ở QĐ3.</span></div></div>
+        <div class="exec-item"><div class="n">4</div><div><b>QĐ2 · Replica backend sau Caddy — sau khi QĐ3</b><span>2B vẫn chọn (API đã stateless). Chỉ triển khai sau khi đã giảm tải đọc bằng index/curated; Connections 13/100 → chưa cần PgBouncer. Chi tiết ở QĐ2.</span></div></div>
+        <div class="exec-item"><div class="n">5</div><div><b>QĐ6 · Kỷ luật phân lớp — giữ schema, siết hợp đồng</b><span>Không đập đi xây lại. Nguồn mới schema riêng; consumer chỉ đọc curated. Mock Oracle G7 ≠ số JDE PROD — fastlane chờ cửa sổ JDE thật. Chi tiết ở QĐ6.</span></div></div>
+        <div class="exec-item"><div class="n">6</div><div><b>QĐ1 · Job table — để sau (chưa cấp thiết)</b><span>T5 ~34 msg/s PASS · T6 soak p95 81ms PASS → queue chưa gấp. Giữ PG job table là công nghệ chọn khi T5–T6 báo áp lực. Chi tiết ở QĐ1.</span></div></div>
       </div>
-      <div class="callout green" style="margin-top:16px">Kết luận: <b>kiến trúc lõi đúng hướng và đã qua vận hành thật</b> — bài toán không phải "đập đi xây lại" mà là <b>đóng rủi ro dữ liệu P0, thêm lớp chịu tải và giám sát</b>.</div>
-    </div>
-    <div class="card">
-      <b style="color:var(--brand)">✖ Khoảng trống — xếp theo mức độ</b>
-      <div class="gap-list">
-        <div class="gap"><span class="sev cao">CAO</span><div><b>PROD chưa có upsert inbound</b> — fix chống trùng (business key, alembic 022) mới nằm trên nhánh v2.3.0; PROD v2.2.0 vẫn insert-only, nguồn retry sinh bản ghi trùng và làm matview REFRESH lỗi.</div></div>
-        <div class="gap"><span class="sev cao">CAO</span><div><b>Watermark theo ngày có thể mất dòng âm thầm</b> — JDE có dòng ghi ngày ở tương lai làm cursor nhảy qua; nhóm bảng fallback theo ngày chưa được audit.</div></div>
-        <div class="gap"><span class="sev cao">CAO</span><div><b>Không có alert/observability</b> — streaming/matview lỗi chỉ ghi <code>last_error</code> vào DB; sync đứng yên không ai được báo. Không /metrics, không watchdog.</div></div>
-        <div class="gap"><span class="sev tb">TB</span><div><b>Mọi thứ chạy 1 bản duy nhất</b> — 1 backend, 1 DB, không LB; trạng thái verify-batch nằm trong RAM từng process nên chưa sẵn sàng multi-replica.</div></div>
-        <div class="gap"><span class="sev tb">TB</span><div><b>Xử lý nặng vẫn in-process</b> — thread/asyncio trong backend, không job queue độc lập, không retry có backoff, không dead-letter.</div></div>
-        <div class="gap"><span class="sev tb">TB</span><div><b>API chưa hard đủ cho tải thật</b> — chưa statement_timeout, chưa request_id, pagination chưa deterministic; bảng transactions/raw_payload chưa có retention.</div></div>
-        <div class="gap"><span class="sev tb">TB</span><div><b>Lớp curated + Grafana mới ở DEV</b> — 26 view + 8 dashboard chưa promote lên PROD (đang hold); PROD chưa có lớp báo cáo.</div></div>
-        <div class="gap"><span class="sev thap">THẤP</span><div><b>Vệ sinh bảo mật P1</b> — còn một số tài khoản/mật khẩu mặc định và vài điểm xác thực, chặn SSRF cần siết lại (danh sách chi tiết trong tài liệu audit nội bộ). Cần dọn trước khi mở cho nhiều nguồn.</div></div>
+      <div class="callout blue" style="margin-top:18px">
+        <b>Lộ trình 3 giai đoạn</b> (chi tiết ở Phần 12 · baseline 27/08/2026):
+        <b>GĐ1 — Tin cậy</b> (QĐ5 upsert PROD + QĐ4 watchdog) ·
+        <b>GĐ2 — Tốc độ đọc</b> (QĐ3 index/curated trước → đo lại T2 → rồi QĐ2 replica) ·
+        <b>GĐ3 — Mở rộng</b> (QĐ1 nếu cần · JDE thật / QĐ6 / fastlane khi có cửa sổ đo).
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ 2. DATA WAREHOUSE ============ -->
-<section id="s2">
-  <div class="sec-head"><span class="sec-num">Phần 2</span><h2>Trả lời: dữ liệu trong ESB MDP có phải "Data Warehouse"?</h2></div>
-  <p class="sec-desc">Câu trả lời ngắn: <b>nó là Data Hub kèm một warehouse thu nhỏ — và cả 3 lớp đã được xây xong</b>, không còn là đề xuất trên giấy.</p>
-  <div class="card">
-    <div class="layer-stack">
-      <div class="layer" style="background:var(--blue-bg);border-color:var(--blue-bd)">Lớp 1 · Staging — ĐÃ CÓ <em>mirror 40 bảng JDE (mdp_staging) · streaming 38/40 bảng · F4111 ~59M dòng</em></div>
-      <div class="arrow-d">▼ làm sạch · chuẩn hoá</div>
-      <div class="layer" style="background:var(--amber-bg);border-color:var(--amber-bd)">Lớp 2 · Curated — ĐÃ CÓ <em>26 view nghiệp vụ (mdp_curated): P2P, Inventory, Supplier, GL, Production, Sales</em></div>
-      <div class="arrow-d">▼ tăng tốc báo cáo</div>
-      <div class="layer" style="background:var(--green-bg);border-color:var(--green-bd)">Lớp 3 · Materialized View — ĐÃ CÓ <em>mdp_models · REFRESH CONCURRENTLY tự động · ~80× nhanh hơn read-through</em></div>
-      <div class="arrow-d">▼ phục vụ</div>
-      <div class="layer" style="background:#0f172a;border-color:#0f172a;color:#fff">Outbound API · Grafana 8 dashboard <em style="color:#94a3b8">consumer chỉ đọc từ đây</em></div>
+<section id="baseline">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">PHẦN 2</span><h2>Hiện trạng &amp; số đo từ dữ liệu thật</h2></div>
+    <p class="sec-desc">Kiến trúc hiện tại được mô tả đầy đủ trong tài liệu "Báo cáo Kiến trúc &amp; Hiện trạng" đi kèm.
+    Phần này chỉ tóm tắt những gì <b>đã chạy tốt</b>, những gì <b>còn hở</b>, và quan trọng nhất — <b>số đo thật</b> làm căn cứ cho mọi quyết định phía sau.</p>
+
+    <div class="card">
+      <h3 class="sub-h" style="margin-top:0">2.1 · Những gì đã chạy tốt (không cần xây lại)</h3>
+      <table class="tbl">
+        <tr><th>Năng lực</th><th>Hiện trạng</th><th>Ý nghĩa với nâng cấp</th></tr>
+        <tr><td><b>Đồng bộ JDE theo watermark</b></td><td>38/40 bảng bật, chạy trong hub, khóa advisory chống chạy trùng</td><td>Không cần công cụ đồng bộ ngoài; nền tảng cho "làn nhanh" (Phần 10)</td></tr>
+        <tr><td><b>Materialized view</b></td><td>Tự refresh định kỳ, tăng tốc đọc ~80 lần</td><td>Đã giải bài toán dashboard chậm — không cần kho phân tích riêng</td></tr>
+        <tr><td><b>API outbound + hàm tính toán</b></td><td>5 hàm (aggregate, timeseries, top, aging, breakdown) qua tham số <code>?function=</code></td><td>Consumer lấy số liệu tổng hợp mà không cần kéo dữ liệu thô</td></tr>
+        <tr><td><b>Phân quyền API key</b></td><td>Scope theo chiều (inbound/outbound) + theo model; không khai scope = từ chối</td><td>Nền cho việc cấp key riêng từng nguồn MES/App sau này</td></tr>
+        <tr><td><b>Phân lớp dữ liệu 5 schema</b></td><td>staging → curated → matview phục vụ, tách riêng data đẩy vào và metadata</td><td>Đúng chuẩn phân lớp ngành — QĐ6 chỉ bổ sung kỷ luật, không xây lại</td></tr>
+        <tr><td><b>API stateless + khóa advisory</b></td><td>Không lưu trạng thái phiên trong tiến trình; job nền tự chống trùng</td><td>Điều kiện tiên quyết cho load balancing đã có sẵn — QĐ2 rẻ</td></tr>
+      </table>
+      <div class="diagram-embed">
+        <div class="diagram-toolbar">
+          <span class="diagram-caption">AS-IS — kiến trúc hiện trạng MDP (một backend, PostgreSQL phân lớp, kéo JDE)</span>
+          <a class="diagram-open" href="diagrams/mdp-as-is.architecture.html" target="_blank" rel="noopener">Mở toàn màn</a>
+        </div>
+        <iframe class="diagram-frame" src="diagrams/mdp-as-is.architecture.html" title="AS-IS kiến trúc hiện trạng MDP" loading="lazy"></iframe>
+      </div>
     </div>
-    <div class="callout">Việc còn lại của "mini DW" không phải xây thêm mà là <b>vận hành hoá</b>: promote 26 curated view + Grafana container lên PROD (đang hold chờ lệnh), thêm retention/partition cho bảng log, và migrate F0005 để decode mã trạng thái cho cả 8 dashboard.</div>
-    <div class="callout blue">Data Warehouse "đúng nghĩa" (star schema, lưu lịch sử nhiều năm, engine phân tích riêng như ClickHouse/BigQuery) <b>vẫn chưa cần</b> — chỉ cân nhắc khi: dữ liệu phân tích &gt; hàng trăm triệu dòng, nhiều báo cáo nặng chạy đồng thời, hoặc cần lịch sử dài. Khi đó tách <b>read replica → DW riêng</b> theo đúng thứ tự.</div>
+
+    <div class="card">
+      <h3 class="sub-h" style="margin-top:0">2.2 · Số đo từ dữ liệu vận hành thật</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">
+        Đo trên bộ trích xuất dữ liệu sản xuất (kiểm kê 40 bảng + mẫu 5.000 dòng mới nhất mỗi bảng, tháng 6/2026). Số liệu đã làm tròn.</p>
+      <table class="tbl">
+        <tr><th>Chỉ số</th><th>Giá trị đo được</th><th>Hệ quả kiến trúc</th></tr>
+        <tr><td><b>Tổng dung lượng DB sản xuất</b></td><td>~80 GB · hơn 150 triệu dòng / 40 bảng</td><td>Backup, retention, index phải tính ở quy mô này</td></tr>
+        <tr><td><b>Bảng lớn nhất (sổ giao dịch kho)</b></td><td>~60 triệu dòng, chiếm quá nửa dung lượng</td><td>Query không index = quét cả bảng; ứng viên BRIN + retention số 1</td></tr>
+        <tr><td><b>Bảng lớn thứ hai (sổ cái kế toán)</b></td><td>~35 triệu dòng</td><td>Tương tự — mọi dashboard tài chính đi qua bảng này</td></tr>
+        <tr><td><b>Tốc độ phát sinh phía JDE</b></td><td>~100–200 nghìn dòng thay đổi/ngày (tổng các bảng); riêng 2 bảng lớn nhất mỗi bảng ≥5.000 dòng/ngày</td><td>Cao hơn ước lượng ban đầu → index + retention chuyển thành <b>bắt buộc</b></td></tr>
+        <tr><td><b>Mẫu hình tải</b></td><td>Dồn cục theo batch: có ngày một bảng nhận ≥5.000 dòng trong vài giờ (chạy MRP/cuối ngày)</td><td>Load test phải mô phỏng <b>burst</b>, không chỉ tải đều; queue tính theo đỉnh, không theo trung bình</td></tr>
+        <tr><td><b>Tăng trưởng</b></td><td>Bảng lớn nhất phình ~40–50 MB/ngày; DB sẽ chạm ~100 GB trong vòng ~1 năm</td><td>Phải có kế hoạch retention/phân vùng trước khi đầy đĩa</td></tr>
+      </table>
+      <div class="callout green">
+        <b>Vì sao số đo này quan trọng:</b> ước lượng ban đầu cho nguồn push mới (MES/App) là 10–100 nghìn bản ghi/ngày.
+        Dữ liệu thật cho thấy riêng phía JDE đã ở mức đó hoặc cao hơn — nghĩa là hệ thống <b>đã và đang</b> xử lý khối lượng tương đương
+        qua đường streaming. Kết luận: nền tảng đủ sức, vấn đề là gia cố các điểm hở bên dưới chứ không phải thay công nghệ.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h" style="margin-top:0">2.2.1 · Baseline load test DEV (27/08/2026)</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">
+        Phiên benchmark trên laptop local (<code>127.0.0.1:8457</code>) và đối chiếu tipa-vm (<code>192.168.2.13</code>, 1 CPU / 3.6GB).
+        Model test <code>loadtest_orders</code> · không sửa mã nguồn · evidence: <code>benchmark-results/20260827/</code>.</p>
+      <table class="tbl">
+        <tr><th>Chỉ số</th><th>Local</th><th>tipa-vm</th><th>Hệ quả kiến trúc</th></tr>
+        <tr><td><b>T1 health smoke</b></td><td>p95 17.5ms · fail 0%</td><td>p95 25.9ms · fail 0%</td><td>Stack ổn định; tipa chậm hơn do tài nguyên</td></tr>
+        <tr><td><b>T2 outbound read @100 VU</b></td><td>p95 <b>2.26s FAIL</b> · 37 RPS · fail 0.33%</td><td>p95 <b>2.69s FAIL</b> · 36 RPS · fail 0.33%</td><td><b>Nút thắt đọc outbound</b> — ưu tiên <b>QĐ3 index/curated trước</b>, rồi QĐ2 replica</td></tr>
+        <tr><td><b>T5 inbound burst 1000 msg</b></td><td>p95 732ms PASS · ~34 msg/s · mất mát 0</td><td>p95 944ms PASS · ~30 msg/s</td><td>Inbound burst chịu tốt; job queue (QĐ1) <b>chưa cấp thiết</b> ở mức tải này</td></tr>
+        <tr><td><b>Toàn vẹn dữ liệu</b></td><td colspan="2">1000/1000 unique doc_no · 0 trùng · 5×POST idempotent → 1 row</td><td>Upsert v2.3.0 cần thiết trên PROD; bản test đã có unique index</td></tr>
+        <tr><td><b>DB @ idle / T2</b></td><td colspan="2">Connections <b>13/100</b> · cache hit 100% · backend CPU peak ~57% @ T2</td><td><b>Chưa cần PgBouncer</b>; QĐ3 trước, replica sau</td></tr>
+        <tr><td><b>Cold start</b></td><td colspan="2">23.3s đến health 200 (3 lần liên tiếp)</td><td>Downtime deploy tham khảo</td></tr>
+        <tr><td><b>SSH 10 phút</b></td><td colspan="2">120/120 OK · disconnect 0%</td><td>Đường SSH tipa ổn định cho đo JDE sau</td></tr>
+        <tr><td><b>T6 soak (30 phút rút gọn)</b></td><td colspan="2">10 VU · p95 <b>81ms</b> · fail 0% · backend RAM ~88→90MB ổn định · postgres ~41→71MB</td><td>Không thấy leak RAM; QĐ1 chưa gấp; soak 4–8h là bước tiếp theo trước prod</td></tr>
+        <tr><td><b>JDE sync G7 (mock Oracle tipa)</b></td><td colspan="2">S04 PASS · sync lag ~2s · watermark sequence tiến · no-dup 7=7 · J04/J05/J08 N/A (không phải JDE PROD)</td><td>Plumbing OK trên mock; <b>mock ≠ PROD</b> — số fastlane/QĐ6 PROD cần Oracle JDE thật</td></tr>
+      </table>
+      <div class="callout red">
+        <b>Kết luận từ load test (27/08/2026):</b> hệ thống đáp ứng burst inbound (T5 PASS ~34 msg/s) và soak ổn (T6 p95 81ms),
+        nhưng <b>đọc outbound @100 VU FAIL</b> — local p95 2.26s · tipa p95 2.69s (ngưỡng 500ms).
+        Đây là nút thắt chính → <b>QĐ3 (index/curated/matview) trước, rồi QĐ2 (replica)</b>. Connections 13/100 → không đẩy PgBouncer lúc này.
+      </div>
+      <div class="diagram-embed">
+        <div class="diagram-toolbar">
+          <span class="diagram-caption">Luồng inbound / outbound — nơi dữ liệu vào và đọc ra</span>
+          <a class="diagram-open" href="diagrams/mdp-inbound-outbound.dataflow.html" target="_blank" rel="noopener">Mở toàn màn</a>
+        </div>
+        <iframe class="diagram-frame" src="diagrams/mdp-inbound-outbound.dataflow.html" title="Dataflow inbound outbound MDP" loading="lazy"></iframe>
+      </div>
+      <div class="diagram-embed">
+        <div class="diagram-toolbar">
+          <span class="diagram-caption">T2 bottleneck — chuỗi đọc outbound bị chậm (p95 vượt ngưỡng)</span>
+          <a class="diagram-open" href="diagrams/mdp-outbound-bottleneck.sequence.html" target="_blank" rel="noopener">Mở toàn màn</a>
+        </div>
+        <iframe class="diagram-frame" src="diagrams/mdp-outbound-bottleneck.sequence.html" title="Sequence nút thắt outbound T2" loading="lazy"></iframe>
+      </div>
+      <h3 class="sub-h">2.2.2 · Ghi chú mock Oracle G7</h3>
+      <p style="font-size:13.5px;max-width:960px">G7 trên tipa chỉ chứng minh <b>đường ống sync</b> (S04 PASS, lag ~2s). Các bài J04/J05/J08 đánh dấu N/A vì không phải Oracle JDE sản xuất.
+      Không dùng số mock để chốt chu kỳ làn nhanh hay SLA độ tươi PROD — cần cửa sổ đo trên JDE thật.</p>
+      <div class="diagram-embed">
+        <div class="diagram-toolbar">
+          <span class="diagram-caption">JDE streaming (mock) — minh họa plumbing, không phải số PROD</span>
+          <a class="diagram-open" href="diagrams/mdp-jde-streaming.sequence.html" target="_blank" rel="noopener">Mở toàn màn</a>
+        </div>
+        <iframe class="diagram-frame" src="diagrams/mdp-jde-streaming.sequence.html" title="Sequence JDE streaming mock Oracle" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h" style="margin-top:0">2.3 · Những điểm hở phải vá (xếp theo mức độ)</h3>
+      <table class="tbl">
+        <tr><th style="width:90px">Mức độ</th><th>Điểm hở</th><th>Hệ quả nếu không vá</th><th>Vá ở đâu</th></tr>
+        <tr><td class="c"><span class="tag no">P0 · DỮ LIỆU</span></td><td>PROD chưa có chống trùng khi nhận dữ liệu (v2.3.0 đã code xong, chưa phát hành)</td><td>Nguồn gửi lại (retry) là sinh dòng trùng → báo cáo sai, matview lỗi</td><td>QĐ5 + Giai đoạn 1</td></tr>
+        <tr><td class="c"><span class="tag no">P0 · DỮ LIỆU</span></td><td>Watermark theo ngày có rủi ro "ngày tương lai" làm con trỏ nhảy qua, mất dòng âm thầm</td><td>Dữ liệu thiếu mà không ai phát hiện</td><td>Phần 10 + Giai đoạn 1</td></tr>
+        <tr><td class="c"><span class="tag no">P0 · VẬN HÀNH</span></td><td>Không có cảnh báo chủ động — streaming lỗi chỉ ghi log</td><td>Sự cố chạy ngầm nhiều ngày mới phát hiện</td><td>QĐ4 + Giai đoạn 1</td></tr>
+        <tr><td class="c"><span class="tag next">P1</span></td><td>Bảng staging lớn chưa có index phụ nào (chỉ có unique index theo khóa chính)</td><td>Query lọc theo mã hàng/ngày/kho quét cả chục triệu dòng</td><td>QĐ3 + Giai đoạn 2</td></tr>
+        <tr><td class="c"><span class="tag next">P1</span></td><td>Một bản backend duy nhất; xử lý nặng chạy chung tiến trình với API</td><td>Nghẽn một chỗ là nghẽn tất cả; container chết là dừng toàn hệ</td><td>QĐ2 sau QĐ3 (GĐ2) · QĐ1 để sau khi T5–T6 báo áp lực (GĐ3)</td></tr>
+        <tr><td class="c"><span class="tag next">P1</span></td><td>Một số cấu hình bảo mật mặc định cần siết (tài khoản khởi tạo, kiểm tra kết nối ra ngoài)</td><td>Rủi ro truy cập trái phép</td><td>Giai đoạn 1–2 (chi tiết trong tài liệu nội bộ)</td></tr>
+        <tr><td class="c"><span class="tag later">P2</span></td><td>Lớp curated view + dashboard Grafana mới có trên DEV, chưa đưa lên PROD</td><td>Người dùng cuối chưa hưởng lợi từ Phase 1</td><td>Giai đoạn 3</td></tr>
+      </table>
+    </div>
   </div>
 </section>
 
-<!-- ============ 3. MEETING REVIEW ============ -->
-<section id="s3">
-  <div class="sec-head"><span class="sec-num">Phần 3</span><h2>Đánh giá kế hoạch cuộc họp (7 nhóm việc)</h2></div>
-  <p class="sec-desc">Nhận xét từng nhóm việc theo biên bản, kèm phần tôi đề nghị bổ sung.</p>
-  <div class="card" style="padding:0;overflow-x:auto">
+<section id="constraints">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">PHẦN 3</span><h2>4 ràng buộc thực tế — nền tảng của mọi lập luận</h2></div>
+    <p class="sec-desc">Kiến trúc "đúng" không tồn tại chung chung — nó đúng <b>với ràng buộc cụ thể</b>.
+    4 ràng buộc dưới đây do chủ dự án chốt, và chính chúng tự động loại phần lớn các phương án "hoành tráng" mà tài liệu này sẽ nhắc tới.</p>
+
+    <div class="cons-grid">
+      <div class="cons"><div class="ic">R1</div><b>1 người vận hành kiêm nhiệm</b><span>Không có đội trực hạ tầng chuyên nghiệp. Mỗi công nghệ thêm vào là một thứ có thể hỏng lúc 2 giờ sáng mà không ai biết sửa → ưu tiên tối đa việc <b>dùng lại thứ đã có</b> (PostgreSQL, Caddy, Grafana, Docker).</span></div>
+      <div class="cons"><div class="ic">R2</div><b>Không cấp thêm máy chủ</b><span>Chỉ có 1 máy sản xuất + 1 máy phát triển. Mọi phương án cần máy mới (cluster đa máy, read replica, Kubernetes) bị loại <b>tự động</b> — muốn mở lại phải là quyết định đầu tư của công ty.</span></div>
+      <div class="cons"><div class="ic">R3</div><b>Tải push mới: 10–100 nghìn bản ghi/ngày</b><span>Ước lượng cho MES/App/OCR khi tích hợp thật. Quy ra trung bình ~1–2 bản ghi/giây — rất nhỏ so với sức PostgreSQL, nhưng phải tính theo <b>giờ cao điểm</b> vì dữ liệu thật dồn cục theo batch.</span></div>
+      <div class="cons"><div class="ic">R4</div><b>Dữ liệu tươi trong vài phút</b><span>Áp dụng đầy đủ cho luồng push (đến là có ngay). Với luồng kéo JDE: <b>làn nhanh 2–5 phút cho vài bảng quan trọng</b>, còn lại giữ chu kỳ hiện tại — tránh đè tải lên Oracle của JDE (Phần 10).</span></div>
+    </div>
+
+    <div class="callout" style="margin-top:18px">
+      <b>Cách đọc các phần sau:</b> mỗi khu vực quyết định (QĐ1–QĐ6) đi theo đúng một khuôn:
+      ① Vấn đề là gì (kèm tình huống ví dụ) → ② Các phương án khả thi → ③ Bảng so sánh → ④ Phương án chọn + lý do loại từng phương án khác
+      → ⑤ Đánh đổi chấp nhận → ⑥ Điều kiện xem xét lại. Nhãn trên mỗi phương án: <span class="tag now">CHỌN</span> ·
+      <span class="tag next">ĐỂ SAU</span> (chọn khi có điều kiện kích hoạt) · <span class="tag later">LOẠI</span> (không phù hợp ràng buộc) ·
+      <span class="tag no">LOẠI HẲN</span> (đã phân tích kỹ, không quay lại).
+    </div>
+  </div>
+</section>
+
+<section id="d1">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">QĐ 1</span><h2>Hàng đợi &amp; xử lý bất đồng bộ (Message Queue)</h2></div>
+    <p class="sec-desc">Ước lượng công sức phương án chọn: <span class="effort e-m">VỪA · ~10–15 ngày công</span> (job table + worker + retry + dead-letter + màn hình theo dõi) ·
+    <b>thời điểm:</b> <span class="tag later">SAU / KHI T5–T6 BÁO ÁP LỰ</span> — benchmark 27/08: T5 PASS ~34 msg/s · T6 soak p95 81ms PASS → chưa cấp thiết.</p>
+
+    <div class="problem">
+      <div class="p-label">① Vấn đề là gì</div>
+      <p>Hiện nay khi một nguồn gửi dữ liệu vào MDP, toàn bộ việc kiểm tra – ghi DB – ghi log diễn ra <b>ngay trong lúc nguồn đang chờ</b> (xử lý đồng bộ).
+      Nguồn gửi đều đặn thì ổn; nguồn gửi dồn dập thì request xếp hàng trong tiến trình API, mọi thứ khác (kể cả API đọc) chậm theo, và nếu quá tải thì request lỗi — dữ liệu của nguồn <b>mất luôn nếu nguồn không tự gửi lại</b>.
+      Hàng đợi (queue) tách hai việc: <b>nhận</b> (nhanh, luôn thành công) và <b>xử lý</b> (từ từ, có thể thử lại khi lỗi).</p>
+      <div class="scenario"><b>Tình huống ví dụ:</b> MES kết thúc ca sản xuất lúc 18h00 và đẩy 5.000 phiếu trong 10 phút, đúng lúc phòng kế toán đang mở dashboard.
+      Bản hiện tại: API inbound và API đọc tranh nhau tài nguyên, cả hai cùng chậm, một phần request MES có thể lỗi timeout.
+      Có queue: MDP nhận 5.000 phiếu trong vài giây (chỉ ghi vào hàng đợi), trả lời MES "đã nhận", rồi xử lý dần trong vài phút — dashboard không bị ảnh hưởng.</div>
+    </div>
+
+    <h3 class="sub-h">② Các phương án đã cân nhắc</h3>
+    <div class="opt-grid">
+      <div class="opt">
+        <div class="opt-name">1A · Giữ xử lý đồng bộ + siết giới hạn</div><span class="opt-verdict v-later">GIAI ĐOẠN NÀY</span>
+        <div class="mini-flow"><span class="mn">Nguồn</span><span class="ma">→</span><span class="mn hl">API xử lý ngay</span><span class="ma">→</span><span class="mn">PostgreSQL</span></div>
+        <div class="pc"><span class="plus">+</span>Không phải xây gì; đơn giản nhất; nguồn biết ngay kết quả</div>
+        <div class="pc"><span class="minus">−</span>Burst làm chậm/lỗi cả hệ; không có thử lại tự động</div>
+        <div class="pc"><span class="minus">−</span>Xử lý nặng (đồng bộ JDE, refresh matview) vẫn chung tiến trình API</div>
+      </div>
+      <div class="opt win">
+        <div class="opt-name">1B · Job table trong PostgreSQL</div><span class="opt-verdict v-win">CHỌN — KHI CẦN</span>
+        <div class="mini-flow"><span class="mn">Nguồn</span><span class="ma">→</span><span class="mn">API ghi vào bảng jobs</span><span class="ma">→</span><span class="mn hl">Worker riêng đọc &amp; xử lý</span><span class="ma">→</span><span class="mn">PostgreSQL</span></div>
+        <div class="pc"><span class="plus">+</span><b>Không thêm hạ tầng mới</b> — hàng đợi là một bảng trong chính PostgreSQL đang có (cơ chế <code>FOR UPDATE SKIP LOCKED</code> chuẩn của Postgres)</div>
+        <div class="pc"><span class="plus">+</span>Có thử lại (retry), có ngăn "thư chết" (dead-letter) cho job hỏng; backup chung với DB — không lo mất job</div>
+        <div class="pc"><span class="plus">+</span>Nhìn thấy được: hàng đợi là bảng SQL, đếm/tra cứu bằng chính công cụ đã quen</div>
+        <div class="pc"><span class="minus">−</span>Trần thông lượng thấp hơn broker chuyên dụng (~vài trăm job/giây — vẫn gấp trăm lần nhu cầu R3)</div>
+        <div class="pc"><span class="minus">−</span>Phải tự viết worker (~vài trăm dòng, một lần)</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">1C · Redis + RQ</div><span class="opt-verdict v-rej">LOẠI</span>
+        <div class="mini-flow"><span class="mn">Nguồn</span><span class="ma">→</span><span class="mn">API</span><span class="ma">→</span><span class="mn hl">Redis (bộ nhớ)</span><span class="ma">→</span><span class="mn">Worker</span></div>
+        <div class="pc"><span class="plus">+</span>Nhanh, nhẹ, thư viện Python sẵn</div>
+        <div class="pc"><span class="minus">−</span>Thêm một hệ mới phải trực (R1); cấu hình lưu trữ (persistence) sai là <b>mất job khi restart</b></div>
+        <div class="pc"><span class="minus">−</span>Tốc độ của Redis chỉ có nghĩa khi Postgres không kham nổi — chưa có số đo nào cho thấy vậy</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">1D · RabbitMQ</div><span class="opt-verdict v-later">ĐỂ SAU</span>
+        <div class="mini-flow"><span class="mn">Nguồn</span><span class="ma">→</span><span class="mn">API</span><span class="ma">→</span><span class="mn hl">Broker (exchange/queue)</span><span class="ma">→</span><span class="mn">Nhiều consumer</span></div>
+        <div class="pc"><span class="plus">+</span>Broker chuẩn công nghiệp: xác nhận (ack), định tuyến, dead-letter có sẵn, UI quản trị</div>
+        <div class="pc"><span class="minus">−</span>Thêm hệ mới + nhiều khái niệm (exchange, binding, ack mode...) — quá cỡ khi chỉ có 3–5 nguồn và 1 người vận hành (R1)</div>
+        <div class="pc"><span class="minus">−</span>Chỉ đáng giá khi cần định tuyến phức tạp nhiều consumer — chưa phải hôm nay</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">1E · Kafka</div><span class="opt-verdict v-never">LOẠI HẲN</span>
+        <div class="mini-flow"><span class="mn">Nguồn</span><span class="ma">→</span><span class="mn hl">Kafka cluster (log phân tán)</span><span class="ma">→</span><span class="mn">Nhiều hệ cùng đọc lại</span></div>
+        <div class="pc"><span class="plus">+</span>Thông lượng cực lớn (hàng triệu msg/giây), phát lại lịch sử</div>
+        <div class="pc"><span class="minus">−</span>Nặng vận hành nhất trong mọi phương án: cluster, tuning, giám sát riêng — vi phạm R1 nghiêm trọng nhất</div>
+        <div class="pc"><span class="minus">−</span>Thiết kế cho hàng triệu event/ngày với nhiều hệ tiêu thụ stream — <b>gấp nhiều chục lần</b> quy mô MDP (R3). Dùng Kafka ở đây là mua xe container để đi chợ.</div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">③ Bảng so sánh</h3>
     <table class="tbl">
-      <tr><th style="width:230px">Nhóm việc trong họp</th><th style="width:110px">Đánh giá</th><th>Ý kiến chuyên môn</th></tr>
-      <tr><td><b>1 · Stabilize baseline</b><br><small style="color:var(--muted)">deploy sạch, healthcheck, backup/restore</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Compose đã có healthcheck + runbook deploy prod. Việc chính: <b>diễn tập restore thật</b> (DB 79 GB), bảo vệ <code>APIKEY_ENC_KEY</code> (mất = key mã hoá không khôi phục được), và viết "known limitations". <b>Kèm theo: cắt bản v2.3.0 xuống PROD</b> (backup trước, alembic 021→022) để PROD có upsert inbound.</td></tr>
-      <tr><td><b>2 · API/query hardening</b><br><small style="color:var(--muted)">pagination, max limit, timeout, request_id</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Limit 500 + envelope + scope-deny đã có; upsert inbound đã xong trên nhánh v2.3.0. Còn thiếu: <code>statement_timeout</code>, middleware <code>request_id</code>, rate limit theo API key, pagination deterministic (thêm ORDER BY khoá). Dọn luôn nhóm P1 bảo mật: secrets mặc định, JWT fall-through, SSRF ở /connections/test.</td></tr>
-      <tr><td><b>3 · Database performance</b><br><small style="color:var(--muted)">EXPLAIN ANALYZE, index, materialized view</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Matview đã có sẵn (~80×) — trọng tâm chuyển sang: EXPLAIN ANALYZE các query outbound/curated chính, index theo kết quả, <b>retention/partition</b> cho <code>transactions</code> và <code>raw_payload</code>, và <b>audit watermark theo ngày</b> (rủi ro mất dòng âm thầm — ưu tiên cao nhất của nhóm này).</td></tr>
-      <tr><td><b>4 · Queue/job readiness</b><br><small style="color:var(--muted)">PostgreSQL job table hoặc Redis/RQ</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Chọn đúng cỡ: <b>PostgreSQL job table (SKIP LOCKED) + 1 container worker</b> — không thêm hạ tầng mới, đủ retry/dead-letter/idempotency. Việc đầu tiên: chuyển verify-batch (đang là queue trong RAM) vào job table để sống sót restart và chạy được multi-replica. Redis/RQ là bước nâng khi cần tốc độ. Chi tiết ở Phần 7.</td></tr>
-      <tr><td><b>5 · Load balancing</b><br><small style="color:var(--muted)">2 backend replicas</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Điều kiện tốt: API stateless, các vòng nền (streaming/matview/source-count) <b>đã có advisory lock</b> nên không chạy trùng. Còn phải sửa: trạng thái verify-batch in-memory (chuyển vào DB), pool kết nối tính theo tổng replicas. 2 replicas trên 1 máy = throughput + zero-downtime deploy, chưa phải HA thật. Chi tiết ở Phần 6.</td></tr>
-      <tr><td><b>6 · Load test k6/Locust</b><br><small style="color:var(--muted)">+ soak test 4–8h</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Chuẩn. Tôi đề xuất bộ 6 kịch bản cụ thể kèm ngưỡng đạt ở Phần 9 — quan trọng nhất là <b>soak test</b> để bắt memory leak và pool cạn kết nối.</td></tr>
-      <tr><td><b>7 · TIPA readiness package</b><br><small style="color:var(--muted)">API contract, runbook, rollback</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Đây là deliverable giúp đội TIPA tích hợp không cần hỏi lại. Thêm <b>onboarding kit cho từng nguồn mới</b> (mẫu API key + mẫu payload + mẫu test).</td></tr>
-      <tr><td><b>Không thêm AI/BPM/OCR-tool/dashboard riêng · Grafana giữ nguyên · streaming disabled mặc định</b></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Kỷ luật phạm vi tốt, khớp thực tế: BPM/OCR/AI/IIoT đã được "hoãn có chủ đích". Streaming hiện bật 38/40 bảng <b>sau khi</b> verify PK/watermark từng bảng — bảng mới thêm phải giữ nguyên tắc tắt mặc định cho tới khi verify xong.</td></tr>
-      <tr style="background:#fffbeb"><td><b>Điều biên bản CHƯA có</b></td><td class="c"><span class="tag next">BỔ SUNG</span></td><td><b>(a) Observability</b>: /metrics Prometheus + alert qua Grafana (đã có sẵn Grafana trong stack) — kèm <b>watchdog watermark</b>: streaming đã chạy 38/40 bảng nhưng lỗi chỉ ghi <code>last_error</code> vào DB, đứng yên không ai biết. <b>(b) Phát hành v2.3.0 xuống PROD</b> — fix chống trùng inbound và unique business key đang nằm trên nhánh, PROD chưa được bảo vệ. <b>(c) Audit watermark theo ngày</b> — đóng rủi ro mất dòng âm thầm trước khi mở thêm nguồn. <b>(d) Promote lớp curated + Grafana lên PROD</b> — 26 view + 8 dashboard mới ở DEV. <b>(e) Quy ước versioning API</b> (v1) trước khi TIPA tích hợp để sau này đổi không vỡ.</td></tr>
+      <tr><th>Tiêu chí</th><th>1A Đồng bộ</th><th>1B Job table ✓</th><th>1C Redis</th><th>1D RabbitMQ</th><th>1E Kafka</th></tr>
+      <tr><td><b>Phức tạp vận hành</b> (R1)</td><td class="c">Không thêm</td><td class="c"><b>Không thêm</b></td><td class="c">+1 hệ</td><td class="c">+1 hệ (nặng)</td><td class="c">+1 cluster</td></tr>
+      <tr><td><b>Hạ tầng</b> (R2)</td><td class="c">0</td><td class="c"><b>0</b></td><td class="c">+RAM</td><td class="c">+container</td><td class="c">+máy chủ</td></tr>
+      <tr><td><b>Thông lượng so với nhu cầu R3</b></td><td class="c">Đủ nếu không burst</td><td class="c"><b>Gấp ~100 lần</b></td><td class="c">Gấp ~1.000 lần</td><td class="c">Gấp ~1.000 lần</td><td class="c">Gấp ~100.000 lần</td></tr>
+      <tr><td><b>Chống mất dữ liệu</b></td><td class="c">Không (lỗi là mất)</td><td class="c"><b>Có — bền như DB</b></td><td class="c">Tùy cấu hình</td><td class="c">Có</td><td class="c">Có</td></tr>
+      <tr><td><b>Độ khó triển khai</b></td><td class="c">—</td><td class="c"><b>Vừa (~2 tuần)</b></td><td class="c">Vừa</td><td class="c">Lớn</td><td class="c">Rất lớn</td></tr>
     </table>
+
+    <div class="decision">
+      <div class="d-label">④ Quyết định &amp; lý do</div>
+      <p><b>Chọn 1B — job table trong PostgreSQL</b> làm công nghệ đích khi cần queue, nhưng <b>triển khai để sau (GĐ3)</b> —
+      chỉ kích hoạt khi T5/T6 (hoặc tải PROD tương đương) báo áp lực. Baseline 27/08/2026: T5 inbound ~34 msg/s PASS, T6 soak p95 81ms PASS →
+      giữ xử lý đồng bộ (1A) kèm giới hạn tải (rate limit, giới hạn kích thước payload) là đủ giai đoạn này. Không thêm Kafka/RabbitMQ/Redis.</p>
+      <ul>
+        <li><b>Loại 1C (Redis)</b>: lợi ích duy nhất là tốc độ — thứ chưa cần; đổi lại thêm một hệ phải trực và rủi ro mất job nếu cấu hình sai. Với R1, không đáng.</li>
+        <li><b>Để sau 1D (RabbitMQ)</b>: là bước nâng cấp hợp lệ <b>nếu</b> job table đo được là không đủ — nhưng phải có số liệu chứng minh trước.</li>
+        <li><b>Loại hẳn 1E (Kafka)</b>: sai quy mô ở mọi tiêu chí. Ghi rõ vào hồ sơ để không mất thời gian bàn lại mỗi lần có ai gợi ý "sao không dùng Kafka".</li>
+      </ul>
+    </div>
+    <div class="tradeoff"><b>⑤ Đánh đổi chấp nhận</b>
+      Job table cộng thêm tải ghi vào PostgreSQL (mỗi job = 1 dòng insert + vài update trạng thái). Ở mức R3 điều này không đáng kể,
+      nhưng nó là lý do phải theo dõi DB (QĐ4) và giữ bảng jobs gọn bằng dọn dẹp định kỳ (QĐ3).</div>
+    <div class="revisit"><b>⑥ Điều kiện xem xét lại</b>
+      Mở lại / đẩy lên lịch sớm nếu MỘT trong các số đo sau xuất hiện: T5 hoặc burst inbound FAIL / p95 vượt ngưỡng kéo dài · tải thật vượt ~500 nghìn job/ngày ·
+      độ trễ hàng đợi (job nằm chờ) vượt 60 giây ở giờ cao điểm dù đã tối ưu · xuất hiện ≥3 hệ tiêu thụ cần đọc cùng một luồng sự kiện theo cách khác nhau (lúc đó cân nhắc 1D RabbitMQ).</div>
   </div>
 </section>
 
-<!-- ============ 4. TARGET ARCHITECTURE ============ -->
-<section id="s4">
-  <div class="sec-head"><span class="sec-num">Sơ đồ A</span><h2>Kiến trúc mục tiêu đề xuất</h2></div>
-  <p class="sec-desc">Giữ nguyên lõi hiện tại · thêm 4 khối mới (viền đậm đánh dấu ➊–➍) · khối nét đứt là giai đoạn sau.</p>
-  <div class="card">
-    <div class="target">
-      <div>
-        <div class="zone" style="height:100%">
-          <div class="zone-title"><span class="dot" style="background:var(--blue)"></span>Nguồn dữ liệu</div>
-          <div class="stack">
-            <div class="node n-blue">JDE (Oracle .16)<small>ora2pg + streaming watermark — đã chạy</small></div>
-            <div class="node n-blue">MES<small>push REST / MQTT sau</small></div>
-            <div class="node n-blue">App 1, 2, 3…<small>push REST</small></div>
-            <div class="node n-blue n-dash">OCR hoá đơn<small>hoãn có chủ đích — khi cần: push REST</small></div>
-            <div class="node n-blue n-dash">IIoT / PLC<small>qua edge tool → MQTT</small></div>
-          </div>
-        </div>
+<section id="d2">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">QĐ 2</span><h2>Load Balancing &amp; khả năng chịu lỗi</h2></div>
+    <p class="sec-desc">Ước lượng công sức phương án chọn: <span class="effort e-s">NHỎ · ~2–3 ngày công</span> (sửa compose, kiểm chứng stateless, load test lại) ·
+    <b>thứ tự:</b> triển khai <b>sau QĐ3</b> (GĐ2) — T2 FAIL trước hết cần index/curated, không phải thêm replica ngay.</p>
+
+    <div class="problem">
+      <div class="p-label">① Vấn đề là gì</div>
+      <p>Backend hiện chạy <b>một bản duy nhất</b> (một container). Hai hệ quả: (1) container đó chết — vì lỗi phần mềm, hết RAM, hay đơn giản là đang cập nhật —
+      thì <b>toàn bộ</b> API dừng; (2) một tiến trình Python chỉ tận dụng hiệu quả một phần CPU của máy, phần còn lại bỏ phí.
+      Load balancing = chạy nhiều bản sao (replica) và có một "người chia việc" đứng trước phân phối request.</p>
+      <div class="scenario"><b>Tình huống ví dụ:</b> đang giờ làm việc, backend gặp lỗi bộ nhớ và bị Docker restart — mất ~30 giây.
+      Bản hiện tại: 30 giây đó mọi request của TIPA/iHUB đều lỗi. Có 2 replicas: Caddy tự động dồn request sang bản còn sống, người dùng không nhận ra sự cố.</div>
+    </div>
+
+    <h3 class="sub-h">② Các phương án đã cân nhắc</h3>
+    <div class="opt-grid">
+      <div class="opt">
+        <div class="opt-name">2A · Giữ 1 replica, chỉ tối ưu</div><span class="opt-verdict v-rej">LOẠI</span>
+        <div class="mini-flow"><span class="mn">Caddy</span><span class="ma">→</span><span class="mn hl">1 backend</span><span class="ma">→</span><span class="mn">PostgreSQL</span></div>
+        <div class="pc"><span class="plus">+</span>Không phải làm gì</div>
+        <div class="pc"><span class="minus">−</span>Một điểm chết duy nhất; không tận dụng CPU; mỗi lần deploy là một lần downtime</div>
       </div>
-      <div class="arrow-r">▶</div>
-      <div>
-        <div class="zone">
-          <div class="zone-title"><span class="dot" style="background:var(--brand)"></span>TIPA ESB — nâng cấp</div>
-          <div class="mid-rows">
-            <div class="node n-dark">➊ Caddy — TLS · <b>load balance 2+ replicas</b> · rate limit<small>cổng vào duy nhất · :8456</small></div>
-            <div class="arrow-d">▼</div>
-            <div class="mid-row">
-              <div class="node n-red">FastAPI ×2 replicas<small>stateless · validate · upsert business key (v2.3.0) · request_id · trả 202 nhanh</small></div>
-              <div class="node n-red">➋ Worker container<small>verify batch · job nặng · retry ×3 · dead-letter</small></div>
-            </div>
-            <div class="arrow-d">▼</div>
-            <div class="mid-row">
-              <div class="node n-amber">➌ Job Queue<small>PostgreSQL SKIP LOCKED (nay) → Redis/RabbitMQ (sau) · streaming/matview giữ advisory lock sẵn có</small></div>
-              <div class="node n-teal">➍ Observability<small>/metrics Prometheus · alert Grafana · watchdog watermark</small></div>
-            </div>
-            <div class="arrow-d">▼</div>
-            <div class="node n-purple">PostgreSQL 16 — pool kết nối chung (PgBouncer khi cần)<small>staging 40 bảng → mdp_curated 26 view → matview mdp_models · mdp_data · metadata · partition log</small></div>
-            <div class="node n-purple n-dash">Read replica<small>giai đoạn sau — khi tải đọc lớn</small></div>
-          </div>
-        </div>
+      <div class="opt win">
+        <div class="opt-name">2B · 2–3 replicas cùng máy, Caddy chia tải</div><span class="opt-verdict v-win">CHỌN</span>
+        <div class="mini-flow"><span class="mn">Caddy</span><span class="ma">→</span><span class="mn hl">backend #1</span><span class="ma">·</span><span class="mn hl">backend #2</span><span class="ma">→</span><span class="mn">PostgreSQL</span></div>
+        <div class="pc"><span class="plus">+</span><b>Gần như miễn phí</b>: Caddy đã có sẵn (chỉ thêm cấu hình), API đã stateless, job nền đã có khóa advisory chống chạy trùng — 3 điều kiện tiên quyết đều thỏa</div>
+        <div class="pc"><span class="plus">+</span>Chịu lỗi mức tiến trình; deploy lần lượt từng bản không downtime; dùng thêm được CPU đang bỏ phí</div>
+        <div class="pc"><span class="minus">−</span>Không chống được sự cố chết cả máy chủ; các replica vẫn dùng chung một DB</div>
       </div>
-      <div class="arrow-r">▶</div>
-      <div>
-        <div class="zone" style="height:100%">
-          <div class="zone-title"><span class="dot" style="background:var(--green)"></span>Tiêu thụ</div>
-          <div class="stack">
-            <div class="node n-green">iHUB — WSO2 (.64)<small>API key + contract v1 · import cert MDP</small></div>
-            <div class="node n-green">Grafana 8 dashboard<small>curated + matview · promote lên PROD</small></div>
-            <div class="node n-green">Apps nội bộ<small>outbound API · ?function=</small></div>
-            <div class="node n-green n-dash">AI Agents qua MCP<small>giai đoạn 3 — gọi API sẵn có</small></div>
-          </div>
-        </div>
+      <div class="opt">
+        <div class="opt-name">2C · 2 máy chủ + load balancer</div><span class="opt-verdict v-later">ĐỂ SAU</span>
+        <div class="mini-flow"><span class="mn">LB</span><span class="ma">→</span><span class="mn hl">Máy A</span><span class="ma">·</span><span class="mn hl">Máy B</span><span class="ma">→</span><span class="mn">DB (vẫn phải giải riêng)</span></div>
+        <div class="pc"><span class="plus">+</span>Chịu lỗi mức máy chủ — máy A cháy, máy B chạy tiếp</div>
+        <div class="pc"><span class="minus">−</span>Cần cấp thêm máy (vi phạm R2); phức tạp vận hành gấp đôi (R1)</div>
+        <div class="pc"><span class="minus">−</span>DB vẫn là điểm chung — muốn chống chết máy trọn vẹn phải thêm cả replica DB, chi phí nhân đôi lần nữa</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">2D · Kubernetes</div><span class="opt-verdict v-rej">LOẠI</span>
+        <div class="mini-flow"><span class="mn">Ingress</span><span class="ma">→</span><span class="mn hl">Pods tự scale/tự hồi phục</span><span class="ma">→</span><span class="mn">DB</span></div>
+        <div class="pc"><span class="plus">+</span>Chuẩn ngành cho hệ lớn: tự hồi phục, tự scale, rolling deploy</div>
+        <div class="pc"><span class="minus">−</span>Chi phí học + vận hành lớn nhất trong mọi phương án của tài liệu này — với R1 (1 người kiêm nhiệm) là rủi ro vận hành, không phải nâng cấp</div>
+        <div class="pc"><span class="minus">−</span>Trên một máy đơn, k8s không đem lại gì hơn Docker Compose + restart policy</div>
       </div>
     </div>
-    <div class="callout">Đồng bộ JDE (giữ nguyên — đã chạy thật): <b>ora2pg full load + streaming watermark trong hub</b>, 38/40 bảng, advisory lock chống chạy trùng. <b>CDC log-based (LogMiner/Debezium/Flink-CDC) đã bị loại vĩnh viễn</b> vì Oracle nguồn tắt ARCHIVELOG và không được restart production — mọi phương án nâng cấp phải xây trên query watermark, không quay lại hướng CDC. Cái còn thiếu là <b>watchdog</b>: cảnh báo khi watermark đứng yên quá ngưỡng.</div>
-    <div class="callout blue">Về ảnh tham khảo Litmus: đó là nền tảng <b>IIoT edge</b> (kết nối PLC Modbus/OPC UA/Siemens). ESB MDP không nên tự xây driver máy móc — nếu sau này cần dữ liệu máy, dùng edge tool (Litmus/Node-RED) thu thập rồi <b>đẩy về hub qua MQTT/REST</b>, đúng vai trò từng lớp.</div>
-  </div>
-</section>
 
-<!-- ============ 5. NEW INBOUND FLOW ============ -->
-<section id="s5">
-  <div class="sec-head"><span class="sec-num">Sơ đồ B</span><h2>Luồng inbound mới — bất đồng bộ, chống trùng</h2></div>
-  <p class="sec-desc">Áp dụng cho mọi nguồn push (OCR, MES, App…). Payload nhỏ lẻ vẫn có thể đi đường đồng bộ như cũ.</p>
-  <div class="card">
-    <div class="chain">
-      <div class="step s-blue"><span class="num">1</span><b>Nguồn gửi JSON</b><span>kèm business key (mã chứng từ / số phiếu)</span></div>
-      <div class="sep">▶</div>
-      <div class="step"><span class="num">2</span><b>Caddy LB</b><span>chia tải 2 replicas · rate limit theo key</span></div>
-      <div class="sep">▶</div>
-      <div class="step s-red"><span class="num">3</span><b>API validate nhanh</b><span>auth · scope · schema model · gắn request_id</span></div>
-      <div class="sep">▶</div>
-      <div class="step s-amber"><span class="num">4</span><b>Ghi vào queue</b><span>trả 202 ngay · nguồn không phải chờ DB</span></div>
-      <div class="sep">▶</div>
-      <div class="step s-red"><span class="num">5</span><b>Worker xử lý</b><span>UPSERT theo business key — nền tảng đã có từ v2.3.0</span></div>
-      <div class="sep">▶</div>
-      <div class="step s-purple"><span class="num">6</span><b>Fail → retry ×3</b><span>vẫn fail → dead-letter + alert · xem lại được</span></div>
-      <div class="sep">▶</div>
-      <div class="step s-green"><span class="num">7</span><b>Data sẵn sàng</b><span>outbound API · tra cứu trạng thái theo request_id</span></div>
+    <h3 class="sub-h">③ Bảng so sánh</h3>
+    <table class="tbl">
+      <tr><th>Tiêu chí</th><th>2A 1 replica</th><th>2B Replicas + Caddy ✓</th><th>2C 2 máy</th><th>2D Kubernetes</th></tr>
+      <tr><td><b>Phức tạp vận hành</b> (R1)</td><td class="c">Không đổi</td><td class="c"><b>+ rất ít</b></td><td class="c">Gấp ~2</td><td class="c">Gấp ~5</td></tr>
+      <tr><td><b>Hạ tầng</b> (R2)</td><td class="c">0</td><td class="c"><b>0</b></td><td class="c">+1 máy trở lên</td><td class="c">+máy / +học</td></tr>
+      <tr><td><b>Chịu lỗi tiến trình</b> (container chết)</td><td class="c">Không</td><td class="c"><b>Có</b></td><td class="c">Có</td><td class="c">Có</td></tr>
+      <tr><td><b>Chịu lỗi máy chủ</b> (máy chết)</td><td class="c">Không</td><td class="c">Không</td><td class="c">Có (trừ DB)</td><td class="c">Có (nếu đa máy)</td></tr>
+      <tr><td><b>Deploy không downtime</b></td><td class="c">Không</td><td class="c"><b>Có</b></td><td class="c">Có</td><td class="c">Có</td></tr>
+      <tr><td><b>Độ khó triển khai</b></td><td class="c">—</td><td class="c"><b>Nhỏ (~2–3 ngày)</b></td><td class="c">Lớn</td><td class="c">Rất lớn</td></tr>
+    </table>
+
+    <div class="decision">
+      <div class="d-label">④ Quyết định &amp; lý do</div>
+      <p><b>Chọn 2B — 2 (sau đó có thể 3) bản sao backend trên cùng máy sản xuất, Caddy chia tải</b>.
+      Benchmark 27/08: T2 outbound @100 VU FAIL (local p95 2.26s · tipa 2.69s) — bằng chứng cần gia cố đọc;
+      <b>thứ tự đúng: xong QĐ3 (EXPLAIN → index/curated/matview) → đo lại T2 → rồi mới bật replica</b>.
+      Kiểm chứng: chạy T2 trong lúc tắt 1 replica giữa chừng, đo tỷ lệ request lỗi (mục tiêu: ~0%).</p>
+      <ul>
+        <li><b>Loại 2A</b>: giữ nguyên là giữ điểm chết duy nhất trong khi chi phí khắc phục chỉ ~2–3 ngày công — tỷ lệ lợi ích/chi phí quá tốt để bỏ qua (sau khi đã giảm tải đọc).</li>
+        <li><b>Để sau 2C</b>: là quyết định đầu tư của công ty (thêm máy), không phải quyết định kỹ thuật. Tài liệu ghi rõ: nếu công ty đặt yêu cầu "máy chết vẫn phải chạy" (SLA chính thức), 2C là bước tiếp theo, kèm bài toán replica DB.</li>
+        <li><b>Loại 2D</b>: mọi lợi ích của k8s chỉ hiện ra khi có nhiều máy và đội vận hành chuyên — cả hai đều chưa có.</li>
+      </ul>
     </div>
-    <div class="callout green">Lợi ích đo được: nguồn burst 1.000 msg không đánh sập DB · gửi trùng không sinh bản ghi trùng · bản ghi lỗi không mất mà nằm ở dead-letter chờ xử lý · mọi request tra được vết theo <code>request_id</code>.</div>
-    <div class="callout">Bước 5 tận dụng nền có sẵn: v2.3.0 đã có <b>UPSERT theo business key + unique index</b> ngay trong inbound. Phần mới của sơ đồ này chỉ là bước 4 (queue + trả 202) và bước 6 (retry/dead-letter) — payload nhỏ lẻ vẫn có thể đi đường đồng bộ như hiện tại.</div>
+    <div class="tradeoff"><b>⑤ Đánh đổi chấp nhận</b>
+      2B không bảo vệ khỏi sự cố chết cả máy chủ hoặc chết DB — rủi ro này được <b>chấp nhận có chủ đích</b> và bù bằng: backup định kỳ đã kiểm chứng khôi phục được (GĐ1) + cảnh báo sớm (QĐ4).
+      Nhiều replica cũng nghĩa là nhiều kết nối DB hơn → theo dõi pool; hiện đo được <b>Connections 13/100</b> nên <b>không đẩy PgBouncer</b> — chỉ mở lại nếu tiến gần <code>max_connections</code>.</div>
+    <div class="revisit"><b>⑥ Điều kiện xem xét lại</b>
+      Mở lại nếu: công ty ký SLA về thời gian sống của hệ thống · được cấp thêm máy chủ · hoặc số đo cho thấy CPU máy sản xuất kịch trần kéo dài dù đã 3 replicas (lúc đó bàn 2C).</div>
   </div>
 </section>
 
-<!-- ============ 6. LOAD BALANCING ============ -->
-<section id="s6">
-  <div class="sec-head"><span class="sec-num">Sơ đồ C</span><h2>Load balancing — làm gì, không làm gì</h2></div>
-  <p class="sec-desc">2 replicas sau Caddy giải quyết throughput và deploy không downtime. HA thật (chống chết máy) là bước sau.</p>
-  <div class="card">
-    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:20px;align-items:start">
-      <div>
+<section id="d3">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">QĐ 3</span><h2>Hiệu năng Database — index, retention, pool kết nối</h2></div>
+    <p class="sec-desc">Ước lượng công sức phương án chọn: <span class="effort e-m">VỪA · ~5–10 ngày công</span> (đo → index đợt 1 → đo lại → chính sách retention).
+    Index là <b>tính năng có sẵn của PostgreSQL</b> — tạo bằng một câu lệnh SQL, không phải lập trình.
+    <b>GĐ2 · việc đầu tiên</b> để xử lý T2 FAIL (local p95 2.26s · tipa 2.69s).</p>
+
+    <div class="problem">
+      <div class="p-label">① Vấn đề là gì</div>
+      <p>Index giống mục lục của một cuốn sách: không có mục lục, muốn tìm một chương phải lật từng trang. Bảng lớn nhất của MDP đã ~60 triệu dòng
+      nhưng hiện <b>chỉ có đúng một index</b> (khóa chính, phục vụ đồng bộ) — mọi câu hỏi kiểu "giao dịch của mã hàng X trong tháng 6" đều phải "lật cả cuốn sách".
+      Đồng thời dữ liệu phình ~40–50 MB/ngày mà chưa có chính sách dọn dẹp (retention) — đĩa sẽ đầy, backup sẽ chậm dần.</p>
+      <div class="scenario"><b>Tình huống ví dụ:</b> Grafana vẽ biểu đồ tồn kho theo tháng. Không index: PostgreSQL đọc cả ~60 triệu dòng để lọc ra vài nghìn dòng liên quan — chục giây đến hàng phút, chiếm trọn đĩa và CPU, mọi truy vấn khác chậm theo.
+      Có index đúng cột: chỉ đọc đúng phần cần — thường dưới một giây. Cùng câu hỏi, chênh nhau hàng trăm lần.</div>
+    </div>
+
+    <h3 class="sub-h">② Các phương án đã cân nhắc</h3>
+    <div class="opt-grid">
+      <div class="opt win">
+        <div class="opt-name">3A · Index theo số đo + retention</div><span class="opt-verdict v-win">CHỌN — VIỆC NỀN</span>
+        <div class="mini-flow"><span class="mn">Đo query chậm</span><span class="ma">→</span><span class="mn hl">EXPLAIN ANALYZE</span><span class="ma">→</span><span class="mn">CREATE INDEX đúng chỗ</span><span class="ma">→</span><span class="mn">Đo lại</span></div>
+        <div class="pc"><span class="plus">+</span>Rẻ nhất, hiệu quả cao nhất trên mỗi đồng bỏ ra; không thêm hạ tầng</div>
+        <div class="pc"><span class="plus">+</span>Kèm chính sách retention/phân vùng cho bảng lớn → chặn bài toán đầy đĩa</div>
+        <div class="pc"><span class="minus">−</span>Phải làm có kỷ luật: đo trước, index sau — index bừa gây hại (xem đánh đổi)</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">3B · PgBouncer (gom kết nối)</div><span class="opt-verdict v-later">ĐỂ SAU — KHÔNG ĐẨY NGAY</span>
+        <div class="mini-flow"><span class="mn">Nhiều replicas</span><span class="ma">→</span><span class="mn hl">PgBouncer</span><span class="ma">→</span><span class="mn">Ít kết nối DB thật</span></div>
+        <div class="pc"><span class="plus">+</span>Giải đúng một bệnh: cạn kết nối DB khi chạy nhiều replicas; nhẹ, dễ cài</div>
+        <div class="pc"><span class="minus">−</span>Baseline 27/08: Connections <b>13/100</b> — chưa có bệnh này; cài trước là thêm tầng chưa cần</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">3C · Read replica PostgreSQL</div><span class="opt-verdict v-rej">LOẠI</span>
+        <div class="mini-flow"><span class="mn">DB chính (ghi)</span><span class="ma">→</span><span class="mn hl">DB phụ (đọc)</span><span class="ma">→</span><span class="mn">Dashboard/outbound</span></div>
+        <div class="pc"><span class="plus">+</span>Tách hẳn tải đọc khỏi tải ghi</div>
+        <div class="pc"><span class="minus">−</span>Cần thêm máy (vi phạm R2). Và matview đã giải phần lớn bài toán tải đọc rồi</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">3D · Kho phân tích riêng (ClickHouse...)</div><span class="opt-verdict v-rej">LOẠI</span>
+        <div class="mini-flow"><span class="mn">PostgreSQL</span><span class="ma">→</span><span class="mn">ETL</span><span class="ma">→</span><span class="mn hl">Engine phân tích riêng</span></div>
+        <div class="pc"><span class="plus">+</span>Rất nhanh cho báo cáo tổng hợp cực lớn</div>
+        <div class="pc"><span class="minus">−</span>Thêm công nghệ mới + luồng ETL mới (vi phạm R1, R2). Lớp staging → curated → matview hiện tại <b>chính là</b> một "kho dữ liệu mini" và chưa đo được giới hạn của nó</div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">③ Chọn loại index nào — bảng tra cứu</h3>
+    <p class="sec-desc" style="margin-bottom:10px">"Multi-index" thường được nhắc tới chính là <b>composite index</b> (một index trên nhiều cột — thứ tự cột rất quan trọng).
+    PostgreSQL cũng tự biết <b>kết hợp nhiều index đơn</b> trong một câu truy vấn khi có lợi. Chọn loại theo bài toán:</p>
+    <table class="tbl">
+      <tr><th>Loại index</th><th>Dùng khi nào</th><th>Chỗ dùng trong MDP</th><th>Lưu ý</th></tr>
+      <tr><td><b>B-tree</b> (mặc định)</td><td>Lọc =, &gt;, &lt;, BETWEEN trên cột đơn</td><td>~95% nhu cầu: cột hay lọc trong outbound, curated view</td><td>Mặc định của <code>CREATE INDEX</code></td></tr>
+      <tr><td><b>Composite</b> (nhiều cột)</td><td>Câu lọc luôn đi cặp (mã hàng + chi nhánh)</td><td>Các view join nhiều điều kiện (P2P, tồn kho)</td><td>Cột hay lọc bằng dấu = đặt trước; index (a,b) dùng được cho lọc riêng a, nhưng không dùng được cho lọc riêng b</td></tr>
+      <tr><td><b>Partial</b> (một phần)</td><td>Chỉ hay truy vấn tập con "nóng"</td><td>VD chỉ index chứng từ còn mở (<code>WHERE trạng thái = mở</code>)</td><td>Nhỏ hơn nhiều lần index thường, ghi cũng nhanh hơn</td></tr>
+      <tr><td><b>BRIN</b></td><td>Bảng khổng lồ, ghi nối tiếp theo thời gian/sequence</td><td><b>2 bảng lớn nhất</b> (sổ kho, sổ cái) — lọc theo khoảng ngày</td><td>Chỉ vài MB thay vì vài GB như B-tree; đổi lại chỉ hợp truy vấn theo khoảng</td></tr>
+      <tr><td><b>GIN</b></td><td>Cột JSONB, tìm theo thuộc tính bên trong</td><td>Payload thô của dữ liệu push (Type A) nếu có nhu cầu tra cứu</td><td>Tốn dung lượng và làm chậm ghi rõ rệt — chỉ tạo khi có nhu cầu thật</td></tr>
+    </table>
+    <div class="callout blue" style="margin-top:12px"><b>Quản lý ở đâu?</b> Index không cần "code tính năng": hệ thống đã tự tạo unique index cho khóa chính, business key và matview.
+    Index phụ bổ sung sẽ quản lý qua <b>migration script</b> (có lịch sử, có rollback) — <b>không</b> xây màn hình quản lý index trong Admin UI:
+    thao tác tạo index trên bảng chục triệu dòng cần chạy đúng thời điểm (<code>CREATE INDEX CONCURRENTLY</code>, ngoài giờ), để một cú click làm được việc đó là rủi ro, không phải tiện ích.</div>
+
+    <div class="decision">
+      <div class="d-label">④ Quyết định &amp; lý do</div>
+      <p><b>Chọn 3A làm việc đầu của GĐ2 (tốc độ đọc)</b> — bằng chứng trực tiếp: T2 outbound @100 VU FAIL (local p95 2.26s · tipa 2.69s).
+      Chu trình bắt buộc: bật <code>pg_stat_statements</code> / EXPLAIN ANALYZE các query outbound chậm → thêm index đợt 1 (ưu tiên BRIN 2 bảng lớn + composite cột lọc) + siết lớp curated/matview →
+      <b>đo lại T2</b> và ghi số trước/sau. Chỉ khi T2 đã cải thiện mới chuyển sang QĐ2 replica. Kèm retention: log giao dịch dọn định kỳ, staging lớn có kế hoạch phân vùng theo tháng.</p>
+      <ul>
+        <li><b>Để sau 3B (PgBouncer)</b>: Connections hiện 13/100 — <b>không đẩy ngay</b>. Kích hoạt chỉ khi <code>pg_stat_activity</code> tiến gần <code>max_connections</code> (thường sau nhiều replicas).</li>
+        <li><b>Loại 3C, 3D</b>: cả hai đều cần máy mới hoặc công nghệ mới (vi phạm R1/R2), và cả hai đều nhằm giải bài toán mà matview + curated view hiện tại chưa hề đuối. Nguyên tắc: không mua thuốc khi chưa có chẩn đoán.</li>
+      </ul>
+    </div>
+    <div class="tradeoff"><b>⑤ Đánh đổi chấp nhận</b>
+      Mỗi index làm chậm thao tác ghi một chút và tốn đĩa (B-tree trên bảng 60 triệu dòng có thể vài GB — vì vậy ưu tiên BRIN/partial ở đó).
+      Quy trình "đo trước, index sau" chậm hơn cảm giác "cứ index hết cho chắc" — nhưng index thừa vừa tốn đĩa vừa làm chậm ghi mà không ai dùng; file đo kèm bộ kit có sẵn câu SQL liệt kê index không được dùng để gỡ bỏ.</div>
+    <div class="revisit"><b>⑥ Điều kiện xem xét lại</b>
+      Nếu sau index đợt 1 + matview mà p95 truy vấn dashboard vẫn vượt mục tiêu, hoặc DB vượt ~150 GB làm backup/restore quá chậm — lúc đó mở lại 3C/3D kèm đề xuất cấp máy.</div>
+  </div>
+</section>
+
+<section id="d4">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">QĐ 4</span><h2>Giám sát &amp; cảnh báo (Observability)</h2></div>
+    <p class="sec-desc">Ước lượng công sức: <span class="effort e-s">NHỎ · 1–2 ngày</span> cho watchdog + Telegram · <span class="effort e-m">VỪA · ~5–8 ngày</span> cho Prometheus + Grafana alerting ·
+    <b>GĐ1 ưu tiên</b> (cùng QĐ5): tin cậy vận hành trước khi tối ưu tốc độ đọc.</p>
+
+    <div class="problem">
+      <div class="p-label">① Vấn đề là gì</div>
+      <p>Hiện nay hệ thống <b>không tự báo</b> khi có sự cố: đồng bộ JDE lỗi chỉ ghi vào log và trường trạng thái — phải có người mở trang quản trị lên xem mới biết.
+      Với 1 người vận hành kiêm nhiệm (R1), "phải nhớ vào xem" đồng nghĩa "sẽ có lúc không xem". Đây được đánh giá là <b>lỗ hổng vận hành lớn nhất</b> hiện tại —
+      vì mọi quyết định khác trong tài liệu này đều dựa trên số đo, mà không có giám sát thì không có số đo.</p>
+      <div class="scenario"><b>Tình huống ví dụ:</b> một bảng JDE ngừng đồng bộ tối thứ Sáu do đổi mật khẩu phía Oracle.
+      Bản hiện tại: thứ Hai họp giao ban, sếp hỏi "sao số liệu cuối tuần không có?", lúc đó mới đi tìm — dữ liệu đã trễ 3 ngày.
+      Có cảnh báo: 22h thứ Sáu điện thoại người vận hành nhận tin "watermark bảng X đứng yên quá 60 phút" — xử lý trong tối, sáng thứ Hai số liệu đầy đủ.</div>
+    </div>
+
+    <h3 class="sub-h">② Các phương án đã cân nhắc</h3>
+    <div class="opt-grid">
+      <div class="opt win">
+        <div class="opt-name">4A · Watchdog + báo Telegram/email</div><span class="opt-verdict v-win">CHỌN — LÀM NGAY</span>
+        <div class="mini-flow"><span class="mn">Script định kỳ</span><span class="ma">→</span><span class="mn hl">Kiểm tra health + watermark + đĩa</span><span class="ma">→</span><span class="mn">Tin nhắn Telegram</span></div>
+        <div class="pc"><span class="plus">+</span>Làm xong trong 1–2 ngày, không thêm hạ tầng; phủ được 3 sự cố nguy hiểm nhất (hệ chết, đồng bộ đứng, đĩa đầy)</div>
+        <div class="pc"><span class="minus">−</span>Thô sơ: không có đồ thị lịch sử, không đo được xu hướng</div>
+      </div>
+      <div class="opt win">
+        <div class="opt-name">4B · Prometheus + Grafana alerting</div><span class="opt-verdict v-win">CHỌN — GIAI ĐOẠN 2</span>
+        <div class="mini-flow"><span class="mn">Backend xuất metrics</span><span class="ma">→</span><span class="mn hl">Prometheus lưu</span><span class="ma">→</span><span class="mn">Grafana vẽ + đặt ngưỡng cảnh báo</span></div>
+        <div class="pc"><span class="plus">+</span>Grafana <b>đã có sẵn trong stack</b> — chỉ thêm Prometheus + khai metrics trong FastAPI</div>
+        <div class="pc"><span class="plus">+</span>Có lịch sử CPU/RAM/p95/độ sâu hàng đợi → chính là nguồn "số đo" cho mọi điều kiện xem xét lại trong tài liệu này</div>
+        <div class="pc"><span class="minus">−</span>Thêm 1–2 container và vài ngày công; phải chọn lọc ngưỡng cảnh báo để tránh spam</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">4C · APM đầy đủ (OpenTelemetry, Sentry...)</div><span class="opt-verdict v-rej">LOẠI</span>
+        <div class="mini-flow"><span class="mn">Trace từng request</span><span class="ma">→</span><span class="mn hl">Backend APM riêng</span><span class="ma">→</span><span class="mn">Phân tích chi tiết</span></div>
+        <div class="pc"><span class="plus">+</span>Soi được từng request chậm ở dòng code nào</div>
+        <div class="pc"><span class="minus">−</span>Thêm cả một hệ sinh thái phải vận hành (R1); giá trị chỉ hiện ra khi đã có nền 4B và một đội dev thường trực tối ưu — chưa phải bây giờ</div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">③ Bảng so sánh</h3>
+    <table class="tbl">
+      <tr><th>Tiêu chí</th><th>4A Watchdog ✓</th><th>4B Prometheus + Grafana ✓</th><th>4C APM</th></tr>
+      <tr><td><b>Thời gian có kết quả</b></td><td class="c"><b>1–2 ngày</b></td><td class="c">~1–2 tuần</td><td class="c">Nhiều tuần</td></tr>
+      <tr><td><b>Phức tạp vận hành</b> (R1)</td><td class="c"><b>Gần 0</b></td><td class="c">Thấp (tận dụng Grafana sẵn có)</td><td class="c">Cao</td></tr>
+      <tr><td><b>Phát hiện sự cố chủ động</b></td><td class="c">Có (3 loại chính)</td><td class="c"><b>Có + xu hướng</b></td><td class="c">Có + chi tiết code</td></tr>
+      <tr><td><b>Cung cấp số đo cho quyết định</b></td><td class="c">Không</td><td class="c"><b>Có — vai trò chính</b></td><td class="c">Có (thừa mức cần)</td></tr>
+    </table>
+
+    <div class="decision">
+      <div class="d-label">④ Quyết định &amp; lý do</div>
+      <p><b>Làm cả 4A lẫn 4B, theo thứ tự — khẳng định GĐ1:</b> 4A ngay tuần đầu GĐ1 (chặn rủi ro "sự cố chạy ngầm"), 4B có thể kéo sang đầu GĐ2 (xây nền số đo liên tục).
+      Cùng QĐ5 upsert PROD, đây là cặp việc <b>tin cậy trước tốc độ</b>. Không đo được thì mọi quyết định khác đều là đoán.</p>
+      <ul>
+        <li>Cảnh báo tối thiểu của 4A: health check fail · watermark bất kỳ bảng nào đứng yên quá ngưỡng · đĩa còn dưới 15% · backup đêm qua không chạy.</li>
+        <li>Ngưỡng 4B giai đoạn đầu: p95 API vượt mục tiêu 15 phút liên tục · RAM backend tăng đơn điệu (nghi memory leak) · độ sâu hàng đợi vượt ngưỡng · kết nối DB tiến gần trần.</li>
+        <li><b>Loại 4C</b>: đúng công cụ, sai thời điểm — quay lại khi đã có 4B chạy ổn và xuất hiện nhu cầu tối ưu từng endpoint.</li>
+      </ul>
+    </div>
+    <div class="tradeoff"><b>⑤ Đánh đổi chấp nhận</b>
+      Cảnh báo đặt ngưỡng sai sẽ hoặc im lặng khi cần (ngưỡng lỏng) hoặc spam đến mức bị bỏ qua (ngưỡng chặt). Chấp nhận vài tuần đầu phải tinh chỉnh ngưỡng — đó là chi phí một lần.</div>
+    <div class="revisit"><b>⑥ Điều kiện xem xét lại</b>
+      Khi hệ mở rộng lên nhiều nguồn + queue + nhiều replica và việc truy vết "request này chậm vì đâu" tốn quá 1 buổi mỗi lần — cân nhắc lại 4C (OpenTelemetry) ở phạm vi hẹp.</div>
+  </div>
+</section>
+
+<section id="d5">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">QĐ 5</span><h2>Hợp đồng nhận dữ liệu cho nguồn mới (MES, App, OCR)</h2></div>
+    <p class="sec-desc">Ước lượng công sức: <span class="effort e-s">NHỎ · 2–5 ngày</span> phát hành v2.3.0 (đã code xong) · <span class="effort e-s">NHỎ–VỪA · 3–5 ngày</span> batch endpoint · 202+queue tính trong QĐ1 ·
+    <b>GĐ1 · việc khẩn cấp nhất:</b> upsert trên PROD (DEV ≠ PROD).</p>
+
+    <div class="problem">
+      <div class="p-label">① Vấn đề là gì</div>
+      <p>Mỗi nguồn mới cần một "hợp đồng" rõ ràng: gửi thế nào, gửi lại khi lỗi có sao không, gửi khối lượng lớn thì làm sao.
+      Điểm mấu chốt là <b>idempotency</b> (chống trùng): mạng công nghiệp luôn có lúc chập chờn, nguồn <b>bắt buộc phải</b> gửi lại khi không chắc — nếu MDP không chống trùng thì mỗi lần gửi lại là một dòng dữ liệu trùng, báo cáo sai từ gốc.
+      Cách tích hợp của MES chưa chốt, nên kiến trúc đích thiết kế sẵn <b>cả hai ngả</b>: nguồn chủ động push qua API, hoặc MDP tự kéo (pull) như đang làm với JDE.</p>
+      <div class="scenario"><b>Tình huống ví dụ:</b> OCR gửi hóa đơn #A123, mạng chập chờn nên không nhận được trả lời, phần mềm OCR gửi lại đúng chuẩn.
+      PROD hiện tại (v2.2.0): sinh 2 dòng #A123 — tổng công nợ đội lên gấp đôi cho hóa đơn đó. Bản v2.3.0 (đã code, chờ phát hành): lần gửi thứ hai chỉ ghi đè lần đầu theo business key — dữ liệu đúng bất kể gửi lại bao nhiêu lần.</div>
+    </div>
+
+    <h3 class="sub-h">② Các phương án — bổ trợ nhau, không loại trừ</h3>
+    <div class="opt-grid">
+      <div class="opt win">
+        <div class="opt-name">5A · Gửi từng bản ghi + upsert theo business key</div><span class="opt-verdict v-win">MẶC ĐỊNH</span>
+        <div class="mini-flow"><span class="mn">Nguồn POST 1 bản ghi</span><span class="ma">→</span><span class="mn hl">Upsert theo khóa nghiệp vụ</span><span class="ma">→</span><span class="mn">Trả kết quả ngay</span></div>
+        <div class="pc"><span class="plus">+</span>Đơn giản nhất cho nguồn; gửi trùng vô hại; biết ngay kết quả từng bản ghi</div>
+        <div class="pc"><span class="plus">+</span>Đã code xong trong v2.3.0 — việc còn lại chỉ là phát hành</div>
+        <div class="pc"><span class="minus">−</span>Volume lớn thì tốn nhiều request (mỗi bản ghi một lần gọi)</div>
+      </div>
+      <div class="opt win">
+        <div class="opt-name">5C · Batch endpoint (500–1.000 bản ghi/request)</div><span class="opt-verdict v-win">CHO NGUỒN LỚN</span>
+        <div class="mini-flow"><span class="mn">Nguồn POST 1 lô</span><span class="ma">→</span><span class="mn hl">Upsert cả lô trong 1 giao dịch</span><span class="ma">→</span><span class="mn">Trả kết quả từng dòng</span></div>
+        <div class="pc"><span class="plus">+</span>Thông lượng tăng ~10 lần mà <b>không cần queue</b>; ít request, ít log</div>
+        <div class="pc"><span class="minus">−</span>Nguồn phải sửa cách gửi (gom lô); cần quy ước phản hồi lỗi từng dòng trong lô</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">5B · Nhận rồi trả "đã nhận" (202), xử lý sau</div><span class="opt-verdict v-later">SAU KHI CÓ QUEUE</span>
+        <div class="mini-flow"><span class="mn">Nguồn POST</span><span class="ma">→</span><span class="mn hl">Ghi vào job table, trả 202 ngay</span><span class="ma">→</span><span class="mn">Worker xử lý dần</span></div>
+        <div class="pc"><span class="plus">+</span>Nguồn không phải chờ; hấp thụ burst tốt nhất; đi kèm retry/dead-letter của QĐ1</div>
+        <div class="pc"><span class="minus">−</span>Cần job table (QĐ1) làm nền; nguồn muốn biết kết quả cuối phải hỏi lại (thêm endpoint tra trạng thái)</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">Ngả pull · Connector worker (khi nguồn không push được)</div><span class="opt-verdict v-later">KHI MES CHỐT CÁCH TÍCH HỢP</span>
+        <div class="mini-flow"><span class="mn hl">MDP tự kéo định kỳ</span><span class="ma">→</span><span class="mn">DB/file của nguồn</span><span class="ma">→</span><span class="mn">Upsert vào staging riêng</span></div>
+        <div class="pc"><span class="plus">+</span>Tái dùng đúng khuôn đã chạy tốt với JDE (watermark + upsert + khóa advisory); nguồn không phải code gì</div>
+        <div class="pc"><span class="minus">−</span>MDP phải được cấp quyền đọc hệ nguồn; độ tươi phụ thuộc chu kỳ kéo</div>
+      </div>
+    </div>
+
+    <div class="decision">
+      <div class="d-label">④ Quyết định &amp; lý do</div>
+      <p><b>Hợp đồng chuẩn cho mọi nguồn push mới: 5A là mặc định + 5C cho nguồn volume lớn; 5B bổ sung sau khi QĐ1 hoàn thành. Nguồn không push được thì đi ngả pull theo khuôn JDE.</b></p>
+      <ul>
+        <li><b>Ưu tiên GĐ1 số 1:</b> phát hành v2.3.0 upsert lên <b>PROD</b> — benchmark DEV đã chứng minh 1000/1000 unique + 5×POST idempotent → 1 row, nhưng PROD v2.2.0 vẫn sinh dòng trùng khi gửi lại. <b>DEV ≠ PROD</b>: số đo DEV không thay thế việc phát hành.</li>
+        <li>Quy ước kèm theo cho mọi nguồn: mỗi model khai báo <b>business key</b> ngay từ đầu · API key riêng từng nguồn, scope đúng model · phản hồi theo phong bì chuẩn <code>{code, message, data}</code> · mọi request ghi log giao dịch có <code>request_id</code> để đối soát.</li>
+      </ul>
+    </div>
+    <div class="tradeoff"><b>⑤ Đánh đổi chấp nhận</b>
+      Upsert chậm hơn insert thuần một chút (phải dò khóa trước khi ghi) — chấp nhận, vì "nhanh mà sai" không phải một lựa chọn. Batch endpoint đẩy độ phức tạp về phía nguồn (gom lô) — chấp nhận với nguồn volume lớn, vì tổng chi phí hai bên vẫn thấp hơn dựng queue sớm.</div>
+    <div class="revisit"><b>⑥ Điều kiện xem xét lại</b>
+      Nếu xuất hiện nguồn cần phản hồi tức thời mà volume burst lớn (không gom lô được) → đẩy 5B lên sớm hơn, tức là kéo QĐ1 lên trước trong lộ trình.</div>
+  </div>
+</section>
+
+<section id="d6">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">QĐ 6</span><h2>Kiến trúc bên trong Database — phân lớp, hợp đồng, mở rộng</h2></div>
+    <p class="sec-desc">Ước lượng công sức: <span class="effort e-s">NHỎ · 2–3 ngày</span> (viết quy ước + rà soát Type B hiện có). Đây là khu vực quyết định <b>tính độc lập và khả năng mở rộng</b> của toàn hệ thống — và nó nằm ở kỷ luật thiết kế, không nằm ở công nghệ mới.</p>
+
+    <div class="problem">
+      <div class="p-label">① Vấn đề là gì</div>
+      <p>Muốn hệ thống "độc lập, dễ tích hợp thêm, dễ mở rộng" thì câu hỏi đúng không phải "dùng công nghệ gì" mà là:
+      <b>khi bên trong thay đổi, bên ngoài có vỡ không?</b> Câu trả lời nằm ở hai thứ: <b>phân lớp</b> (dữ liệu thô, dữ liệu làm sạch, dữ liệu phục vụ — tách bạch)
+      và <b>hợp đồng</b> (bên ngoài chỉ nhìn thấy một "mặt tiền" ổn định, không nhìn thấy ruột).
+      Tin tốt: MDP <b>đã có phân lớp đúng chuẩn</b> — đánh giá khách quan là giữ nguyên, không đập đi xây lại. Cái thiếu là kỷ luật sử dụng các lớp đó.</p>
+    </div>
+
+    <h3 class="sub-h">Phân lớp hiện có (giữ nguyên) — và kỷ luật bổ sung</h3>
+    <div class="card">
+      <div class="layer-stack">
+        <div class="layer n-blue"><span>Lớp NHẬN — staging thô theo nguồn</span><em>bản sao dữ liệu nguồn, không sửa đổi<br>JDE đã có · nguồn mới: schema riêng từng nguồn</em></div>
+        <div class="arrow-d">↓ làm sạch, join, chuẩn hóa</div>
+        <div class="layer n-teal"><span>Lớp LÀM SẠCH — curated view</span><em>view nghiệp vụ đặt tên theo ngôn ngữ kinh doanh<br>26 view đã dựng (DEV), chờ đưa lên PROD</em></div>
+        <div class="arrow-d">↓ tăng tốc phần đọc nặng</div>
+        <div class="layer n-purple"><span>Lớp PHỤC VỤ — materialized view + API outbound + hàm tính</span><em>nơi duy nhất consumer được chạm vào<br>~80 lần nhanh hơn đọc xuyên</em></div>
+      </div>
+      <div class="mini-flow" style="justify-content:center;margin-top:14px">
+        <span class="mn">+ Lớp DỮ LIỆU PUSH (Type A, có business key)</span>
+        <span class="mn">+ Lớp METADATA (model, key, log, jobs)</span>
+      </div>
+    </div>
+
+    <h3 class="sub-h">② Các phương án đã cân nhắc</h3>
+    <div class="opt-grid">
+      <div class="opt">
+        <div class="opt-name">6A · Giữ nguyên như hiện tại, không thêm quy ước</div><span class="opt-verdict v-rej">LOẠI</span>
+        <div class="pc"><span class="plus">+</span>Không tốn công</div>
+        <div class="pc"><span class="minus">−</span>Nguồn mới sẽ trộn vào chung schema staging của JDE → vài năm sau không ai gỡ nổi cái gì thuộc nguồn nào</div>
+        <div class="pc"><span class="minus">−</span>Consumer trỏ thẳng bảng thô: đổi cấu trúc bảng là vỡ dây chuyền các hệ đã tích hợp</div>
+      </div>
+      <div class="opt win">
+        <div class="opt-name">6B · Giữ phân lớp + bổ sung 3 kỷ luật</div><span class="opt-verdict v-win">CHỌN</span>
+        <div class="pc"><span class="plus">+</span><b>Kỷ luật 1 — schema theo nguồn:</b> mỗi nguồn mới một schema staging riêng (<code>stg_mes</code>, <code>stg_ocr</code>...) — gỡ bỏ, đối soát, phân quyền theo nguồn đều dễ</div>
+        <div class="pc"><span class="plus">+</span><b>Kỷ luật 2 — hợp đồng đầu ra:</b> mọi model outbound (Type B) chỉ trỏ vào <b>curated view</b>, không trỏ thẳng bảng thô — đổi ruột không vỡ vỏ. Đây chính là chữ "độc lập" mà hệ thống cần</div>
+        <div class="pc"><span class="plus">+</span><b>Kỷ luật 3 — version cho view:</b> cần đổi cấu trúc một view đang có người dùng thì tạo bản <code>_v2</code> chạy song song, hẹn ngày tắt bản cũ — không sửa phá vỡ</div>
+        <div class="pc"><span class="minus">−</span>Tốn vài ngày viết quy ước + rà lại các Type B hiện có cho đúng chuẩn</div>
+      </div>
+      <div class="opt">
+        <div class="opt-name">6C · Tách microservice / DB riêng từng nguồn</div><span class="opt-verdict v-rej">LOẠI</span>
+        <div class="pc"><span class="plus">+</span>Cô lập tuyệt đối từng nguồn</div>
+        <div class="pc"><span class="minus">−</span>Nhân số hệ phải vận hành lên theo số nguồn (vi phạm R1/R2); mất khả năng join chéo nguồn — thứ làm nên giá trị của một data hub; là over-engineering ở quy mô này</div>
+      </div>
+    </div>
+
+    <div class="decision">
+      <div class="d-label">④ Quyết định &amp; lý do</div>
+      <p><b>Chọn 6B.</b> Tính độc lập – dễ mở rộng – hiệu quả mà chủ dự án yêu cầu được bảo đảm bằng: phân lớp sẵn có (đã đúng) + 3 kỷ luật trên (bổ sung) + index/retention của QĐ3 (hiệu năng). Không cần và không nên thay công nghệ.</p>
+      <ul>
+        <li><b>Loại 6A</b>: rẻ hôm nay, đắt nhất về sau — nợ kiến trúc kiểu này chính là lý do nhiều hệ thống "không dám sửa gì" sau 3 năm.</li>
+        <li><b>Loại 6C</b>: đúng sách vở cho công ty trăm kỹ sư, sai hoàn toàn với ràng buộc R1/R2. Điểm mạnh nhất của MDP là dữ liệu các nguồn <b>nằm cạnh nhau join được</b> — tách rời là tự bỏ điểm mạnh đó.</li>
+        <li><b>Disclaimer số đo G7:</b> mock Oracle tipa (lag ~2s, S04 PASS) chỉ chứng minh plumbing — <b>mock ≠ JDE PROD</b>. J04/J05/J08 N/A; mọi số chu kỳ/fastlane trên PROD phải đo lại trên Oracle JDE thật.</li>
+      </ul>
+    </div>
+    <div class="tradeoff"><b>⑤ Đánh đổi chấp nhận</b>
+      Kỷ luật "chỉ đọc qua curated view" thêm một bước cho mỗi model mới (phải dựng view trước khi mở outbound) — chậm hơn vài giờ mỗi lần, đổi lấy quyền tự do sửa ruột mãi mãi. Version view nghĩa là có giai đoạn 2 bản song song — cần ghi sổ ngày hẹn tắt bản cũ.</div>
+    <div class="revisit"><b>⑥ Điều kiện xem xét lại</b>
+      Nếu một nguồn tương lai có yêu cầu cô lập đặc biệt (dữ liệu nhạy cảm phải tách quyền truy cập ở mức DB), cân nhắc database riêng cho nguồn đó — nhưng vẫn trong cùng máy chủ PostgreSQL, không phải microservice.</div>
+  </div>
+</section>
+
+<section id="fastlane">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">PHẦN 10</span><h2>Làn nhanh JDE — dữ liệu tươi vài phút mà không đè Oracle</h2></div>
+    <p class="sec-desc">Ước lượng công sức: <span class="effort e-s">NHỎ–VỪA · 3–5 ngày</span> (audit watermark + cấu hình chu kỳ + cảnh báo độ trễ). Trả lời ràng buộc R4 cho luồng kéo JDE.
+    <b>Hoãn triển khai fastlane</b> đến khi có cửa sổ đo trên Oracle JDE thật — mock G7 ≠ PROD.</p>
+
+    <div class="card">
+      <h3 class="sub-h" style="margin-top:0">Vì sao không "real-time thật" (CDC) — quyết định đã chốt vĩnh viễn</h3>
+      <p style="font-size:13.5px;max-width:960px">Cách duy nhất có dữ liệu JDE real-time thật là đọc log giao dịch của Oracle (CDC — Debezium/LogMiner/Flink).
+      Đã khảo sát trực tiếp: Oracle nguồn <b>tắt chế độ lưu log cần thiết</b> (ARCHIVELOG OFF), bật lên đòi hỏi restart hệ thống sản xuất của JDE — rủi ro không thuộc quyền MDP quyết định.
+      Kết luận đã ghi sổ: <b>loại CDC vĩnh viễn</b>, đi đường quét watermark — và nâng cấp bằng cách quét <b>thông minh hơn</b>, không phải quét kiểu khác.</p>
+
+      <h3 class="sub-h">Thiết kế làn nhanh</h3>
+      <div class="target" style="margin-top:8px">
         <div class="stack">
-          <div class="node n-dark">Caddy<small>reverse_proxy → round-robin + health check</small></div>
-          <div class="arrow-d">▼ &nbsp;&nbsp; ▼</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div class="node n-red">backend-1<small>:8000</small></div>
-            <div class="node n-red">backend-2<small>:8000</small></div>
-          </div>
-          <div class="arrow-d">▼</div>
-          <div class="node n-purple">PostgreSQL<small>pool: (replicas × pool_size) &lt; max_connections</small></div>
+          <div class="node n-red">Oracle JDE<small>hệ sản xuất — không được đè tải</small></div>
+        </div>
+        <div class="arrow-r">→</div>
+        <div class="mid-rows">
+          <div class="node n-green">LÀN NHANH · chu kỳ 2–5 phút<small>chỉ bảng có watermark dạng <b>sequence</b> (số tăng đều theo dòng mới) — quét rất rẻ: "cho tôi các dòng có số thứ tự &gt; lần trước"</small></div>
+          <div class="node n-blue">LÀN THƯỜNG · chu kỳ hiện tại (15–60 phút)<small>các bảng còn lại — nhu cầu báo cáo không cần tươi hơn</small></div>
+          <div class="node n-amber n-dash">KHÔNG BAO GIỜ vào làn nhanh: bảng watermark theo ngày<small>cột ngày có thể chứa "ngày tương lai" (ngày hẹn giao...) → con trỏ nhảy qua → <b>mất dòng âm thầm</b>. Phải audit và chuyển sang sequence/khóa chính trước</small></div>
+        </div>
+        <div class="arrow-r">→</div>
+        <div class="stack">
+          <div class="node n-purple">Staging MDP<small>upsert theo khóa chính</small></div>
         </div>
       </div>
-      <div>
-        <table class="tbl">
-          <tr><th>Điều kiện cần kiểm</th><th style="width:120px">Hiện trạng</th></tr>
-          <tr><td>API stateless (không lưu session trong process)</td><td class="c"><span class="tag now">ĐẠT</span> JWT/API key</td></tr>
-          <tr><td>Job nền không chạy trùng giữa replicas</td><td class="c"><span class="tag now">ĐẠT</span> advisory lock sẵn có</td></tr>
-          <tr><td>Trạng thái verify-batch không nằm trong RAM 1 process</td><td class="c"><span class="tag next">CẦN LÀM</span> chuyển vào job table</td></tr>
-          <tr><td>Pool kết nối DB tính theo tổng replicas</td><td class="c"><span class="tag next">CẦN LÀM</span></td></tr>
-          <tr><td>Seed admin/PK/RBAC lúc khởi động không đụng độ 2 replicas</td><td class="c"><span class="tag next">CẦN KIỂM</span></td></tr>
-          <tr><td>HA đa máy (máy chết vẫn chạy) + DB failover</td><td class="c"><span class="tag later">GIAI ĐOẠN SAU</span></td></tr>
-        </table>
+
+      <div class="callout red" style="margin-top:16px"><b>Disclaimer bắt buộc — mock Oracle G7 ≠ JDE PROD:</b>
+      Benchmark tipa chỉ chứng minh đường ống sync (S04 PASS · lag ~2s · watermark tiến · no-dup). Các bài J04/J05/J08 đánh dấu N/A vì nguồn không phải Oracle JDE sản xuất.
+      <b>Không dùng số mock để chốt chu kỳ làn nhanh, SLA độ tươi, hay tải lên Oracle PROD.</b> Fastlane và số đo QĐ6 trên PROD chờ cửa sổ đo JDE thật (GĐ3).</div>
+      <div class="callout green" style="margin-top:16px"><b>Vì sao thiết kế vẫn khả thi (khi có số PROD):</b>
+      bảng lớn nhất phát sinh cỡ trăm nghìn dòng/ngày → chia cho chu kỳ 5 phút chỉ còn <b>vài trăm dòng mỗi lần quét</b> — một câu truy vấn theo sequence có index là xong trong tích tắc, tải lên Oracle không đáng kể.
+      Điều kiện tiên quyết: hoàn thành <b>audit watermark</b> (việc P0 ở Phần 2.3) để biết chính xác bảng nào đủ chuẩn sequence — và đo lại trên JDE thật.</div>
+      <div class="callout"><b>Chọn bảng nào vào làn nhanh?</b> Do nghiệp vụ quyết định, không phải kỹ thuật: bắt đầu bằng câu hỏi "báo cáo/hệ thống nào cần số liệu trong vòng 5 phút?" rồi dò ngược ra bảng.
+      Kỹ thuật chỉ đặt điều kiện gác cổng: phải là watermark sequence + có khóa chính upsert được. Mỗi bảng vào làn nhanh đều cộng tải lên Oracle — vào ít, có lý do, đo được.</div>
+      <div class="revisit" style="margin-top:12px"><b>Điều kiện xem xét lại</b>
+      Nếu nghiệp vụ đòi độ tươi dưới 1 phút cho một luồng cụ thể — không rút ngắn chu kỳ quét thêm nữa (bắt đầu đè Oracle), mà bàn với đội JDE về việc <b>push từ phía ứng dụng</b> cho đúng luồng đó (trigger/API từ nghiệp vụ JDE), đi vào MDP theo hợp đồng QĐ5 như một nguồn push bình thường.</div>
+    </div>
+  </div>
+</section>
+
+<section id="target">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">PHẦN 11</span><h2>Kiến trúc đích — sau khi áp cả 6 quyết định</h2></div>
+    <p class="sec-desc">Bức tranh tổng khi lộ trình hoàn thành. Phần tô <b>xanh lá</b> là cái mới so với hiện tại; còn lại là giữ nguyên và gia cố.
+    Thứ tự hiện thực: GĐ1 tin cậy (QĐ5+QĐ4) → GĐ2 tốc độ đọc (QĐ3 rồi QĐ2) → GĐ3 mở rộng (QĐ1 nếu cần, JDE thật/fastlane).</p>
+
+    <div class="card">
+      <div class="diagram-embed" style="margin-top:0">
+        <div class="diagram-toolbar">
+          <span class="diagram-caption">TO-BE — kiến trúc đích sau khi áp QĐ1–QĐ6 (theo lộ trình ưu tiên)</span>
+          <a class="diagram-open" href="diagrams/mdp-target.architecture.html" target="_blank" rel="noopener">Mở toàn màn</a>
+        </div>
+        <iframe class="diagram-frame" src="diagrams/mdp-target.architecture.html" title="TO-BE kiến trúc đích MDP" loading="lazy"></iframe>
       </div>
+      <ul style="margin:14px 0 0 18px;font-size:13.5px;color:var(--slate)">
+        <li>Một cổng Caddy · nhiều backend replica (QĐ2, sau QĐ3) · worker/job table khi cần (QĐ1, GĐ3)</li>
+        <li>PostgreSQL phân lớp: staging → curated → matview + index/retention (QĐ3) + kỷ luật hợp đồng (QĐ6)</li>
+        <li>Watchdog/Prometheus (QĐ4) · upsert inbound mặc định (QĐ5) · làn nhanh JDE chỉ sau số đo Oracle thật</li>
+      </ul>
+
+      <h3 class="sub-h">Sơ đồ tham chiếu (ASCII — giữ để đối chiếu nhanh)</h3>
+      <div class="target">
+        <div class="stack">
+          <div class="zone-title"><span class="dot" style="background:var(--blue)"></span>Nguồn dữ liệu</div>
+          <div class="node n-red">JDE (Oracle)<small>kéo watermark · làn nhanh + làn thường (sau đo PROD)</small></div>
+          <div class="node n-blue">OCR hóa đơn<small>push · upsert theo business key</small></div>
+          <div class="node n-blue">MES<small>push (5A/5C) hoặc pull connector — chờ chốt</small></div>
+          <div class="node n-blue n-dash">App 1, 2, 3…<small>vào theo đúng khuôn: key riêng · scope riêng · schema riêng</small></div>
+        </div>
+        <div class="arrow-r">→</div>
+        <div class="mid-rows">
+          <div class="zone-title"><span class="dot" style="background:var(--brand)"></span>MDP Hub — máy chủ sản xuất</div>
+          <div class="node n-dark">Caddy — cổng vào duy nhất + chia tải<small>TLS · rate limit · phân phối round-robin</small></div>
+          <div class="mid-row">
+            <div class="node n-green">Backend replica #1<small>API inbound/outbound — stateless</small></div>
+            <div class="node n-green">Backend replica #2 (mới)<small>QĐ2 · sau QĐ3 · deploy lần lượt</small></div>
+          </div>
+          <div class="mid-row">
+            <div class="node n-green">Worker (khi cần)<small>QĐ1 · GĐ3 nếu T5–T6 báo áp lực</small></div>
+            <div class="node n-green">Watchdog + Prometheus (mới)<small>QĐ4 · GĐ1 · Telegram · Grafana</small></div>
+          </div>
+          <div class="node n-purple full">PostgreSQL — một DB, phân lớp rõ (QĐ3 + QĐ6)<small>staging theo nguồn → curated view (hợp đồng) → matview phục vụ · + dữ liệu push · metadata · job table khi cần · index BRIN/composite theo số đo · retention định kỳ</small></div>
+        </div>
+        <div class="arrow-r">→</div>
+        <div class="stack">
+          <div class="zone-title"><span class="dot" style="background:var(--teal)"></span>Bên tiêu thụ</div>
+          <div class="node n-teal">TIPA / iHUB (ESB)<small>API outbound + hàm tính · phong bì chuẩn</small></div>
+          <div class="node n-teal">Grafana dashboards<small>đọc curated/matview qua tài khoản chỉ-đọc</small></div>
+          <div class="node n-teal n-dash">Hệ tương lai<small>chỉ chạm lớp phục vụ — không chạm dữ liệu thô</small></div>
+        </div>
+      </div>
+
+      <h3 class="sub-h">Luồng push (nguồn mới) — từng bước</h3>
+      <div class="chain">
+        <div class="step"><span class="no">B1</span><b>Nguồn gọi API</b><span>kèm API key riêng, 1 bản ghi (5A) hoặc 1 lô (5C)</span></div>
+        <div class="step"><span class="no">B2</span><b>Kiểm tra</b><span>key đúng scope? đúng model? payload hợp lệ?</span></div>
+        <div class="step"><span class="no">B3</span><b>Upsert</b><span>theo business key — gửi trùng chỉ ghi đè, không sinh dòng mới</span></div>
+        <div class="step"><span class="no">B4</span><b>Ghi log giao dịch</b><span>request_id để đối soát hai bên</span></div>
+        <div class="step"><span class="no">B5</span><b>Trả phong bì chuẩn</b><span>{code, message, data} — hoặc 202 nếu đi ngả queue (5B)</span></div>
+      </div>
+
+      <h3 class="sub-h">Luồng job nền (mới — QĐ1) — từng bước</h3>
+      <div class="chain">
+        <div class="step"><span class="no">B1</span><b>Ghi job</b><span>API hoặc lịch định kỳ chèn 1 dòng vào bảng jobs</span></div>
+        <div class="step"><span class="no">B2</span><b>Worker nhặt job</b><span>SKIP LOCKED — nhiều worker không giẫm chân nhau</span></div>
+        <div class="step"><span class="no">B3</span><b>Xử lý</b><span>sync bảng, refresh matview, xử lý lô inbound…</span></div>
+        <div class="step"><span class="no">B4</span><b>Lỗi? Thử lại</b><span>giãn cách tăng dần (backoff), tối đa N lần</span></div>
+        <div class="step"><span class="no">B5</span><b>Hỏng hẳn → dead-letter</b><span>đánh dấu + bắn cảnh báo Telegram — không lặng lẽ mất</span></div>
+      </div>
+
+      <div class="callout blue" style="margin-top:16px"><b>Nguyên tắc xuyên suốt của kiến trúc đích:</b>
+      một cổng vào (Caddy) · một nguồn sự thật (PostgreSQL phân lớp) · consumer chỉ chạm lớp phục vụ ·
+      mọi nguồn mới vào theo cùng một khuôn (key – scope – schema – business key) · xử lý nặng qua job table <b>khi số đo đòi hỏi</b> · mọi bất thường phải tự kêu lên (watchdog).
+      Thêm nguồn thứ 5, thứ 10 <b>không thay đổi kiến trúc</b> — chỉ lặp lại khuôn. Thứ tự hiện thực bám GĐ1→GĐ2→GĐ3 theo benchmark 27/08/2026.</div>
     </div>
   </div>
 </section>
 
-<!-- ============ 7. MESSAGE QUEUE ============ -->
-<section id="s7">
-  <div class="sec-head"><span class="sec-num">Sơ đồ D</span><h2>Message queue — chọn đúng cỡ, tránh quá tay</h2></div>
-  <p class="sec-desc">Nguyên tắc: mỗi bậc chỉ nâng khi có số liệu chứng minh bậc dưới không đủ. Không nhảy thẳng lên Kafka.</p>
-  <div class="card">
-    <div class="tree">
-      <div class="q">Cần tách xử lý nặng khỏi request? (hiện tại: CÓ)</div>
-      <div class="arrow-d">▼</div>
-      <div class="node n-amber" style="max-width:520px">Bậc 1 — PostgreSQL job table + SKIP LOCKED + worker<small>0 hạ tầng mới · đủ retry, dead-letter, idempotency · phù hợp &lt; ~50 job/giây</small></div>
-      <div class="arrow-d">▼ khi job/giây tăng cao hoặc cần độ trễ thấp</div>
-      <div class="node n-amber" style="max-width:520px">Bậc 2 — Redis + RQ (hoặc Redis Streams)<small>thêm 1 container · nhanh hơn · phù hợp hàng trăm job/giây</small></div>
-      <div class="arrow-d">▼ khi nhiều nguồn push realtime, cần routing/fanout nhiều consumer</div>
-      <div class="node n-amber n-dash" style="max-width:520px">Bậc 3 — RabbitMQ<small>broker thực thụ · ack/nack, DLX chuẩn · đội cần kỹ năng vận hành</small></div>
-      <div class="arrow-d">▼ chỉ khi cần event streaming, replay lịch sử, nhiều hệ cùng subscribe</div>
-      <div class="node n-dash" style="max-width:520px">Bậc 4 — Kafka<small>quá cỡ cho hiện tại · chi phí vận hành cao · chưa khuyến nghị</small></div>
-    </div>
-    <h3 class="sub-h">So sánh nhanh</h3>
-    <div style="overflow-x:auto">
-    <table class="tbl">
-      <tr><th>Giải pháp</th><th>Hạ tầng thêm</th><th>Phù hợp khi</th><th style="width:130px">Khuyến nghị</th></tr>
-      <tr><td><b>PostgreSQL job table</b> (SKIP LOCKED)</td><td>Không — dùng DB sẵn có</td><td>Tải hiện tại của TIPA; job import, refresh matview, validate</td><td class="c"><span class="tag now">LÀM NGAY</span></td></tr>
-      <tr><td><b>Redis + RQ</b></td><td>+1 container Redis</td><td>Job/giây tăng cao, cần latency thấp, cache dùng chung</td><td class="c"><span class="tag next">KHI CẦN</span></td></tr>
-      <tr><td><b>RabbitMQ</b></td><td>+1 broker cần vận hành</td><td>Nhiều nguồn realtime, routing phức tạp, nhiều consumer độc lập</td><td class="c"><span class="tag next">GIAI ĐOẠN 2</span></td></tr>
-      <tr><td><b>Kafka</b></td><td>Cluster + Zookeeper/KRaft, giám sát riêng</td><td>Event streaming khối lượng rất lớn, cần replay, nhiều hệ subscribe</td><td class="c"><span class="tag no">CHƯA</span></td></tr>
-      <tr><td><b>MQTT broker</b> (Mosquitto/EMQX)</td><td>+1 container nhẹ</td><td>Khác mục đích: nhận telemetry máy móc/MES dạng IIoT — không thay job queue</td><td class="c"><span class="tag later">KHI CÓ IIoT</span></td></tr>
-    </table>
-    </div>
-    <div class="callout">Mẹo phân biệt: <b>job queue</b> (bậc 1–2) = "việc cần làm sau, không mất"; <b>message broker</b> (bậc 3–4) = "dòng sự kiện nhiều bên cùng nghe". Nhu cầu trong biên bản họp là loại thứ nhất.</div>
-    <div class="callout blue">Hiện trạng để đối chiếu: hub đã có nền "bậc 0" — streaming/matview chạy vòng lặp nội bộ + advisory lock (giữ nguyên, hoạt động tốt); verify-batch dùng queue trong RAM (mất khi restart, không chia sẻ giữa replicas — <b>ứng viên đầu tiên chuyển vào job table</b>). Riêng Kafka: use-case tự nhiên nhất của nó là nhận CDC stream, mà <b>CDC đã bị loại vĩnh viễn</b> do ràng buộc Oracle — thêm một lý do không đầu tư Kafka.</div>
-  </div>
-</section>
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">PHẦN 12</span><h2>Lộ trình 3 giai đoạn + ước lượng công sức</h2></div>
+    <p class="sec-desc">Không gắn ngày cụ thể — mỗi giai đoạn có điều kiện hoàn thành (Definition of Done) đo được; xong điều kiện mới sang giai đoạn sau.
+    Thứ tự phản ánh baseline <b>27/08/2026</b>: <b>tin cậy trước → tốc độ đọc → mở rộng</b> (T2 FAIL là nút thắt; T5/T6 PASS nên queue chưa gấp).</p>
 
-<!-- ============ 8. ROADMAP ============ -->
-<section id="s8">
-  <div class="sec-head"><span class="sec-num">Sơ đồ E</span><h2>Lộ trình 3 giai đoạn</h2></div>
-  <p class="sec-desc">Giai đoạn 1 khớp 7 nhóm việc trong họp (branch <code>release/tipa-integration-readiness</code>) + các bổ sung từ hiện trạng thật: phát hành v2.3.0, audit watermark, observability, promote curated.</p>
-  <div class="phases">
+    <div class="diagram-embed">
+      <div class="diagram-toolbar">
+        <span class="diagram-caption">Luồng ưu tiên nâng cấp — GĐ1 tin cậy → GĐ2 tốc độ đọc → GĐ3 mở rộng</span>
+        <a class="diagram-open" href="diagrams/mdp-upgrade-priority.workflow.html" target="_blank" rel="noopener">Mở toàn màn</a>
+      </div>
+      <iframe class="diagram-frame" src="diagrams/mdp-upgrade-priority.workflow.html" title="Workflow ưu tiên nâng cấp MDP" loading="lazy"></iframe>
+    </div>
+
     <div class="phase">
-      <div class="phase-head" style="background:var(--green)"><b>Giai đoạn 1 — Readiness</b><span>~6–8 tuần · làm ngay</span></div>
-      <div class="phase-body">
-        <div class="it"><b>Phát hành v2.3.0 lên PROD</b> (backup DB → alembic 021→022): PROD có upsert inbound</div>
-        <div class="it"><b>Audit watermark theo ngày</b> — đóng rủi ro mất dòng âm thầm (nhóm bảng fallback UPMJ)</div>
-        <div class="it">Stabilize: diễn tập restore DB 79 GB, bảo vệ APIKEY_ENC_KEY, known limitations</div>
-        <div class="it">API hardening: statement_timeout, request_id, rate limit, pagination deterministic, dọn P1 security</div>
-        <div class="it">DB: EXPLAIN ANALYZE + index, partition/retention transactions &amp; raw_payload</div>
-        <div class="it">Queue bậc 1: PG job table + worker — chuyển verify-batch khỏi RAM trước tiên</div>
-        <div class="it">LB: 2 backend replicas sau Caddy + pool tính lại</div>
-        <div class="it">Load test k6 6 kịch bản + soak 4–8h</div>
-        <div class="it"><b>Bổ sung:</b> /metrics + alert + watchdog watermark; promote curated + Grafana lên PROD; API v1 contract</div>
-      </div>
-      <div class="phase-foot">DoD: chạy ổn định · restore được · có load test report · runbook TIPA</div>
+      <div class="phase-head"><span class="phase-no">GĐ1 · TIN CẬY</span><b>QĐ5 upsert PROD + QĐ4 watchdog</b><span class="dur">~2 tuần · ưu tiên cao nhất</span></div>
+      <ul>
+        <li><b>Phát hành v2.3.0 lên PROD</b> (upsert theo business key) — <span class="effort e-s">NHỎ · 2–5 ngày</span> · vá P0 "gửi trùng sinh dòng trùng" · <b>DEV ≠ PROD</b></li>
+        <li><b>Watchdog + cảnh báo Telegram</b> (QĐ4a) — <span class="effort e-s">NHỎ · 1–2 ngày</span></li>
+        <li><b>Audit watermark</b>: rà bảng watermark theo ngày, chuyển sequence/khóa chính nơi có thể — <span class="effort e-s">NHỎ · 3–5 ngày</span> · vá P0 "mất dòng âm thầm"</li>
+        <li><b>Kiểm chứng backup/restore</b> + siết cấu hình bảo mật mặc định — <span class="effort e-s">NHỎ · 1–2 ngày mỗi mục</span></li>
+      </ul>
+      <div class="callout green"><b>DoD GĐ1:</b> gửi trùng 1.000 bản ghi trên PROD → 0 dòng trùng · rút mạng backend 1 phút → Telegram trong 5 phút · watermark ngày đã audit · restore backup có biên bản.</div>
     </div>
+
     <div class="phase">
-      <div class="phase-head" style="background:var(--amber)"><b>Giai đoạn 2 — Mở rộng nguồn</b><span>sau khi G1 đạt DoD</span></div>
-      <div class="phase-body">
-        <div class="it">Onboard MES + App 1,2,3 theo mẫu push (Type A + API key + business key)</div>
-        <div class="it">Nâng queue lên Redis/RQ hoặc RabbitMQ <b>nếu số liệu load test yêu cầu</b></div>
-        <div class="it">MQTT broker nếu có nguồn telemetry máy móc (qua edge tool)</div>
-        <div class="it">Read replica PostgreSQL nếu tải đọc dashboard lớn</div>
-        <div class="it">Mở rộng dữ liệu JDE: migrate F0005 (decode mã cho 8 dashboard) + F03B11 (mở dashboard AR)</div>
-        <div class="it">Bảng streaming mới giữ nguyên tắc: tắt mặc định tới khi verify PK/watermark</div>
-        <div class="it">RBAC chi tiết theo vai trò</div>
-      </div>
-      <div class="phase-foot">DoD: 3+ nguồn thật chạy ổn qua queue · không bản ghi trùng · alert hoạt động</div>
+      <div class="phase-head"><span class="phase-no">GĐ2 · TỐC ĐỘ ĐỌC</span><b>QĐ3 trước → đo lại T2 → rồi QĐ2</b><span class="dur">~4 tuần</span></div>
+      <ul>
+        <li><b>QĐ3 trước hết:</b> pg_stat_statements → EXPLAIN → index đợt 1 (BRIN/composite) + siết curated/matview → <b>đo lại T2</b> (hiện FAIL: local p95 2.26s · tipa 2.69s) — <span class="effort e-m">VỪA · 5–10 ngày</span></li>
+        <li><b>Chính sách retention</b> + gia cố API (phân trang tối đa, timeout, rate limit) — <span class="effort e-s">NHỎ · 2–5 ngày</span></li>
+        <li><b>Sau khi T2 cải thiện:</b> 2 replicas + Caddy (QĐ2), kiểm chứng kill-1-replica — <span class="effort e-s">NHỎ · 2–3 ngày</span></li>
+        <li><b>Prometheus + Grafana alerting</b> (QĐ4b) — <span class="effort e-m">VỪA · 5–8 ngày</span></li>
+        <li><b>Không đẩy PgBouncer</b> (Connections 13/100); không triển khai fastlane trên số mock G7</li>
+      </ul>
+      <div class="callout green"><b>DoD GĐ2:</b> EXPLAIN trước/sau index lưu sổ · T2 p95 đạt mục tiêu (&lt;500ms @100 VU) hoặc cải thiện rõ so baseline · kill-1-replica ≈ 0 request rơi · dashboard CPU/RAM/p95/kết nối DB hoạt động.</div>
     </div>
+
     <div class="phase">
-      <div class="phase-head" style="background:#64748b"><b>Giai đoạn 3 — DW & AI</b><span>khi nhu cầu thật xuất hiện</span></div>
-      <div class="phase-body">
-        <div class="it">Lớp canonical + data mart cho phân tích lịch sử dài</div>
-        <div class="it">Tách analytics ra read replica / engine DW riêng nếu volume lớn</div>
-        <div class="it">MCP server cho AI Agents — gọi outbound API sẵn có, không chạm DB</div>
-        <div class="it">Kafka chỉ khi có nhu cầu event streaming đa consumer thực tế</div>
-        <div class="it">Data lineage, data quality rules, catalog</div>
-      </div>
-      <div class="phase-foot">Quyết định dựa trên số liệu vận hành G1–G2, không dựa trên phỏng đoán</div>
+      <div class="phase-head"><span class="phase-no">GĐ3 · MỞ RỘNG</span><b>QĐ1 nếu cần · JDE thật / QĐ6 / fastlane</b><span class="dur">~4–6 tuần</span></div>
+      <ul>
+        <li><b>QĐ1 job table + worker</b> — chỉ khi T5/T6 (hoặc tải PROD) báo áp lực; hiện T5 ~34 msg/s PASS · T6 p95 81ms PASS → chưa gấp — <span class="effort e-m">VỪA · 10–15 ngày</span></li>
+        <li><b>Đo trên Oracle JDE thật</b> (thay mock G7): J04/J05/J08 · số lag/chu kỳ PROD — rồi mới cấu hình <b>làn nhanh</b> / kỷ luật QĐ6 trên số thật — <span class="effort e-s">NHỎ–VỪA · 3–5 ngày</span></li>
+        <li><b>Batch endpoint</b> (QĐ5c) + tùy chọn 202/queue (5B) nếu đã có QĐ1 — <span class="effort e-s">NHỎ–VỪA · 3–5 ngày</span></li>
+        <li><b>Đưa curated views + Grafana lên PROD</b> · load test đầy đủ + soak 4–8 giờ · gói TIPA readiness — <span class="effort e-m">VỪA · 5–8 ngày mỗi nhóm</span></li>
+      </ul>
+      <div class="callout green"><b>DoD GĐ3 (= Definition of Done toàn lộ trình):</b> hệ ổn định theo nhu cầu đo được · burst không lỗi/trùng/mất khi đã bật queue · số JDE PROD (không phải mock) cho fastlane · soak 8 giờ RAM không tăng đơn điệu · bộ tài liệu tích hợp TIPA bàn giao đủ.</div>
+    </div>
+
+    <div class="callout" style="margin-top:16px"><b>Tổng công sức ước tính (thô):</b> GĐ1 ≈ 8–16 ngày công · GĐ2 ≈ 18–32 ngày công · GĐ3 ≈ 20–40 ngày công (QĐ1 chỉ tính nếu kích hoạt).
+    Ước lượng cho 1 người làm chính; các mục độc lập (index / watchdog / batch) có thể chạy song song nếu có thêm người.</div>
+  </div>
+</section>
+
+<section id="testing">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">PHẦN 13</span><h2>Kế hoạch đo kiểm — biến "cảm giác" thành con số</h2></div>
+    <p class="sec-desc">Bộ công cụ đo (k6 + script kiểm chứng + bộ SQL chẩn đoán DB) đã dựng sẵn trong thư mục <code>loadtest/</code> nội bộ.
+    Nguyên tắc: <b>chỉ chạy trên DEV trước</b>, dùng model test riêng + API key riêng, và mỗi lần đo đều lưu kết quả để so trước/sau mỗi thay đổi.</p>
+
+    <div class="card">
+      <h3 class="sub-h" style="margin-top:0">Các kịch bản</h3>
+      <table class="tbl">
+        <tr><th style="width:60px">Bài</th><th>Kịch bản</th><th>Đo cái gì</th><th>Ngưỡng ĐẠT</th></tr>
+        <tr><td class="c"><b>T1</b></td><td>Smoke — 10 người ảo gọi health check 1 phút</td><td>Hệ sống không, độ trễ nền</td><td>100% OK · p95 &lt; 100ms</td></tr>
+        <tr><td class="c"><b>T2</b></td><td>Tải đọc — tăng dần tới 100 người ảo đọc outbound 10 phút</td><td>p95 đọc, tỷ lệ lỗi khi nhiều consumer</td><td>lỗi &lt; 1% · p95 &lt; 500ms</td></tr>
+        <tr><td class="c"><b>T5</b></td><td>Burst ghi — 1.000 bản ghi dồn dập, <b>cố tình gửi trùng 10%</b></td><td>p95 ghi + <b>độ mất mát + độ trùng lặp</b> (đếm lại bằng script sau khi bắn)</td><td>lỗi &lt; 1% · p95 &lt; 1s · <b>mất = 0 · trùng = 0</b></td></tr>
+        <tr><td class="c"><b>T6</b></td><td>Soak — 4–8 giờ tải trung bình trộn 70% đọc / 30% ghi</td><td>Rò rỉ bộ nhớ, lỗi tích lũy, cạn pool kết nối</td><td>RAM không tăng đơn điệu · lỗi &lt; 0.5%</td></tr>
+        <tr><td class="c"><b>KILL</b></td><td>Chạy T2, giữa chừng tắt 1 replica (sau khi có QĐ2)</td><td>Chịu lỗi thật sự của load balancing</td><td>request rơi ≈ 0</td></tr>
+      </table>
+
+      <h3 class="sub-h">Theo dõi song song trong lúc test</h3>
+      <table class="tbl">
+        <tr><th>Kênh</th><th>Xem gì</th><th>Trả lời câu hỏi</th></tr>
+        <tr><td><code>docker stats</code></td><td>CPU/RAM từng container theo thời gian</td><td>Nghẽn ở backend hay ở DB? Có rò rỉ bộ nhớ không?</td></tr>
+        <tr><td>Bộ SQL chẩn đoán (kèm kit)</td><td>Kết nối đang mở · query chạy lâu · bảng quét tuần tự nhiều · index không ai dùng · tỷ lệ cache</td><td>Cần index ở đâu? Cần PgBouncer chưa? Bảng nào cần retention?</td></tr>
+        <tr><td>Trang Migration Jobs</td><td>Watermark có tiến đều khi hệ chịu tải không</td><td>Tải API có làm chậm đồng bộ JDE không?</td></tr>
+        <tr><td>Grafana</td><td>Độ trễ dashboard khi đang chịu tải</td><td>Trải nghiệm người dùng cuối lúc cao điểm</td></tr>
+      </table>
+
+      <div class="callout blue" style="margin-top:14px"><b>Bài T5 là bài quan trọng nhất</b> vì nó đo đúng hai chữ "mất mát" và "trùng lặp" — hai thứ không nhìn thấy bằng mắt:
+      bắn N bản ghi có đánh số → đọc lại toàn bộ qua outbound → đối chiếu từng mã. Chạy trên PROD v2.2.0 hiện tại, phần gửi-trùng 10% <b>sẽ sinh dòng trùng</b> —
+      đó chính là bằng chứng bằng số cho việc phát hành v2.3.0 là việc khẩn cấp nhất (Giai đoạn 1).</div>
     </div>
   </div>
 </section>
 
-<!-- ============ 9. TEST PLAN ============ -->
-<section id="s9">
-  <div class="sec-head"><span class="sec-num">Phần 9</span><h2>Test plan — k6, có ngưỡng đạt cụ thể</h2></div>
-  <p class="sec-desc">Chạy trên DEV (tipa-vm) trước — đúng quy tắc DEV-first — rồi lặp lại trên PROD (.63) ngoài giờ; đo trước và sau mỗi thay đổi lớn để so sánh.</p>
-  <div class="card" style="padding:0;overflow-x:auto">
-    <table class="tbl">
-      <tr><th>#</th><th>Kịch bản</th><th>Mô phỏng</th><th>Tải đề xuất</th><th>Ngưỡng đạt</th></tr>
-      <tr><td>T1</td><td><b>Health smoke</b></td><td>Giám sát cơ bản</td><td>10 VUs · 1 phút</td><td>100% OK · p95 &lt; 100ms</td></tr>
-      <tr><td>T2</td><td><b>Outbound read load</b></td><td>TIPA đọc dữ liệu qua API key</td><td>100 VUs · 10 phút · GET /outbound/*</td><td>lỗi &lt; 1% · p95 &lt; 500ms</td></tr>
-      <tr><td>T3</td><td><b>Dashboard-like</b></td><td>Grafana query 26 curated view / matview</td><td>20 VUs · 10 phút · curated + matview</td><td>p95 &lt; 1s · DB CPU &lt; 70% · REFRESH không chặn đọc</td></tr>
-      <tr><td>T4</td><td><b>Mixed read/write</b></td><td>Vừa nguồn push ghi vừa iHUB đọc · streaming chạy nền</td><td>70% read + 30% write · 15 phút</td><td>lỗi &lt; 1% · không deadlock · watermark vẫn tiến</td></tr>
-      <tr><td>T5</td><td><b>Inbound burst → queue</b></td><td>MES/App bắn dồn dập · gửi lại trùng business key</td><td>1.000 msg trong 1 phút</td><td>100% nhận 202 · queue tiêu hoá hết &lt; 10 phút · 0 bản ghi trùng khi gửi lại</td></tr>
-      <tr><td>T6</td><td><b>Soak test</b></td><td>Chạy bền</td><td>Tải trung bình liên tục 4–8 giờ</td><td>RAM không tăng dần · pool không cạn · lỗi &lt; 0.5%</td></tr>
-    </table>
-  </div>
-  <div class="callout" style="margin-top:14px">Mỗi lần chạy lưu thành <b>load test report</b> (ngày, cấu hình, kết quả, đồ thị) — đây là 1 mục bắt buộc trong readiness package và là căn cứ quyết định có cần nâng bậc queue/replica hay không.</div>
-</section>
-
-<!-- ============ 10. CHECKLIST ============ -->
-<section id="s10">
-  <div class="sec-head"><span class="sec-num">Phần 10</span><h2>Go-live checklist — TIPA readiness package</h2></div>
-  <p class="sec-desc">Đủ các mục này = sẵn sàng cho hệ thống TIPA tích hợp thật.</p>
-  <div class="card">
-    <div class="check-grid">
-      <div class="check"><span class="bx"></span><div><b>v2.3.0 đã lên PROD</b> — upsert inbound + unique business key chạy thật; backup trước khi nâng alembic 021→022</div></div>
-      <div class="check"><span class="bx"></span><div><b>API contract v1</b> — tài liệu endpoint, mẫu payload, mã envelope (0/1001–2003), giới hạn tải cho từng consumer</div></div>
-      <div class="check"><span class="bx"></span><div><b>Operation runbook</b> — khởi động/dừng, xem log, xử lý dead-letter, restore DB, xử lý watermark đứng</div></div>
-      <div class="check"><span class="bx"></span><div><b>Rollback plan</b> — quay về tag trước (mốc pre-v2.Y.Z) + restore backup, đã diễn tập ít nhất 1 lần</div></div>
-      <div class="check"><span class="bx"></span><div><b>Load test report</b> — kết quả T1–T6 đạt ngưỡng, kèm cấu hình máy</div></div>
-      <div class="check"><span class="bx"></span><div><b>Backup/restore đã diễn tập</b> — restore thật DB 79 GB vào môi trường sạch, đo thời gian phục hồi</div></div>
-      <div class="check"><span class="bx"></span><div><b>Queue strategy rõ ràng</b> — job table + worker chạy, verify-batch đã chuyển khỏi RAM, retry/DLQ được test bằng cách cố tình gây lỗi</div></div>
-      <div class="check"><span class="bx"></span><div><b>Multi-replica cơ bản</b> — 2 backend chạy ổn qua T2/T4, kill 1 replica không mất request, advisory lock giữ job đơn nhất</div></div>
-      <div class="check"><span class="bx"></span><div><b>Alert hoạt động</b> — dừng thử streaming refresher → cảnh báo watermark đứng trong X phút; DB đầy 80% → cảnh báo</div></div>
-      <div class="check"><span class="bx"></span><div><b>Watermark đã audit</b> — nhóm bảng fallback theo ngày được rà; bảng có sequence đều dùng sequence</div></div>
-      <div class="check"><span class="bx"></span><div><b>Curated + Grafana trên PROD</b> — schema mdp_curated + grant grafana_ro + container Grafana riêng của MDP</div></div>
-      <div class="check"><span class="bx"></span><div><b>Onboarding kit nguồn mới</b> — quy trình cấp API key, mẫu payload, business key, test case mẫu</div></div>
-      <div class="check"><span class="bx"></span><div><b>Known limitations</b> — công bố rõ: GL đang period-net, Inventory chờ xác minh scaling, Production chỉ throughput, mã thô chờ F0005, RBAC thô…</div></div>
-      <div class="check"><span class="bx"></span><div><b>Secrets production</b> — đổi hết tài khoản/mật khẩu mặc định, khoá mã hoá API key có backup riêng, repo public đã quét sạch secret</div></div>
+<section id="glossary">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">PHẦN 14</span><h2>Phụ lục — thuật ngữ giải thích bằng lời thường</h2></div>
+    <p class="sec-desc">Dành cho người đọc không chuyên IT. Mỗi thuật ngữ giải thích bằng một hình ảnh đời thường.</p>
+    <div class="gloss">
+      <div class="gl"><b>Queue (hàng đợi) / Job table</b>Quầy lấy số ở ngân hàng: khách (dữ liệu) lấy số rồi ngồi chờ, giao dịch viên (worker) gọi lần lượt. Không ai bị đuổi về chỉ vì đông. "Job table" = dùng chính PostgreSQL làm cuốn sổ lấy số.</div>
+      <div class="gl"><b>Load balancing / Replica</b>Mở thêm quầy thu ngân và có người đứng chia khách. Một quầy nghỉ, khách tự dồn sang quầy kia — siêu thị không phải đóng cửa.</div>
+      <div class="gl"><b>Index (chỉ mục)</b>Mục lục sách: tìm chương cần đọc trong 5 giây thay vì lật từng trang. "Composite index" = mục lục xếp theo hai tiêu chí cùng lúc (VD: theo kho, rồi theo mã hàng).</div>
+      <div class="gl"><b>BRIN / GIN</b>Hai kiểu mục lục đặc biệt: BRIN — mục lục siêu mỏng cho sổ ghi chép nối tiếp theo ngày (chỉ ghi "tháng 6 nằm ở tập 12–14"); GIN — mục lục tra ngược cho dữ liệu dạng hồ sơ tự do (JSONB).</div>
+      <div class="gl"><b>Upsert / Idempotency (chống trùng)</b>Điểm danh bằng danh sách có sẵn tên: ai đến thì đánh dấu, đến lần nữa cũng chỉ là một dấu — không ai bị ghi tên hai lần. Gửi lại bao nhiêu lần, dữ liệu vẫn đúng một bản.</div>
+      <div class="gl"><b>Business key (khóa nghiệp vụ)</b>Số CMND của một bản ghi: số hóa đơn, mã phiếu... Hệ thống dựa vào nó để biết "gặp lại người quen" thay vì tưởng là người mới.</div>
+      <div class="gl"><b>Watermark (mực nước)</b>Cái kẹp sách đánh dấu "lần trước đọc đến đây". Lần sau chỉ đọc phần mới thay vì đọc lại từ đầu. Kẹp bằng số thứ tự thì chắc chắn; kẹp bằng ngày thì có thể bị "ngày tương lai" đánh lừa nhảy cóc.</div>
+      <div class="gl"><b>CDC (Change Data Capture)</b>Nghe lén nhật ký của Oracle để biết mọi thay đổi tức thì. Rất hay nhưng đòi Oracle bật chế độ ghi nhật ký đầy đủ — hệ JDE đang tắt, bật lên phải restart hệ sản xuất → đã loại vĩnh viễn.</div>
+      <div class="gl"><b>Materialized view (matview)</b>Bảng kết quả tính sẵn: thay vì mỗi lần hỏi lại cộng từ đầu 60 triệu dòng, hệ tính sẵn định kỳ và ai hỏi thì đưa ngay bản đã tính — nhanh hơn ~80 lần.</div>
+      <div class="gl"><b>Curated view / Contract view</b>"Mặt tiền cửa hàng": khách chỉ nhìn kệ trưng bày gọn gàng, không vào kho lộn xộn phía sau. Sắp xếp lại kho thoải mái — mặt tiền không đổi, khách không bị ảnh hưởng.</div>
+      <div class="gl"><b>Stateless</b>Nhân viên tổng đài không cần nhớ bạn là ai giữa hai cuộc gọi — mọi thông tin nằm trong hồ sơ chung (DB). Nhờ vậy cuộc gọi nào rơi vào nhân viên nào cũng được — điều kiện để chia tải.</div>
+      <div class="gl"><b>p95</b>"95% request nhanh hơn con số này". Trung bình dễ nói dối (một request 30 giây trộn với nghìn request nhanh vẫn ra trung bình đẹp) — p95 phơi ra trải nghiệm của những người chậm nhất.</div>
+      <div class="gl"><b>Soak test</b>Chạy rà máy 4–8 giờ liên tục để lộ bệnh mãn tính: rò rỉ bộ nhớ, lỗi tích lũy — những thứ bài test 10 phút không bao giờ thấy.</div>
+      <div class="gl"><b>Dead-letter (thư chết)</b>Ngăn "thư không phát được" ở bưu điện: job hỏng sau N lần thử được cất riêng + báo người vận hành, thay vì âm thầm vứt đi hoặc thử lại mãi mãi.</div>
+      <div class="gl"><b>Retention / Partition</b>Dọn tủ hồ sơ định kỳ: giấy tờ cũ quá hạn đem lưu kho hoặc hủy (retention); tủ chia ngăn theo tháng để lấy nhanh và bỏ nguyên ngăn khi hết hạn (partition).</div>
+      <div class="gl"><b>PgBouncer</b>Lễ tân gom khách: 100 người dùng nhưng chỉ cần 10 cánh cửa vào DB, lễ tân xếp lượt — DB không bị cạn "cửa" (kết nối).</div>
     </div>
   </div>
-  <div class="callout green" style="margin-top:16px"><b>Khuyến nghị chốt:</b> phê duyệt lộ trình Giai đoạn 1 theo biên bản họp + các bổ sung: <b>phát hành v2.3.0 xuống PROD, audit watermark theo ngày, observability/watchdog, promote curated + Grafana lên PROD</b>. Không đầu tư Kafka/AI/BPM ở giai đoạn này (CDC đã bị loại vĩnh viễn theo ràng buộc Oracle). Mọi quyết định nâng cấp tiếp theo dựa trên số liệu load test, không dựa trên cảm tính.</div>
 </section>
 
-</div>
+</main>
 
 <footer>
-  TIPA ESB · Đánh giá &amp; Phương án nâng cấp kiến trúc — baseline TIPA_V2.0 (v2.2.0 PROD · v2.3.0 chờ phát hành) + biên bản họp · 26/08/2026 · tài liệu đi kèm: architecture-report.html
+  <div class="wrap">
+    <div>Avenue MDP — Hồ sơ Quyết định Kiến trúc Nâng cấp · phiên bản tài liệu 3.0</div>
+    <div>Baseline: MDP v2.2.0 (PROD) / v2.3.0 (chờ phát hành) · Load test DEV 27/08/2026 · Cập nhật 27/08/2026</div>
+  </div>
 </footer>
 
-<script>
-(function(){
-  var sections=[].slice.call(document.querySelectorAll('section'));
-  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
-    sections.forEach(function(s){s.classList.add('rv')});
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}});
-    },{rootMargin:'0px 0px -6% 0px'});
-    sections.forEach(function(s){io.observe(s)});
-  }
-  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
-  var map={};
-  links.forEach(function(a){var id=(a.getAttribute('href')||'').slice(1);var el=document.getElementById(id);if(el)map[id]=a});
-  if('IntersectionObserver' in window){
-    var io2=new IntersectionObserver(function(es){
-      es.forEach(function(en){
-        if(en.isIntersecting){
-          links.forEach(function(a){a.classList.remove('act')});
-          var a=map[en.target.id];if(a)a.classList.add('act');
-        }
-      });
-    },{rootMargin:'-25% 0px -65% 0px'});
-    Object.keys(map).forEach(function(id){io2.observe(document.getElementById(id))});
-  }
-})();
-</script>
 </body>
 </html>

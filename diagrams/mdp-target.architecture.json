@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Avenue MDP — Kiến trúc đích (TO-BE)",
+    "output": "mdp-target.architecture.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1180,
+      680
+    ],
+    "views": [
+      {
+        "id": "edge",
+        "label": "Cổng & replica",
+        "focus": [
+          "caddy",
+          "api_a",
+          "api_b"
+        ],
+        "note": "Caddy cân tải Backend×2 sau khi QĐ3 đã đo lại."
+      },
+      {
+        "id": "data",
+        "label": "Lớp dữ liệu",
+        "focus": [
+          "pg",
+          "curated",
+          "watch"
+        ],
+        "note": "Curated/index + watchdog upsert PROD."
+      },
+      {
+        "id": "read",
+        "label": "Đọc outbound",
+        "focus": [
+          "tipa",
+          "caddy",
+          "api_a",
+          "pg"
+        ],
+        "note": "Consumer đọc qua API replica."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "mes",
+      "type": "external",
+      "label": "MES / OCR",
+      "sublabel": "inbound",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        130,
+        64
+      ]
+    },
+    {
+      "id": "tipa",
+      "type": "external",
+      "label": "TIPA",
+      "sublabel": "outbound",
+      "pos": [
+        40,
+        420
+      ],
+      "size": [
+        130,
+        64
+      ]
+    },
+    {
+      "id": "caddy",
+      "type": "cloud",
+      "label": "Caddy",
+      "sublabel": "LB :8457",
+      "pos": [
+        260,
+        260
+      ],
+      "size": [
+        130,
+        64
+      ],
+      "tag": "TLS"
+    },
+    {
+      "id": "api_a",
+      "type": "backend",
+      "label": "Backend A",
+      "sublabel": "replica 1",
+      "pos": [
+        480,
+        160
+      ],
+      "size": [
+        130,
+        60
+      ],
+      "tag": "QĐ2"
+    },
+    {
+      "id": "api_b",
+      "type": "backend",
+      "label": "Backend B",
+      "sublabel": "replica 2",
+      "pos": [
+        480,
+        360
+      ],
+      "size": [
+        130,
+        60
+      ],
+      "tag": "QĐ2"
+    },
+    {
+      "id": "pg",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "index + curated",
+      "pos": [
+        720,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "tag": "QĐ3"
+    },
+    {
+      "id": "curated",
+      "type": "database",
+      "label": "Serve layer",
+      "sublabel": "matview / view",
+      "pos": [
+        720,
+        100
+      ],
+      "size": [
+        150,
+        60
+      ]
+    },
+    {
+      "id": "watch",
+      "type": "security",
+      "label": "Watchdog",
+      "sublabel": "upsert PROD",
+      "pos": [
+        720,
+        440
+      ],
+      "size": [
+        150,
+        60
+      ],
+      "tag": "QĐ4·QĐ5"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Mục tiêu gần (GĐ1–GĐ2)",
+      "wraps": [
+        "caddy",
+        "api_a",
+        "api_b",
+        "pg",
+        "curated",
+        "watch"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "mes-in",
+      "from": "mes",
+      "to": "caddy",
+      "label": "HTTPS inbound",
+      "variant": "emphasis"
+    },
+    {
+      "id": "tipa-get",
+      "from": "tipa",
+      "to": "caddy",
+      "label": "GET outbound",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "id": "lb-a",
+      "from": "caddy",
+      "to": "api_a",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "lb-b",
+      "from": "caddy",
+      "to": "api_b",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "a-pg",
+      "from": "api_a",
+      "to": "pg",
+      "label": "SQL",
+      "variant": "emphasis"
+    },
+    {
+      "id": "b-pg",
+      "from": "api_b",
+      "to": "pg",
+      "label": "SQL"
+    },
+    {
+      "id": "pg-serve",
+      "from": "pg",
+      "to": "curated",
+      "label": "REFRESH",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDy": -36
+    },
+    {
+      "id": "watch-pg",
+      "from": "watch",
+      "to": "pg",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "GĐ1 — tin cậy",
+      "items": [
+        "QĐ5: upsert đúng trên PROD (DEV ≠ PROD)",
+        "QĐ4: watchdog lag / fail / alert"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "GĐ2 — tốc độ đọc",
+      "items": [
+        "QĐ3 trước: index + curated theo EXPLAIN",
+        "QĐ2 sau: Backend×2 sau Caddy"
+      ]
+    }
+  ]
+}
