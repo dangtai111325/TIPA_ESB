@@ -3,137 +3,612 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Avenue MDP — Tài liệu kiến trúc TIPA ESB</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>TIPA ESB — Đánh giá hiện trạng (bản tham chiếu)</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
   :root{
     --brand:#dc2626; --brand-dark:#991b1b;
-    --ink:#0f172a; --muted:#64748b; --slate:#334155;
-    --bg:#f8fafc; --card:#ffffff; --line:#e2e8f0;
+    --blue:#2563eb; --blue-bg:#eff6ff; --blue-bd:#bfdbfe;
     --green:#059669; --green-bg:#ecfdf5; --green-bd:#a7f3d0;
+    --amber:#d97706; --amber-bg:#fffbeb; --amber-bd:#fde68a;
+    --purple:#7c3aed; --purple-bg:#f5f3ff; --purple-bd:#ddd6fe;
+    --teal:#0d9488; --teal-bg:#f0fdfa; --teal-bd:#99f6e4;
+    --slate:#334155; --ink:#0f172a; --muted:#64748b;
+    --bg:#f8fafc; --card:#ffffff; --line:#e2e8f0;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
-  a{cursor:pointer;color:inherit;text-decoration:none}
-  a:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+  body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 
-  .hero{
-    background:linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#450a0a 100%);
-    color:#fff;padding:56px 0 48px;
-  }
-  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
-  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#f87171;margin-bottom:12px}
-  .hero h1{font-size:clamp(28px,4vw,36px);font-weight:800;letter-spacing:-.5px;max-width:18ch}
+  header.hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#450a0a 100%);color:#fff;padding:48px 0 40px}
+  .hero h1{font-size:29px;font-weight:800;letter-spacing:-.5px}
   .hero h1 span{color:#f87171}
-  .hero .sub{margin-top:14px;color:#cbd5e1;font-size:16px;max-width:54ch}
-  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .hero p.sub{margin-top:8px;color:#cbd5e1;font-size:15px;max-width:820px}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
   .badge{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:4px 14px;font-size:12.5px;color:#e2e8f0}
-  .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-  .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    font-size:14px;font-weight:700;border-radius:12px;padding:12px 20px;
-    transition:background .15s,border-color .15s,transform .15s;
-  }
-  .btn:hover{transform:translateY(-1px)}
-  .btn-primary{background:var(--brand);color:#fff;border:1px solid transparent}
-  .btn-primary:hover{background:var(--brand-dark)}
-  .btn-ghost{background:transparent;color:#e2e8f0;border:1px solid rgba(255,255,255,.28)}
-  .btn-ghost:hover{background:rgba(255,255,255,.08)}
 
-  main{flex:1;padding:40px 0 56px}
-  .sec-label{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand);margin-bottom:14px}
-  .grid{display:grid;gap:14px}
-  @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
-  .card{
-    background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:20px 22px;
-    box-shadow:0 1px 3px rgba(15,23,42,.05);display:flex;flex-direction:column;gap:8px;
-    transition:border-color .15s,box-shadow .15s;
-  }
-  .card:hover{border-color:#fecaca;box-shadow:0 4px 14px rgba(15,23,42,.08)}
-  .card.primary{border-color:#fecaca;background:linear-gradient(180deg,#fff 0%,#fef2f2 100%)}
-  .card .tag{display:inline-block;align-self:flex-start;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 9px;color:#fff;background:var(--brand)}
-  .card .tag.secondary{background:var(--slate)}
-  .card .tag.ok{background:var(--green)}
-  .card h2{font-size:17px;font-weight:800;letter-spacing:-.2px}
-  .card p{font-size:13.5px;color:var(--muted);flex:1}
-  .card .go{font-size:13px;font-weight:700;color:var(--brand);margin-top:6px}
+  nav.toc{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding:10px 24px}
+  nav.toc a{white-space:nowrap;font-size:13px;color:var(--slate);text-decoration:none;padding:6px 12px;border-radius:8px}
+  nav.toc a:hover{background:#f1f5f9;color:var(--brand)}
 
-  .diagrams{margin-top:36px}
-  .diagram-list{display:grid;gap:10px}
-  @media(min-width:700px){.diagram-list{grid-template-columns:1fr 1fr}}
-  .diagram-list a{
-    display:flex;justify-content:space-between;align-items:center;gap:12px;
-    background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;
-    font-size:13.5px;font-weight:600;color:var(--slate);
-  }
-  .diagram-list a:hover{border-color:#fecaca;color:var(--brand)}
-  .diagram-list span{font-size:11px;font-weight:600;color:var(--muted)}
+  section{padding:44px 0 8px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+  .sec-num{font-size:13px;font-weight:700;color:var(--brand);background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:2px 10px;white-space:nowrap}
+  h2{font-size:22px;font-weight:800;letter-spacing:-.3px}
+  h3.sub-h{font-size:15px;font-weight:700;margin:22px 0 10px}
+  .sec-desc{color:var(--muted);font-size:14px;margin-bottom:20px}
 
-  footer{background:#0f172a;color:#94a3b8;padding:22px 0;font-size:12.5px}
-  footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-  footer a{color:#e2e8f0;font-weight:600}
-  footer a:hover{color:#f87171}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+
+  .node{border-radius:12px;padding:12px 14px;text-align:center;font-size:13.5px;font-weight:600;border:1.5px solid var(--line);background:#fff}
+  .node small{display:block;font-weight:500;font-size:11.5px;color:var(--muted);margin-top:3px}
+  .n-blue{background:var(--blue-bg);border-color:var(--blue-bd);color:#1e40af}
+  .n-blue small{color:#3b82f6}
+  .n-green{background:var(--green-bg);border-color:var(--green-bd);color:#065f46}
+  .n-green small{color:#10b981}
+  .n-amber{background:var(--amber-bg);border-color:var(--amber-bd);color:#92400e}
+  .n-amber small{color:#d97706}
+  .n-purple{background:var(--purple-bg);border-color:var(--purple-bd);color:#5b21b6}
+  .n-purple small{color:#8b5cf6}
+  .n-teal{background:var(--teal-bg);border-color:var(--teal-bd);color:#115e59}
+  .n-teal small{color:#0d9488}
+  .n-red{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+  .n-red small{color:#ef4444}
+  .n-dark{background:#0f172a;border-color:#0f172a;color:#fff}
+  .n-dark small{color:#94a3b8}
+  .n-dash{border-style:dashed;opacity:.78}
+
+  .arrow-d{text-align:center;color:#94a3b8;font-size:18px;font-weight:700;line-height:1;padding:5px 0}
+  .arrow-r{display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:20px;font-weight:700}
+
+  .callout{margin-top:14px;border-left:4px solid var(--amber);background:var(--amber-bg);border-radius:0 10px 10px 0;padding:10px 14px;font-size:13px;color:#78350f}
+  .callout.red{border-left-color:var(--brand);background:#fef2f2;color:#7f1d1d}
+  .callout.blue{border-left-color:var(--blue);background:var(--blue-bg);color:#1e3a8a}
+  .callout.green{border-left-color:var(--green);background:var(--green-bg);color:#064e3b}
+
+  code{font-family:Consolas,'Courier New',monospace;font-size:.92em;background:#f1f5f9;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:#0f172a}
+  .n-dark code{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff}
+
+  /* executive summary */
+  .exec{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .exec-item{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:16px}
+  .exec-item .n{flex-shrink:0;width:34px;height:34px;border-radius:10px;background:var(--brand);color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center}
+  .exec-item b{display:block;font-size:14px;margin-bottom:3px}
+  .exec-item span{font-size:12.5px;color:var(--muted)}
+
+  /* scorecard */
+  .score-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .chip-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .chip{font-size:12px;font-weight:600;border-radius:999px;padding:5px 13px;border:1.5px solid}
+  .chip.ok{background:var(--green-bg);border-color:var(--green-bd);color:#065f46}
+  .gap-list{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+  .gap{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;background:#fff;font-size:13px}
+  .sev{flex-shrink:0;font-size:10px;font-weight:800;border-radius:6px;padding:3px 8px;color:#fff;margin-top:1px;white-space:nowrap}
+  .sev.cao{background:var(--brand)}
+  .sev.tb{background:var(--amber)}
+  .sev.thap{background:#94a3b8}
+
+  /* tables */
+  table.tbl{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border-radius:12px;overflow:hidden}
+  table.tbl th{background:#0f172a;color:#fff;text-align:left;padding:10px 14px;font-size:12px;font-weight:700}
+  table.tbl td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.tbl tr:last-child td{border-bottom:none}
+  table.tbl td.c{text-align:center}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 9px;color:#fff;white-space:nowrap}
+  .tag.now{background:var(--green)}
+  .tag.next{background:var(--amber)}
+  .tag.later{background:#94a3b8}
+  .tag.no{background:var(--brand)}
+
+  /* layers (DW answer) */
+  .layer-stack{display:flex;flex-direction:column;gap:8px;max-width:620px;margin:0 auto}
+  .layer{border-radius:12px;padding:13px 18px;border:1.5px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13.5px;font-weight:600}
+  .layer em{font-style:normal;font-size:11px;font-weight:500;color:var(--muted);text-align:right}
+
+  /* target architecture */
+  .zone{border:2px dashed #cbd5e1;border-radius:16px;padding:16px}
+  .zone-title{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .zone-title .dot{width:9px;height:9px;border-radius:50%}
+  .target{display:grid;grid-template-columns:200px 34px 1fr 34px 200px;gap:8px;align-items:stretch}
+  .stack{display:flex;flex-direction:column;gap:10px}
+  .mid-rows{display:flex;flex-direction:column;gap:10px}
+  .mid-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .full{grid-column:1/-1}
+
+  /* step chain */
+  .chain{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch}
+  .chain .step{flex:1 1 130px;min-width:126px;position:relative;border-radius:12px;padding:12px 12px 12px 14px;border:1.5px solid var(--line);background:#fff}
+  .chain .step .num{position:absolute;top:-11px;left:10px;width:22px;height:22px;border-radius:50%;background:var(--slate);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .chain .step b{display:block;font-size:12.5px;margin-bottom:2px}
+  .chain .step span{font-size:11px;color:var(--muted);display:block}
+  .chain .sep{display:flex;align-items:center;color:#94a3b8;font-size:18px;font-weight:700}
+  .s-blue{border-color:var(--blue-bd)!important;background:var(--blue-bg)!important}
+  .s-blue .num{background:var(--blue)}
+  .s-amber{border-color:var(--amber-bd)!important;background:var(--amber-bg)!important}
+  .s-amber .num{background:var(--amber)}
+  .s-red{border-color:#fecaca!important;background:#fef2f2!important}
+  .s-red .num{background:var(--brand)}
+  .s-green{border-color:var(--green-bd)!important;background:var(--green-bg)!important}
+  .s-green .num{background:var(--green)}
+  .s-purple{border-color:var(--purple-bd)!important;background:var(--purple-bg)!important}
+  .s-purple .num{background:var(--purple)}
+  .s-teal{border-color:var(--teal-bd)!important;background:var(--teal-bg)!important}
+  .s-teal .num{background:var(--teal)}
+
+  /* decision tree */
+  .tree{display:flex;flex-direction:column;gap:4px;align-items:center}
+  .tree .q{background:#0f172a;color:#fff;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:600;text-align:center}
+  .tree .branches{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;margin-top:4px}
+  .tree .branch{display:flex;flex-direction:column;gap:4px;align-items:center}
+  .tree .lbl{font-size:11px;font-weight:700;padding:2px 12px;border-radius:999px}
+  .lbl.yes{background:var(--green-bg);color:#065f46;border:1px solid var(--green-bd)}
+  .lbl.no2{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+
+  /* roadmap */
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .phase{border-radius:16px;border:1.5px solid var(--line);background:#fff;overflow:hidden;display:flex;flex-direction:column}
+  .phase-head{padding:14px 18px;color:#fff}
+  .phase-head b{font-size:15px;display:block}
+  .phase-head span{font-size:11.5px;opacity:.9}
+  .phase-body{padding:14px 18px;display:flex;flex-direction:column;gap:7px;flex:1}
+  .phase-body .it{font-size:12.5px;padding-left:18px;position:relative}
+  .phase-body .it::before{content:"▸";position:absolute;left:2px;color:var(--muted)}
+  .phase-foot{padding:10px 18px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted)}
+
+  .check-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .check{display:flex;gap:10px;align-items:flex-start;font-size:13px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px 13px}
+  .check .bx{flex-shrink:0;width:18px;height:18px;border:2px solid #94a3b8;border-radius:5px;margin-top:1px}
+
+  footer{margin-top:56px;padding:26px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+
+  @media(max-width:960px){
+    .exec,.score-grid,.check-grid{grid-template-columns:1fr}
+    .target{grid-template-columns:1fr}
+    .target .arrow-r{transform:rotate(90deg);padding:2px 0}
+    .phases{grid-template-columns:1fr}
+    .mid-row{grid-template-columns:1fr}
+    .tree .branches{grid-template-columns:1fr}
+  }
+</style>
+<style id="theme-pro">
+  /* ===== ui-ux-pro-max overlay: Exaggerated Minimalism · navy + blue accent · IBM Plex ===== */
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --accent:#0369a1; --accent-strong:#075985; --accent-bg:#f0f9ff; --accent-bd:#bae6fd;
+    --font-sans:'IBM Plex Sans','Inter','Segoe UI',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono',Consolas,'Courier New',monospace;
+    --sh-md:0 1px 2px rgba(2,6,23,.05),0 10px 28px -14px rgba(2,6,23,.14);
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-sans);font-size:15px;line-height:1.6;color:#0f172a;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  code{font-family:var(--font-mono)}
+
+  header.hero{background:linear-gradient(140deg,#020617 0%,#0f172a 55%,#082f49 100%);border-top:4px solid #dc2626;padding:60px 0 48px}
+  .hero .kicker{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#7dd3fc;margin-bottom:12px}
+  .hero h1{font-size:clamp(27px,3.2vw,38px);font-weight:700;letter-spacing:-.02em}
+  .hero h1 span{color:#38bdf8}
+  .hero p.sub{margin-top:12px;color:#94a3b8;font-size:15.5px;line-height:1.65;max-width:820px}
+  .badges{margin-top:22px}
+  .badge{background:rgba(56,189,248,.08);border:1px solid rgba(125,211,252,.22);color:#bae6fd;font-weight:500}
+
+  nav.toc{background:rgba(255,255,255,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  nav.toc a{font-weight:500;color:#475569;cursor:pointer;transition:background .18s ease,color .18s ease}
+  nav.toc a:hover{background:var(--accent-bg);color:var(--accent-strong)}
+  nav.toc a.act{background:var(--accent-bg);color:var(--accent-strong);font-weight:600}
+  nav.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  section{padding:52px 0 10px;scroll-margin-top:64px}
+  .sec-num{color:var(--accent-strong);background:var(--accent-bg);border:1px solid var(--accent-bd);border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 12px}
+  h2{font-size:24px;font-weight:700;letter-spacing:-.02em}
+  .card{border-radius:16px;border-color:#e5eaf1;box-shadow:var(--sh-md)}
+  .exec-item,.gap,.lane,.zone,.phase,.check,.risk{border-color:#e5eaf1}
+  .exec-item{transition:box-shadow .2s ease}
+  .exec-item:hover{box-shadow:var(--sh-md)}
+  .exec-item .n{background:#0f172a}
+
+  table.tbl th{font-family:var(--font-sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  table.tbl tbody tr:hover td,table.tbl tr:hover td{background:#fafcfe}
+  .tree .q{background:#0f172a}
+  .n-dark{background:#0f172a;border-color:#0f172a}
+  footer{color:#94a3b8;padding:32px 0 44px}
+
+  @media (prefers-reduced-motion: no-preference){
+    .rv{opacity:0;transform:translateY(14px);transition:opacity .4s ease-out,transform .4s ease-out}
+    .rv.in{opacity:1;transform:none}
+  }
+  @media print{
+    nav.toc{display:none}
+    body{background:#fff}
+    .card{box-shadow:none}
+    header.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .rv{opacity:1 !important;transform:none !important}
+  }
 </style>
 </head>
 <body>
 
 <header class="hero">
   <div class="wrap">
-    <p class="eyebrow">TIPA ESB · Avenue MDP</p>
-    <h1>Hồ sơ quyết định <span>nâng cấp kiến trúc</span></h1>
-    <p class="sub">Tài liệu công khai theo benchmark 27/08/2026 — ưu tiên theo số đo: tin cậy trước, tốc độ đọc sau, mở rộng khi có bằng chứng.</p>
+    <div class="kicker">Đề xuất nâng cấp kiến trúc · 26/08/2026</div>
+    <h1>Nâng cấp TIPA ESB <span>·</span> Đánh giá & Phương án Kiến trúc</h1>
+    <p class="sub">Baseline: mã nguồn TIPA_V2.0 — bản v2.2.0 đang chạy PROD (.63), nhánh v2.3.0 chờ phát hành. Đánh giá khách quan + kế hoạch cuộc họp · trả lời câu hỏi "Data Warehouse" · phương án message queue, load balancing · kiến trúc mục tiêu và lộ trình 3 giai đoạn.</p>
     <div class="badges">
-      <span class="badge">Benchmark 27/08/2026</span>
-      <span class="badge">6 sơ đồ Archify</span>
-      <span class="badge">QĐ5 → QĐ4 → QĐ3 → QĐ2</span>
-    </div>
-    <div class="cta-row">
-      <a class="btn btn-primary" href="architecture-upgrade-proposal.html">Mở hồ sơ nâng cấp</a>
-      <a class="btn btn-ghost" href="architecture-upgrade-proposal.html#baseline">Xem số đo baseline</a>
+      <span class="badge">Vai trò: Kiến trúc sư hệ thống</span>
+      <span class="badge">Nguồn: mã nguồn TIPA_V2.0 + tài liệu vận hành + biên bản họp</span>
+      <span class="badge">Ngày: 26/08/2026</span>
     </div>
   </div>
 </header>
 
-<main>
+<nav class="toc">
   <div class="wrap">
-    <p class="sec-label">Tài liệu chính</p>
-    <div class="grid">
-      <a class="card primary" href="architecture-upgrade-proposal.html">
-        <span class="tag">Mới · khuyến nghị</span>
-        <h2>Hồ sơ quyết định kiến trúc nâng cấp</h2>
-        <p>QĐ1–QĐ6, lộ trình GĐ1–GĐ3, iframe sơ đồ AS-IS / TO-BE / bottleneck / ưu tiên — căn cứ load test local &amp; tipa.</p>
-        <span class="go">Vào tài liệu →</span>
-      </a>
-      <a class="card" href="architecture-assessment.html">
-        <span class="tag secondary">Tham chiếu</span>
-        <h2>Đánh giá &amp; phương án ban đầu</h2>
-        <p>Bản đánh giá hiện trạng / DW / LB / queue trước khi chốt theo số đo benchmark. Giữ để đối chiếu.</p>
-        <span class="go">Xem bản cũ →</span>
-      </a>
-    </div>
+    <a href="#s0">Tóm tắt</a><a href="#s1">Đánh giá hiện trạng</a><a href="#s2">Data Warehouse?</a>
+    <a href="#s3">Đánh giá kế hoạch họp</a><a href="#s4">Kiến trúc mục tiêu</a><a href="#s5">Luồng inbound mới</a>
+    <a href="#s6">Load balancing</a><a href="#s7">Message queue</a><a href="#s8">Lộ trình</a>
+    <a href="#s9">Test plan</a><a href="#s10">Checklist</a>
+  </div>
+</nav>
 
-    <div class="diagrams">
-      <p class="sec-label">Sơ đồ Archify (mở toàn màn)</p>
-      <div class="diagram-list">
-        <a href="diagrams/mdp-as-is.architecture.html">AS-IS kiến trúc<span>architecture</span></a>
-        <a href="diagrams/mdp-inbound-outbound.dataflow.html">Inbound / outbound<span>dataflow</span></a>
-        <a href="diagrams/mdp-outbound-bottleneck.sequence.html">Nút thắt T2 outbound<span>sequence</span></a>
-        <a href="diagrams/mdp-jde-streaming.sequence.html">JDE streaming mock<span>sequence</span></a>
-        <a href="diagrams/mdp-target.architecture.html">TO-BE kiến trúc đích<span>architecture</span></a>
-        <a href="diagrams/mdp-upgrade-priority.workflow.html">Thứ tự nâng cấp<span>workflow</span></a>
+<div class="wrap">
+
+<!-- ============ 0. EXECUTIVE SUMMARY ============ -->
+<section id="s0">
+  <div class="sec-head"><span class="sec-num">Phần 0</span><h2>Tóm tắt cho người ra quyết định</h2></div>
+  <p class="sec-desc">6 kết luận quan trọng nhất — chi tiết và căn cứ ở các phần sau.</p>
+  <div class="exec">
+    <div class="exec-item"><span class="n">1</span><div><b>Hướng đi trong họp là ĐÚNG: củng cố trước, mở rộng sau</b><span>Nền tảng v2.x đã trưởng thành hơn nhiều so với MVP: streaming sync, matview, function service đều chạy thật. Harden vận hành trước khi nối MES/App là quyết định chuẩn.</span></div></div>
+    <div class="exec-item"><span class="n">2</span><div><b>Không dùng Kafka — và CDC log-based đã đóng cửa vĩnh viễn</b><span>Oracle nguồn tắt ARCHIVELOG, không được restart production → LogMiner/Debezium/Flink-CDC bị loại hẳn. Đồng bộ chốt là ora2pg + query watermark; queue bắt đầu từ PostgreSQL job table.</span></div></div>
+    <div class="exec-item"><span class="n">3</span><div><b>"Kho dữ liệu mini" đã HIỆN THỰC — chưa cần Data Warehouse riêng</b><span>Staging 40 bảng → 26 curated view → matview (~80× nhanh hơn) → Grafana 8 dashboard đã chạy trên DEV. Việc còn lại là promote lên PROD + retention, không phải xây DW mới.</span></div></div>
+    <div class="exec-item"><span class="n">4</span><div><b>Load balancing: điều kiện tốt hơn dự kiến</b><span>API stateless; các vòng nền (streaming, matview) đã có advisory lock chống chạy trùng. Còn 2 việc: trạng thái verify-batch đang nằm trong RAM từng process, và tính lại pool kết nối DB.</span></div></div>
+    <div class="exec-item"><span class="n">5</span><div><b>Việc cấp bách nhất: phát hành v2.3.0 xuống PROD + audit watermark ngày</b><span>Fix chống trùng inbound (upsert theo business key) đã xong trên nhánh DEV nhưng PROD chưa có. Watermark theo cột ngày có thể mất dòng âm thầm — 2 rủi ro dữ liệu P0 cần đóng trước tiên.</span></div></div>
+    <div class="exec-item"><span class="n">6</span><div><b>Thêm nguồn MES/App: không cần viết lại — dùng 2 mẫu có sẵn + queue</b><span>Nguồn push dùng Type A + API Key + business key; nguồn batch dùng staging + streaming + Type B. Kiến trúc lõi đã đúng, chỉ cần thêm lớp chịu tải và giám sát.</span></div></div>
+  </div>
+</section>
+
+<!-- ============ 1. ASSESSMENT ============ -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-num">Phần 1</span><h2>Đánh giá hiện trạng — khách quan</h2></div>
+  <p class="sec-desc">Dựa trên khảo sát mã nguồn TIPA_V2.0 (19 router API, streaming service, matview, Grafana), tài liệu vận hành và audit bug tiềm ẩn v2.2.0.</p>
+  <div class="score-grid">
+    <div class="card">
+      <b style="color:var(--green)">✔ Điểm mạnh — nên giữ nguyên</b>
+      <div class="chip-wrap">
+        <span class="chip ok">Phân lớp đúng: nguồn → staging → curated → matview → API</span>
+        <span class="chip ok">Consumer không chạm DB nguồn</span>
+        <span class="chip ok">Streaming watermark trong hub · 38/40 bảng</span>
+        <span class="chip ok">Advisory lock chống job chạy trùng</span>
+        <span class="chip ok">Xác thực 2 làn · scope rỗng = từ chối</span>
+        <span class="chip ok">Audit log + envelope chuẩn</span>
+        <span class="chip ok">Matview ~80× cho báo cáo nặng</span>
+        <span class="chip ok">Dashboard-as-code + role grafana_ro</span>
+        <span class="chip ok">~38 module test offline + quy trình prompt/report</span>
+      </div>
+      <div class="callout green" style="margin-top:16px">Kết luận: <b>kiến trúc lõi đúng hướng và đã qua vận hành thật</b> — bài toán không phải "đập đi xây lại" mà là <b>đóng rủi ro dữ liệu P0, thêm lớp chịu tải và giám sát</b>.</div>
+    </div>
+    <div class="card">
+      <b style="color:var(--brand)">✖ Khoảng trống — xếp theo mức độ</b>
+      <div class="gap-list">
+        <div class="gap"><span class="sev cao">CAO</span><div><b>PROD chưa có upsert inbound</b> — fix chống trùng (business key, alembic 022) mới nằm trên nhánh v2.3.0; PROD v2.2.0 vẫn insert-only, nguồn retry sinh bản ghi trùng và làm matview REFRESH lỗi.</div></div>
+        <div class="gap"><span class="sev cao">CAO</span><div><b>Watermark theo ngày có thể mất dòng âm thầm</b> — JDE có dòng ghi ngày ở tương lai làm cursor nhảy qua; nhóm bảng fallback theo ngày chưa được audit.</div></div>
+        <div class="gap"><span class="sev cao">CAO</span><div><b>Không có alert/observability</b> — streaming/matview lỗi chỉ ghi <code>last_error</code> vào DB; sync đứng yên không ai được báo. Không /metrics, không watchdog.</div></div>
+        <div class="gap"><span class="sev tb">TB</span><div><b>Mọi thứ chạy 1 bản duy nhất</b> — 1 backend, 1 DB, không LB; trạng thái verify-batch nằm trong RAM từng process nên chưa sẵn sàng multi-replica.</div></div>
+        <div class="gap"><span class="sev tb">TB</span><div><b>Xử lý nặng vẫn in-process</b> — thread/asyncio trong backend, không job queue độc lập, không retry có backoff, không dead-letter.</div></div>
+        <div class="gap"><span class="sev tb">TB</span><div><b>API chưa hard đủ cho tải thật</b> — chưa statement_timeout, chưa request_id, pagination chưa deterministic; bảng transactions/raw_payload chưa có retention.</div></div>
+        <div class="gap"><span class="sev tb">TB</span><div><b>Lớp curated + Grafana mới ở DEV</b> — 26 view + 8 dashboard chưa promote lên PROD (đang hold); PROD chưa có lớp báo cáo.</div></div>
+        <div class="gap"><span class="sev thap">THẤP</span><div><b>Vệ sinh bảo mật P1</b> — còn một số tài khoản/mật khẩu mặc định và vài điểm xác thực, chặn SSRF cần siết lại (danh sách chi tiết trong tài liệu audit nội bộ). Cần dọn trước khi mở cho nhiều nguồn.</div></div>
       </div>
     </div>
   </div>
-</main>
+</section>
+
+<!-- ============ 2. DATA WAREHOUSE ============ -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-num">Phần 2</span><h2>Trả lời: dữ liệu trong ESB MDP có phải "Data Warehouse"?</h2></div>
+  <p class="sec-desc">Câu trả lời ngắn: <b>nó là Data Hub kèm một warehouse thu nhỏ — và cả 3 lớp đã được xây xong</b>, không còn là đề xuất trên giấy.</p>
+  <div class="card">
+    <div class="layer-stack">
+      <div class="layer" style="background:var(--blue-bg);border-color:var(--blue-bd)">Lớp 1 · Staging — ĐÃ CÓ <em>mirror 40 bảng JDE (mdp_staging) · streaming 38/40 bảng · F4111 ~59M dòng</em></div>
+      <div class="arrow-d">▼ làm sạch · chuẩn hoá</div>
+      <div class="layer" style="background:var(--amber-bg);border-color:var(--amber-bd)">Lớp 2 · Curated — ĐÃ CÓ <em>26 view nghiệp vụ (mdp_curated): P2P, Inventory, Supplier, GL, Production, Sales</em></div>
+      <div class="arrow-d">▼ tăng tốc báo cáo</div>
+      <div class="layer" style="background:var(--green-bg);border-color:var(--green-bd)">Lớp 3 · Materialized View — ĐÃ CÓ <em>mdp_models · REFRESH CONCURRENTLY tự động · ~80× nhanh hơn read-through</em></div>
+      <div class="arrow-d">▼ phục vụ</div>
+      <div class="layer" style="background:#0f172a;border-color:#0f172a;color:#fff">Outbound API · Grafana 8 dashboard <em style="color:#94a3b8">consumer chỉ đọc từ đây</em></div>
+    </div>
+    <div class="callout">Việc còn lại của "mini DW" không phải xây thêm mà là <b>vận hành hoá</b>: promote 26 curated view + Grafana container lên PROD (đang hold chờ lệnh), thêm retention/partition cho bảng log, và migrate F0005 để decode mã trạng thái cho cả 8 dashboard.</div>
+    <div class="callout blue">Data Warehouse "đúng nghĩa" (star schema, lưu lịch sử nhiều năm, engine phân tích riêng như ClickHouse/BigQuery) <b>vẫn chưa cần</b> — chỉ cân nhắc khi: dữ liệu phân tích &gt; hàng trăm triệu dòng, nhiều báo cáo nặng chạy đồng thời, hoặc cần lịch sử dài. Khi đó tách <b>read replica → DW riêng</b> theo đúng thứ tự.</div>
+  </div>
+</section>
+
+<!-- ============ 3. MEETING REVIEW ============ -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-num">Phần 3</span><h2>Đánh giá kế hoạch cuộc họp (7 nhóm việc)</h2></div>
+  <p class="sec-desc">Nhận xét từng nhóm việc theo biên bản, kèm phần tôi đề nghị bổ sung.</p>
+  <div class="card" style="padding:0;overflow-x:auto">
+    <table class="tbl">
+      <tr><th style="width:230px">Nhóm việc trong họp</th><th style="width:110px">Đánh giá</th><th>Ý kiến chuyên môn</th></tr>
+      <tr><td><b>1 · Stabilize baseline</b><br><small style="color:var(--muted)">deploy sạch, healthcheck, backup/restore</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Compose đã có healthcheck + runbook deploy prod. Việc chính: <b>diễn tập restore thật</b> (DB 79 GB), bảo vệ <code>APIKEY_ENC_KEY</code> (mất = key mã hoá không khôi phục được), và viết "known limitations". <b>Kèm theo: cắt bản v2.3.0 xuống PROD</b> (backup trước, alembic 021→022) để PROD có upsert inbound.</td></tr>
+      <tr><td><b>2 · API/query hardening</b><br><small style="color:var(--muted)">pagination, max limit, timeout, request_id</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Limit 500 + envelope + scope-deny đã có; upsert inbound đã xong trên nhánh v2.3.0. Còn thiếu: <code>statement_timeout</code>, middleware <code>request_id</code>, rate limit theo API key, pagination deterministic (thêm ORDER BY khoá). Dọn luôn nhóm P1 bảo mật: secrets mặc định, JWT fall-through, SSRF ở /connections/test.</td></tr>
+      <tr><td><b>3 · Database performance</b><br><small style="color:var(--muted)">EXPLAIN ANALYZE, index, materialized view</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Matview đã có sẵn (~80×) — trọng tâm chuyển sang: EXPLAIN ANALYZE các query outbound/curated chính, index theo kết quả, <b>retention/partition</b> cho <code>transactions</code> và <code>raw_payload</code>, và <b>audit watermark theo ngày</b> (rủi ro mất dòng âm thầm — ưu tiên cao nhất của nhóm này).</td></tr>
+      <tr><td><b>4 · Queue/job readiness</b><br><small style="color:var(--muted)">PostgreSQL job table hoặc Redis/RQ</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Chọn đúng cỡ: <b>PostgreSQL job table (SKIP LOCKED) + 1 container worker</b> — không thêm hạ tầng mới, đủ retry/dead-letter/idempotency. Việc đầu tiên: chuyển verify-batch (đang là queue trong RAM) vào job table để sống sót restart và chạy được multi-replica. Redis/RQ là bước nâng khi cần tốc độ. Chi tiết ở Phần 7.</td></tr>
+      <tr><td><b>5 · Load balancing</b><br><small style="color:var(--muted)">2 backend replicas</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Điều kiện tốt: API stateless, các vòng nền (streaming/matview/source-count) <b>đã có advisory lock</b> nên không chạy trùng. Còn phải sửa: trạng thái verify-batch in-memory (chuyển vào DB), pool kết nối tính theo tổng replicas. 2 replicas trên 1 máy = throughput + zero-downtime deploy, chưa phải HA thật. Chi tiết ở Phần 6.</td></tr>
+      <tr><td><b>6 · Load test k6/Locust</b><br><small style="color:var(--muted)">+ soak test 4–8h</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Chuẩn. Tôi đề xuất bộ 6 kịch bản cụ thể kèm ngưỡng đạt ở Phần 9 — quan trọng nhất là <b>soak test</b> để bắt memory leak và pool cạn kết nối.</td></tr>
+      <tr><td><b>7 · TIPA readiness package</b><br><small style="color:var(--muted)">API contract, runbook, rollback</small></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Đây là deliverable giúp đội TIPA tích hợp không cần hỏi lại. Thêm <b>onboarding kit cho từng nguồn mới</b> (mẫu API key + mẫu payload + mẫu test).</td></tr>
+      <tr><td><b>Không thêm AI/BPM/OCR-tool/dashboard riêng · Grafana giữ nguyên · streaming disabled mặc định</b></td><td class="c"><span class="tag now">ĐỒNG Ý</span></td><td>Kỷ luật phạm vi tốt, khớp thực tế: BPM/OCR/AI/IIoT đã được "hoãn có chủ đích". Streaming hiện bật 38/40 bảng <b>sau khi</b> verify PK/watermark từng bảng — bảng mới thêm phải giữ nguyên tắc tắt mặc định cho tới khi verify xong.</td></tr>
+      <tr style="background:#fffbeb"><td><b>Điều biên bản CHƯA có</b></td><td class="c"><span class="tag next">BỔ SUNG</span></td><td><b>(a) Observability</b>: /metrics Prometheus + alert qua Grafana (đã có sẵn Grafana trong stack) — kèm <b>watchdog watermark</b>: streaming đã chạy 38/40 bảng nhưng lỗi chỉ ghi <code>last_error</code> vào DB, đứng yên không ai biết. <b>(b) Phát hành v2.3.0 xuống PROD</b> — fix chống trùng inbound và unique business key đang nằm trên nhánh, PROD chưa được bảo vệ. <b>(c) Audit watermark theo ngày</b> — đóng rủi ro mất dòng âm thầm trước khi mở thêm nguồn. <b>(d) Promote lớp curated + Grafana lên PROD</b> — 26 view + 8 dashboard mới ở DEV. <b>(e) Quy ước versioning API</b> (v1) trước khi TIPA tích hợp để sau này đổi không vỡ.</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 4. TARGET ARCHITECTURE ============ -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-num">Sơ đồ A</span><h2>Kiến trúc mục tiêu đề xuất</h2></div>
+  <p class="sec-desc">Giữ nguyên lõi hiện tại · thêm 4 khối mới (viền đậm đánh dấu ➊–➍) · khối nét đứt là giai đoạn sau.</p>
+  <div class="card">
+    <div class="target">
+      <div>
+        <div class="zone" style="height:100%">
+          <div class="zone-title"><span class="dot" style="background:var(--blue)"></span>Nguồn dữ liệu</div>
+          <div class="stack">
+            <div class="node n-blue">JDE (Oracle .16)<small>ora2pg + streaming watermark — đã chạy</small></div>
+            <div class="node n-blue">MES<small>push REST / MQTT sau</small></div>
+            <div class="node n-blue">App 1, 2, 3…<small>push REST</small></div>
+            <div class="node n-blue n-dash">OCR hoá đơn<small>hoãn có chủ đích — khi cần: push REST</small></div>
+            <div class="node n-blue n-dash">IIoT / PLC<small>qua edge tool → MQTT</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-r">▶</div>
+      <div>
+        <div class="zone">
+          <div class="zone-title"><span class="dot" style="background:var(--brand)"></span>TIPA ESB — nâng cấp</div>
+          <div class="mid-rows">
+            <div class="node n-dark">➊ Caddy — TLS · <b>load balance 2+ replicas</b> · rate limit<small>cổng vào duy nhất · :8456</small></div>
+            <div class="arrow-d">▼</div>
+            <div class="mid-row">
+              <div class="node n-red">FastAPI ×2 replicas<small>stateless · validate · upsert business key (v2.3.0) · request_id · trả 202 nhanh</small></div>
+              <div class="node n-red">➋ Worker container<small>verify batch · job nặng · retry ×3 · dead-letter</small></div>
+            </div>
+            <div class="arrow-d">▼</div>
+            <div class="mid-row">
+              <div class="node n-amber">➌ Job Queue<small>PostgreSQL SKIP LOCKED (nay) → Redis/RabbitMQ (sau) · streaming/matview giữ advisory lock sẵn có</small></div>
+              <div class="node n-teal">➍ Observability<small>/metrics Prometheus · alert Grafana · watchdog watermark</small></div>
+            </div>
+            <div class="arrow-d">▼</div>
+            <div class="node n-purple">PostgreSQL 16 — pool kết nối chung (PgBouncer khi cần)<small>staging 40 bảng → mdp_curated 26 view → matview mdp_models · mdp_data · metadata · partition log</small></div>
+            <div class="node n-purple n-dash">Read replica<small>giai đoạn sau — khi tải đọc lớn</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-r">▶</div>
+      <div>
+        <div class="zone" style="height:100%">
+          <div class="zone-title"><span class="dot" style="background:var(--green)"></span>Tiêu thụ</div>
+          <div class="stack">
+            <div class="node n-green">iHUB — WSO2 (.64)<small>API key + contract v1 · import cert MDP</small></div>
+            <div class="node n-green">Grafana 8 dashboard<small>curated + matview · promote lên PROD</small></div>
+            <div class="node n-green">Apps nội bộ<small>outbound API · ?function=</small></div>
+            <div class="node n-green n-dash">AI Agents qua MCP<small>giai đoạn 3 — gọi API sẵn có</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">Đồng bộ JDE (giữ nguyên — đã chạy thật): <b>ora2pg full load + streaming watermark trong hub</b>, 38/40 bảng, advisory lock chống chạy trùng. <b>CDC log-based (LogMiner/Debezium/Flink-CDC) đã bị loại vĩnh viễn</b> vì Oracle nguồn tắt ARCHIVELOG và không được restart production — mọi phương án nâng cấp phải xây trên query watermark, không quay lại hướng CDC. Cái còn thiếu là <b>watchdog</b>: cảnh báo khi watermark đứng yên quá ngưỡng.</div>
+    <div class="callout blue">Về ảnh tham khảo Litmus: đó là nền tảng <b>IIoT edge</b> (kết nối PLC Modbus/OPC UA/Siemens). ESB MDP không nên tự xây driver máy móc — nếu sau này cần dữ liệu máy, dùng edge tool (Litmus/Node-RED) thu thập rồi <b>đẩy về hub qua MQTT/REST</b>, đúng vai trò từng lớp.</div>
+  </div>
+</section>
+
+<!-- ============ 5. NEW INBOUND FLOW ============ -->
+<section id="s5">
+  <div class="sec-head"><span class="sec-num">Sơ đồ B</span><h2>Luồng inbound mới — bất đồng bộ, chống trùng</h2></div>
+  <p class="sec-desc">Áp dụng cho mọi nguồn push (OCR, MES, App…). Payload nhỏ lẻ vẫn có thể đi đường đồng bộ như cũ.</p>
+  <div class="card">
+    <div class="chain">
+      <div class="step s-blue"><span class="num">1</span><b>Nguồn gửi JSON</b><span>kèm business key (mã chứng từ / số phiếu)</span></div>
+      <div class="sep">▶</div>
+      <div class="step"><span class="num">2</span><b>Caddy LB</b><span>chia tải 2 replicas · rate limit theo key</span></div>
+      <div class="sep">▶</div>
+      <div class="step s-red"><span class="num">3</span><b>API validate nhanh</b><span>auth · scope · schema model · gắn request_id</span></div>
+      <div class="sep">▶</div>
+      <div class="step s-amber"><span class="num">4</span><b>Ghi vào queue</b><span>trả 202 ngay · nguồn không phải chờ DB</span></div>
+      <div class="sep">▶</div>
+      <div class="step s-red"><span class="num">5</span><b>Worker xử lý</b><span>UPSERT theo business key — nền tảng đã có từ v2.3.0</span></div>
+      <div class="sep">▶</div>
+      <div class="step s-purple"><span class="num">6</span><b>Fail → retry ×3</b><span>vẫn fail → dead-letter + alert · xem lại được</span></div>
+      <div class="sep">▶</div>
+      <div class="step s-green"><span class="num">7</span><b>Data sẵn sàng</b><span>outbound API · tra cứu trạng thái theo request_id</span></div>
+    </div>
+    <div class="callout green">Lợi ích đo được: nguồn burst 1.000 msg không đánh sập DB · gửi trùng không sinh bản ghi trùng · bản ghi lỗi không mất mà nằm ở dead-letter chờ xử lý · mọi request tra được vết theo <code>request_id</code>.</div>
+    <div class="callout">Bước 5 tận dụng nền có sẵn: v2.3.0 đã có <b>UPSERT theo business key + unique index</b> ngay trong inbound. Phần mới của sơ đồ này chỉ là bước 4 (queue + trả 202) và bước 6 (retry/dead-letter) — payload nhỏ lẻ vẫn có thể đi đường đồng bộ như hiện tại.</div>
+  </div>
+</section>
+
+<!-- ============ 6. LOAD BALANCING ============ -->
+<section id="s6">
+  <div class="sec-head"><span class="sec-num">Sơ đồ C</span><h2>Load balancing — làm gì, không làm gì</h2></div>
+  <p class="sec-desc">2 replicas sau Caddy giải quyết throughput và deploy không downtime. HA thật (chống chết máy) là bước sau.</p>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:20px;align-items:start">
+      <div>
+        <div class="stack">
+          <div class="node n-dark">Caddy<small>reverse_proxy → round-robin + health check</small></div>
+          <div class="arrow-d">▼ &nbsp;&nbsp; ▼</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="node n-red">backend-1<small>:8000</small></div>
+            <div class="node n-red">backend-2<small>:8000</small></div>
+          </div>
+          <div class="arrow-d">▼</div>
+          <div class="node n-purple">PostgreSQL<small>pool: (replicas × pool_size) &lt; max_connections</small></div>
+        </div>
+      </div>
+      <div>
+        <table class="tbl">
+          <tr><th>Điều kiện cần kiểm</th><th style="width:120px">Hiện trạng</th></tr>
+          <tr><td>API stateless (không lưu session trong process)</td><td class="c"><span class="tag now">ĐẠT</span> JWT/API key</td></tr>
+          <tr><td>Job nền không chạy trùng giữa replicas</td><td class="c"><span class="tag now">ĐẠT</span> advisory lock sẵn có</td></tr>
+          <tr><td>Trạng thái verify-batch không nằm trong RAM 1 process</td><td class="c"><span class="tag next">CẦN LÀM</span> chuyển vào job table</td></tr>
+          <tr><td>Pool kết nối DB tính theo tổng replicas</td><td class="c"><span class="tag next">CẦN LÀM</span></td></tr>
+          <tr><td>Seed admin/PK/RBAC lúc khởi động không đụng độ 2 replicas</td><td class="c"><span class="tag next">CẦN KIỂM</span></td></tr>
+          <tr><td>HA đa máy (máy chết vẫn chạy) + DB failover</td><td class="c"><span class="tag later">GIAI ĐOẠN SAU</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. MESSAGE QUEUE ============ -->
+<section id="s7">
+  <div class="sec-head"><span class="sec-num">Sơ đồ D</span><h2>Message queue — chọn đúng cỡ, tránh quá tay</h2></div>
+  <p class="sec-desc">Nguyên tắc: mỗi bậc chỉ nâng khi có số liệu chứng minh bậc dưới không đủ. Không nhảy thẳng lên Kafka.</p>
+  <div class="card">
+    <div class="tree">
+      <div class="q">Cần tách xử lý nặng khỏi request? (hiện tại: CÓ)</div>
+      <div class="arrow-d">▼</div>
+      <div class="node n-amber" style="max-width:520px">Bậc 1 — PostgreSQL job table + SKIP LOCKED + worker<small>0 hạ tầng mới · đủ retry, dead-letter, idempotency · phù hợp &lt; ~50 job/giây</small></div>
+      <div class="arrow-d">▼ khi job/giây tăng cao hoặc cần độ trễ thấp</div>
+      <div class="node n-amber" style="max-width:520px">Bậc 2 — Redis + RQ (hoặc Redis Streams)<small>thêm 1 container · nhanh hơn · phù hợp hàng trăm job/giây</small></div>
+      <div class="arrow-d">▼ khi nhiều nguồn push realtime, cần routing/fanout nhiều consumer</div>
+      <div class="node n-amber n-dash" style="max-width:520px">Bậc 3 — RabbitMQ<small>broker thực thụ · ack/nack, DLX chuẩn · đội cần kỹ năng vận hành</small></div>
+      <div class="arrow-d">▼ chỉ khi cần event streaming, replay lịch sử, nhiều hệ cùng subscribe</div>
+      <div class="node n-dash" style="max-width:520px">Bậc 4 — Kafka<small>quá cỡ cho hiện tại · chi phí vận hành cao · chưa khuyến nghị</small></div>
+    </div>
+    <h3 class="sub-h">So sánh nhanh</h3>
+    <div style="overflow-x:auto">
+    <table class="tbl">
+      <tr><th>Giải pháp</th><th>Hạ tầng thêm</th><th>Phù hợp khi</th><th style="width:130px">Khuyến nghị</th></tr>
+      <tr><td><b>PostgreSQL job table</b> (SKIP LOCKED)</td><td>Không — dùng DB sẵn có</td><td>Tải hiện tại của TIPA; job import, refresh matview, validate</td><td class="c"><span class="tag now">LÀM NGAY</span></td></tr>
+      <tr><td><b>Redis + RQ</b></td><td>+1 container Redis</td><td>Job/giây tăng cao, cần latency thấp, cache dùng chung</td><td class="c"><span class="tag next">KHI CẦN</span></td></tr>
+      <tr><td><b>RabbitMQ</b></td><td>+1 broker cần vận hành</td><td>Nhiều nguồn realtime, routing phức tạp, nhiều consumer độc lập</td><td class="c"><span class="tag next">GIAI ĐOẠN 2</span></td></tr>
+      <tr><td><b>Kafka</b></td><td>Cluster + Zookeeper/KRaft, giám sát riêng</td><td>Event streaming khối lượng rất lớn, cần replay, nhiều hệ subscribe</td><td class="c"><span class="tag no">CHƯA</span></td></tr>
+      <tr><td><b>MQTT broker</b> (Mosquitto/EMQX)</td><td>+1 container nhẹ</td><td>Khác mục đích: nhận telemetry máy móc/MES dạng IIoT — không thay job queue</td><td class="c"><span class="tag later">KHI CÓ IIoT</span></td></tr>
+    </table>
+    </div>
+    <div class="callout">Mẹo phân biệt: <b>job queue</b> (bậc 1–2) = "việc cần làm sau, không mất"; <b>message broker</b> (bậc 3–4) = "dòng sự kiện nhiều bên cùng nghe". Nhu cầu trong biên bản họp là loại thứ nhất.</div>
+    <div class="callout blue">Hiện trạng để đối chiếu: hub đã có nền "bậc 0" — streaming/matview chạy vòng lặp nội bộ + advisory lock (giữ nguyên, hoạt động tốt); verify-batch dùng queue trong RAM (mất khi restart, không chia sẻ giữa replicas — <b>ứng viên đầu tiên chuyển vào job table</b>). Riêng Kafka: use-case tự nhiên nhất của nó là nhận CDC stream, mà <b>CDC đã bị loại vĩnh viễn</b> do ràng buộc Oracle — thêm một lý do không đầu tư Kafka.</div>
+  </div>
+</section>
+
+<!-- ============ 8. ROADMAP ============ -->
+<section id="s8">
+  <div class="sec-head"><span class="sec-num">Sơ đồ E</span><h2>Lộ trình 3 giai đoạn</h2></div>
+  <p class="sec-desc">Giai đoạn 1 khớp 7 nhóm việc trong họp (branch <code>release/tipa-integration-readiness</code>) + các bổ sung từ hiện trạng thật: phát hành v2.3.0, audit watermark, observability, promote curated.</p>
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-head" style="background:var(--green)"><b>Giai đoạn 1 — Readiness</b><span>~6–8 tuần · làm ngay</span></div>
+      <div class="phase-body">
+        <div class="it"><b>Phát hành v2.3.0 lên PROD</b> (backup DB → alembic 021→022): PROD có upsert inbound</div>
+        <div class="it"><b>Audit watermark theo ngày</b> — đóng rủi ro mất dòng âm thầm (nhóm bảng fallback UPMJ)</div>
+        <div class="it">Stabilize: diễn tập restore DB 79 GB, bảo vệ APIKEY_ENC_KEY, known limitations</div>
+        <div class="it">API hardening: statement_timeout, request_id, rate limit, pagination deterministic, dọn P1 security</div>
+        <div class="it">DB: EXPLAIN ANALYZE + index, partition/retention transactions &amp; raw_payload</div>
+        <div class="it">Queue bậc 1: PG job table + worker — chuyển verify-batch khỏi RAM trước tiên</div>
+        <div class="it">LB: 2 backend replicas sau Caddy + pool tính lại</div>
+        <div class="it">Load test k6 6 kịch bản + soak 4–8h</div>
+        <div class="it"><b>Bổ sung:</b> /metrics + alert + watchdog watermark; promote curated + Grafana lên PROD; API v1 contract</div>
+      </div>
+      <div class="phase-foot">DoD: chạy ổn định · restore được · có load test report · runbook TIPA</div>
+    </div>
+    <div class="phase">
+      <div class="phase-head" style="background:var(--amber)"><b>Giai đoạn 2 — Mở rộng nguồn</b><span>sau khi G1 đạt DoD</span></div>
+      <div class="phase-body">
+        <div class="it">Onboard MES + App 1,2,3 theo mẫu push (Type A + API key + business key)</div>
+        <div class="it">Nâng queue lên Redis/RQ hoặc RabbitMQ <b>nếu số liệu load test yêu cầu</b></div>
+        <div class="it">MQTT broker nếu có nguồn telemetry máy móc (qua edge tool)</div>
+        <div class="it">Read replica PostgreSQL nếu tải đọc dashboard lớn</div>
+        <div class="it">Mở rộng dữ liệu JDE: migrate F0005 (decode mã cho 8 dashboard) + F03B11 (mở dashboard AR)</div>
+        <div class="it">Bảng streaming mới giữ nguyên tắc: tắt mặc định tới khi verify PK/watermark</div>
+        <div class="it">RBAC chi tiết theo vai trò</div>
+      </div>
+      <div class="phase-foot">DoD: 3+ nguồn thật chạy ổn qua queue · không bản ghi trùng · alert hoạt động</div>
+    </div>
+    <div class="phase">
+      <div class="phase-head" style="background:#64748b"><b>Giai đoạn 3 — DW & AI</b><span>khi nhu cầu thật xuất hiện</span></div>
+      <div class="phase-body">
+        <div class="it">Lớp canonical + data mart cho phân tích lịch sử dài</div>
+        <div class="it">Tách analytics ra read replica / engine DW riêng nếu volume lớn</div>
+        <div class="it">MCP server cho AI Agents — gọi outbound API sẵn có, không chạm DB</div>
+        <div class="it">Kafka chỉ khi có nhu cầu event streaming đa consumer thực tế</div>
+        <div class="it">Data lineage, data quality rules, catalog</div>
+      </div>
+      <div class="phase-foot">Quyết định dựa trên số liệu vận hành G1–G2, không dựa trên phỏng đoán</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. TEST PLAN ============ -->
+<section id="s9">
+  <div class="sec-head"><span class="sec-num">Phần 9</span><h2>Test plan — k6, có ngưỡng đạt cụ thể</h2></div>
+  <p class="sec-desc">Chạy trên DEV (tipa-vm) trước — đúng quy tắc DEV-first — rồi lặp lại trên PROD (.63) ngoài giờ; đo trước và sau mỗi thay đổi lớn để so sánh.</p>
+  <div class="card" style="padding:0;overflow-x:auto">
+    <table class="tbl">
+      <tr><th>#</th><th>Kịch bản</th><th>Mô phỏng</th><th>Tải đề xuất</th><th>Ngưỡng đạt</th></tr>
+      <tr><td>T1</td><td><b>Health smoke</b></td><td>Giám sát cơ bản</td><td>10 VUs · 1 phút</td><td>100% OK · p95 &lt; 100ms</td></tr>
+      <tr><td>T2</td><td><b>Outbound read load</b></td><td>TIPA đọc dữ liệu qua API key</td><td>100 VUs · 10 phút · GET /outbound/*</td><td>lỗi &lt; 1% · p95 &lt; 500ms</td></tr>
+      <tr><td>T3</td><td><b>Dashboard-like</b></td><td>Grafana query 26 curated view / matview</td><td>20 VUs · 10 phút · curated + matview</td><td>p95 &lt; 1s · DB CPU &lt; 70% · REFRESH không chặn đọc</td></tr>
+      <tr><td>T4</td><td><b>Mixed read/write</b></td><td>Vừa nguồn push ghi vừa iHUB đọc · streaming chạy nền</td><td>70% read + 30% write · 15 phút</td><td>lỗi &lt; 1% · không deadlock · watermark vẫn tiến</td></tr>
+      <tr><td>T5</td><td><b>Inbound burst → queue</b></td><td>MES/App bắn dồn dập · gửi lại trùng business key</td><td>1.000 msg trong 1 phút</td><td>100% nhận 202 · queue tiêu hoá hết &lt; 10 phút · 0 bản ghi trùng khi gửi lại</td></tr>
+      <tr><td>T6</td><td><b>Soak test</b></td><td>Chạy bền</td><td>Tải trung bình liên tục 4–8 giờ</td><td>RAM không tăng dần · pool không cạn · lỗi &lt; 0.5%</td></tr>
+    </table>
+  </div>
+  <div class="callout" style="margin-top:14px">Mỗi lần chạy lưu thành <b>load test report</b> (ngày, cấu hình, kết quả, đồ thị) — đây là 1 mục bắt buộc trong readiness package và là căn cứ quyết định có cần nâng bậc queue/replica hay không.</div>
+</section>
+
+<!-- ============ 10. CHECKLIST ============ -->
+<section id="s10">
+  <div class="sec-head"><span class="sec-num">Phần 10</span><h2>Go-live checklist — TIPA readiness package</h2></div>
+  <p class="sec-desc">Đủ các mục này = sẵn sàng cho hệ thống TIPA tích hợp thật.</p>
+  <div class="card">
+    <div class="check-grid">
+      <div class="check"><span class="bx"></span><div><b>v2.3.0 đã lên PROD</b> — upsert inbound + unique business key chạy thật; backup trước khi nâng alembic 021→022</div></div>
+      <div class="check"><span class="bx"></span><div><b>API contract v1</b> — tài liệu endpoint, mẫu payload, mã envelope (0/1001–2003), giới hạn tải cho từng consumer</div></div>
+      <div class="check"><span class="bx"></span><div><b>Operation runbook</b> — khởi động/dừng, xem log, xử lý dead-letter, restore DB, xử lý watermark đứng</div></div>
+      <div class="check"><span class="bx"></span><div><b>Rollback plan</b> — quay về tag trước (mốc pre-v2.Y.Z) + restore backup, đã diễn tập ít nhất 1 lần</div></div>
+      <div class="check"><span class="bx"></span><div><b>Load test report</b> — kết quả T1–T6 đạt ngưỡng, kèm cấu hình máy</div></div>
+      <div class="check"><span class="bx"></span><div><b>Backup/restore đã diễn tập</b> — restore thật DB 79 GB vào môi trường sạch, đo thời gian phục hồi</div></div>
+      <div class="check"><span class="bx"></span><div><b>Queue strategy rõ ràng</b> — job table + worker chạy, verify-batch đã chuyển khỏi RAM, retry/DLQ được test bằng cách cố tình gây lỗi</div></div>
+      <div class="check"><span class="bx"></span><div><b>Multi-replica cơ bản</b> — 2 backend chạy ổn qua T2/T4, kill 1 replica không mất request, advisory lock giữ job đơn nhất</div></div>
+      <div class="check"><span class="bx"></span><div><b>Alert hoạt động</b> — dừng thử streaming refresher → cảnh báo watermark đứng trong X phút; DB đầy 80% → cảnh báo</div></div>
+      <div class="check"><span class="bx"></span><div><b>Watermark đã audit</b> — nhóm bảng fallback theo ngày được rà; bảng có sequence đều dùng sequence</div></div>
+      <div class="check"><span class="bx"></span><div><b>Curated + Grafana trên PROD</b> — schema mdp_curated + grant grafana_ro + container Grafana riêng của MDP</div></div>
+      <div class="check"><span class="bx"></span><div><b>Onboarding kit nguồn mới</b> — quy trình cấp API key, mẫu payload, business key, test case mẫu</div></div>
+      <div class="check"><span class="bx"></span><div><b>Known limitations</b> — công bố rõ: GL đang period-net, Inventory chờ xác minh scaling, Production chỉ throughput, mã thô chờ F0005, RBAC thô…</div></div>
+      <div class="check"><span class="bx"></span><div><b>Secrets production</b> — đổi hết tài khoản/mật khẩu mặc định, khoá mã hoá API key có backup riêng, repo public đã quét sạch secret</div></div>
+    </div>
+  </div>
+  <div class="callout green" style="margin-top:16px"><b>Khuyến nghị chốt:</b> phê duyệt lộ trình Giai đoạn 1 theo biên bản họp + các bổ sung: <b>phát hành v2.3.0 xuống PROD, audit watermark theo ngày, observability/watchdog, promote curated + Grafana lên PROD</b>. Không đầu tư Kafka/AI/BPM ở giai đoạn này (CDC đã bị loại vĩnh viễn theo ràng buộc Oracle). Mọi quyết định nâng cấp tiếp theo dựa trên số liệu load test, không dựa trên cảm tính.</div>
+</section>
+
+</div>
 
 <footer>
-  <div class="wrap">
-    <span>Avenue MDP · tài liệu công khai qua GitHub Pages</span>
-    <a href="https://github.com/dangtai111325/TIPA_ESB">github.com/dangtai111325/TIPA_ESB</a>
-  </div>
+  TIPA ESB · Đánh giá &amp; Phương án nâng cấp kiến trúc — baseline TIPA_V2.0 (v2.2.0 PROD · v2.3.0 chờ phát hành) + biên bản họp · 26/08/2026 · tài liệu đi kèm: architecture-report.html
 </footer>
 
+<script>
+(function(){
+  var sections=[].slice.call(document.querySelectorAll('section'));
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+    sections.forEach(function(s){s.classList.add('rv')});
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}});
+    },{rootMargin:'0px 0px -6% 0px'});
+    sections.forEach(function(s){io.observe(s)});
+  }
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  var map={};
+  links.forEach(function(a){var id=(a.getAttribute('href')||'').slice(1);var el=document.getElementById(id);if(el)map[id]=a});
+  if('IntersectionObserver' in window){
+    var io2=new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(a){a.classList.remove('act')});
+          var a=map[en.target.id];if(a)a.classList.add('act');
+        }
+      });
+    },{rootMargin:'-25% 0px -65% 0px'});
+    Object.keys(map).forEach(function(id){io2.observe(document.getElementById(id))});
+  }
+})();
+</script>
 </body>
 </html>
