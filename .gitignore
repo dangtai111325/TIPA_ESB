@@ -1,4 +1,14 @@
-﻿# Archify visual-check evidence (local only)
+﻿# Local-only leader brief & recheck
+mdp-leader-brief.html
+scripts/recheck-leader-brief.ps1
+diagrams/_recheck-manifest.txt
+
+# D7–D9 serve brief only (not on GitHub Pages hub)
+diagrams/mdp-inbound-vs-outbound-queue.*
+diagrams/mdp-queue-decision.*
+diagrams/mdp-final.*
+
+# Archify visual-check evidence (local only)
 diagrams/*.visual-check.*
 diagrams/_*.json
 diagrams/_*.txt

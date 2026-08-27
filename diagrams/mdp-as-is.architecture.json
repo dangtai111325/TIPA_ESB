@@ -78,7 +78,7 @@
     {
       "id": "tipa",
       "type": "external",
-      "label": "TIPA / iHUB",
+      "label": "E2 iHub",
       "sublabel": "GET outbound",
       "pos": [
         40,

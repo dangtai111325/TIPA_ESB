@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avenue MDP — Danh mục Chỉ số Đo &amp; Tiêu chí Đánh giá</title>
+<style>
+  :root{
+    --brand:#dc2626; --brand-dark:#991b1b;
+    --blue:#2563eb; --blue-bg:#eff6ff; --blue-bd:#bfdbfe;
+    --green:#059669; --green-bg:#ecfdf5; --green-bd:#a7f3d0;
+    --amber:#d97706; --amber-bg:#fffbeb; --amber-bd:#fde68a;
+    --purple:#7c3aed; --purple-bg:#f5f3ff; --purple-bd:#ddd6fe;
+    --teal:#0d9488; --teal-bg:#f0fdfa; --teal-bd:#99f6e4;
+    --slate:#334155; --ink:#0f172a; --muted:#64748b;
+    --bg:#f8fafc; --card:#ffffff; --line:#e2e8f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+
+  header.hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#450a0a 100%);color:#fff;padding:44px 0 36px}
+  .hero h1{font-size:26px;font-weight:800;letter-spacing:-.4px}
+  .hero h1 span{color:#f87171}
+  .hero p.sub{margin-top:8px;color:#cbd5e1;font-size:14.5px;max-width:920px}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .badge{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:4px 12px;font-size:12px;color:#e2e8f0}
+
+  nav.toc{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding:10px 24px}
+  nav.toc a{white-space:nowrap;font-size:12.5px;color:var(--slate);text-decoration:none;padding:6px 11px;border-radius:8px}
+  nav.toc a:hover{background:#f1f5f9;color:var(--brand)}
+
+  section{padding:36px 0 4px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+  .sec-num{font-size:12px;font-weight:700;color:var(--brand);background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:2px 10px}
+  h2{font-size:20px;font-weight:800}
+  .sec-desc{color:var(--muted);font-size:13.5px;margin-bottom:16px;max-width:1000px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(15,23,42,.04);margin-bottom:14px}
+
+  .callout{border-left:4px solid var(--amber);background:var(--amber-bg);border-radius:0 10px 10px 0;padding:10px 14px;font-size:13px;color:#78350f;margin:12px 0}
+  .callout.blue{border-left-color:var(--blue);background:var(--blue-bg);color:#1e3a8a}
+  .callout.green{border-left-color:var(--green);background:var(--green-bg);color:#064e3b}
+  .callout.red{border-left-color:var(--brand);background:#fef2f2;color:#7f1d1d}
+
+  code{font-family:Consolas,'Courier New',monospace;font-size:.9em;background:#f1f5f9;border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+
+  table.m{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border-radius:12px;overflow:hidden}
+  table.m th{background:#0f172a;color:#fff;text-align:left;padding:9px 11px;font-size:11px;font-weight:700;position:sticky;top:48px;z-index:5}
+  table.m td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.m tr:last-child td{border-bottom:none}
+  table.m tr:hover td{background:#f8fafc}
+  table.m td.id{font-weight:800;font-family:Consolas,monospace;white-space:nowrap;color:var(--brand-dark)}
+  table.m .col-metric{min-width:140px}
+  table.m .col-how{min-width:200px}
+  table.m .col-pass{min-width:150px}
+
+  .pri{display:inline-block;font-size:10px;font-weight:800;border-radius:5px;padding:2px 7px;color:#fff;white-space:nowrap}
+  .p0{background:var(--brand)}
+  .p1{background:var(--amber)}
+  .p2{background:#64748b}
+  .p3{background:#94a3b8}
+
+  .tag{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px;margin:1px 2px 1px 0}
+  .t-net{background:var(--blue-bg);color:#1e40af;border:1px solid var(--blue-bd)}
+  .t-api{background:var(--purple-bg);color:#5b21b6;border:1px solid var(--purple-bd)}
+  .t-db{background:var(--teal-bg);color:#115e59;border:1px solid var(--teal-bd)}
+  .t-jde{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+  .t-res{background:var(--amber-bg);color:#92400e;border:1px solid var(--amber-bd)}
+  .t-data{background:var(--green-bg);color:#065f46;border:1px solid var(--green-bd)}
+  .t-sec{background:#f1f5f9;color:#334155;border:1px solid var(--line)}
+
+  .sum{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .sum .b{border:1.5px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+  .sum .b b{display:block;font-size:22px;font-weight:800;color:var(--brand)}
+  .sum .b span{font-size:12px;color:var(--muted)}
+
+  .order{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .order .step{flex:1 1 140px;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;font-size:12px}
+  .order .step .n{font-size:10px;font-weight:800;color:var(--brand)}
+  .order .step b{display:block;margin:2px 0}
+
+  .st{display:inline-block;font-size:10px;font-weight:800;border-radius:5px;padding:2px 8px;color:#fff}
+  .st-pass{background:var(--green)}
+  .st-fail{background:var(--brand)}
+  .st-block{background:#64748b}
+  .st-na{background:#94a3b8}
+  table.m td.col-res{font-size:12px;min-width:120px}
+  table.m td.col-qd{font-size:11px;color:var(--muted);min-width:80px}
+
+  footer{margin-top:48px;background:#0f172a;color:#94a3b8;padding:22px 0;font-size:12px}
+  footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+  @media(max-width:900px){
+    .sum{grid-template-columns:1fr 1fr}
+    table.m{font-size:11.5px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Avenue MDP — <span>Danh mục Chỉ số Đo &amp; Tiêu chí Đánh giá</span></h1>
+    <p class="sub">
+      Bản kiểm kê đầy đủ các chỉ mục cần đo trên môi trường test (localhost laptop + SSH tới máy JDE).
+      Mỗi dòng: <b>chỉ số → cách đo → công cụ → tiêu chí → ưu tiên → kết quả baseline (local/tipa)</b>.
+      <b>Phiên đo baseline đã thực hiện 27/08/2026</b> — không sửa mã nguồn trong phiên đo.
+    </p>
+    <div class="badges">
+      <span class="badge">Môi trường: localhost + SSH → tipa</span>
+      <span class="badge">9 nhóm · 68 chỉ số</span>
+      <span class="badge">Baseline P0 đã đo</span>
+      <span class="badge">Evidence: benchmark-results/20260827/</span>
+      <span class="badge">Phiên bản danh mục 1.1 · baseline · 27/08/2026</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <a href="#baseline">Baseline đã đo</a>
+    <a href="#overview">Tổng quan</a>
+    <a href="#order">Thứ tự chạy</a>
+    <a href="#g1">G1 Mạng</a>
+    <a href="#g2">G2 Sống còn</a>
+    <a href="#g3">G3 API</a>
+    <a href="#g4">G4 Load</a>
+    <a href="#g5">G5 Toàn vẹn</a>
+    <a href="#g6">G6 Database</a>
+    <a href="#g7">G7 JDE sync</a>
+    <a href="#g8">G8 Tài nguyên</a>
+    <a href="#g9">G9 Bảo mật</a>
+    <a href="#matrix">Ma trận DoD</a>
+  </div>
+</nav>
+
+<main>
+<section id="overview">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">0</span><h2>Tổng quan &amp; quy ước</h2></div>
+    <p class="sec-desc">Môi trường test dự kiến: MDP chạy trên laptop (localhost), kết nối SSH/DB-link tới máy có JDE + thư viện triển khai.
+    Mục tiêu: thu thập <b>số đo thật</b> (latency, load, mất mát, sync lag…) để làm baseline trước khi lên plan nâng cấp.</p>
+
+    <div class="sum">
+      <div class="b"><b>68</b><span>chỉ số đo được liệt kê</span></div>
+      <div class="b"><b>9</b><span>nhóm (mạng → bảo mật)</span></div>
+      <div class="b"><b>~30</b><span>chỉ số ưu tiên P0 (bắt buộc trước khi kết luận)</span></div>
+      <div class="b"><b>7</b><span>bước chạy tuần tự (không nhảy cóc)</span></div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:14px;margin-bottom:8px">Quy ước mức ưu tiên</h3>
+      <p style="font-size:13px">
+        <span class="pri p0">P0</span> Bắt buộc — không có số này thì không được kết luận kiến trúc &nbsp;
+        <span class="pri p1">P1</span> Quan trọng — cần có trong báo cáo baseline &nbsp;
+        <span class="pri p2">P2</span> Bổ trợ — đo khi còn thời gian &nbsp;
+        <span class="pri p3">P3</span> Tùy chọn — nice-to-have
+      </p>
+      <div class="callout blue" style="margin-top:12px">
+        <b>Quy ước tiêu chí:</b> mọi ngưỡng dưới đây là <b>mục tiêu thiết kế ban đầu</b> cho môi trường test.
+        Sau lần đo đầu, sẽ cập nhật thành “baseline thực tế” (số đo được) + “mục tiêu sau nâng cấp” (số muốn đạt).
+        Số đo local/test <b>không</b> thay số đo PROD — nhưng đủ để quyết định plan và kiểm chứng script.
+      </div>
+      <div class="callout red">
+        <b>An toàn:</b> chỉ dùng model/API key test riêng · không ghi đè dữ liệu nghiệp vụ · không chạy soak/burst nặng lên máy JDE nguồn nếu chưa được phép ·
+        ghi lại cấu hình (CPU/RAM laptop, phiên bản MDP, khoảng cách mạng) kèm mọi kết quả.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="order">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">0b</span><h2>Thứ tự chạy bắt buộc</h2></div>
+    <p class="sec-desc">Không nhảy cóc: bước trước FAIL thì dừng, sửa rồi mới sang bước sau.</p>
+    <div class="order">
+      <div class="step"><span class="n">BƯỚC 1</span><b>Mạng &amp; SSH</b>G1 — ping, RTT, SSH, cổng DB</div>
+      <div class="step"><span class="n">BƯỚC 2</span><b>Sống còn</b>G2 — health, container, DB connect</div>
+      <div class="step"><span class="n">BƯỚC 3</span><b>API đúng chức năng</b>G3 + 1 request inbound/outbound thủ công</div>
+      <div class="step"><span class="n">BƯỚC 4</span><b>Load nhẹ → nặng</b>G4 T1→T2→T5 (chưa soak)</div>
+      <div class="step"><span class="n">BƯỚC 5</span><b>Toàn vẹn dữ liệu</b>G5 — mất/trùng sau T5</div>
+      <div class="step"><span class="n">BƯỚC 6</span><b>DB + JDE sync</b>G6 + G7 song song lúc có tải</div>
+      <div class="step"><span class="n">BƯỚC 7</span><b>Soak + bảo mật cơ bản</b>G8 T6 + G9 checklist</div>
+    </div>
+  </div>
+</section>
+
+<section id="baseline">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">BL</span><h2>Baseline đã đo — Phiên 2026-08-27</h2></div>
+    <p class="sec-desc">Kết quả thật từ phiên benchmark (không sửa mã nguồn). Evidence: <code>benchmark-results/20260827/</code></p>
+
+    <div class="card">
+      <h3 style="font-size:14px;margin-bottom:8px">Cấu hình phiên đo</h3>
+      <table class="m">
+        <tr><th>Mục</th><th>Local (laptop)</th><th>tipa-vm</th></tr>
+        <tr><td>URL MDP</td><td><code>http://127.0.0.1:8457</code></td><td><code>http://192.168.2.13:8457</code></td></tr>
+        <tr><td>CPU</td><td>Docker Desktop host</td><td><b>1</b> × Intel i7-4610M @ 3.00GHz</td></tr>
+        <tr><td>RAM</td><td>Docker Desktop</td><td>~4–6.6 GiB (Oracle mock chiếm ~1.4 GiB)</td></tr>
+        <tr><td>Disk /</td><td>—</td><td>61G · ~35G trống sau cài Oracle image</td></tr>
+        <tr><td>Docker</td><td>Desktop</td><td>29.5.2</td></tr>
+        <tr><td>Stack MDP</td><td>mdpv2 5 container healthy</td><td>mdpv2 · DB tipa <b>43 MB</b> (không phải PROD 80GB)</td></tr>
+        <tr><td>Replica</td><td colspan="2">1 (backend ×1)</td></tr>
+        <tr><td>Model test</td><td colspan="2"><code>loadtest_orders</code></td></tr>
+        <tr><td>Oracle / G7</td><td>—</td><td><span class="st st-pass">PASS</span> mock <code>gvenzl/oracle-free</code> :1521 · view <code>V2_PRO_F4111</code> (không phải JDE PROD)</td></tr>
+      </table>
+    </div>
+
+    <div class="callout green">
+      <b>Số then chốt cho kiến trúc:</b>
+      (1) Health p95 local <b>17.5ms</b> · (2) Inbound yên tĩnh p95 <b>75ms</b> · (3) Outbound @100VU p95 <b>2.26s FAIL</b> ·
+      (4) Inbound burst p95 <b>732ms</b> · (5) ~34 msg/s · (6) Mất mát <b>0</b> · (7) Trùng <b>0</b> ·
+      (8) Connections 13/100 · (9) Cache hit 100% · (10) tipa T2 p95 <b>2.69s FAIL</b> ·
+      (11) Sync lag mock G7 <b>~2s</b> · (12) Watermark sequence tiến · (13) Soak 30m p95 81ms fail 0%
+    </div>
+
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr>
+          <th>ID</th><th>Chỉ số</th><th>Đo local</th><th>Đo tipa</th><th>Đạt?</th><th>→ QĐ</th><th>Evidence</th>
+        </tr>
+        <tr><td class="id">N01</td><td>Ping localhost</td><td class="col-res">loss 0%, avg 0ms</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>g1-g3-local.json</td></tr>
+        <tr><td class="id">N02</td><td>Ping tipa</td><td class="col-res">avg 4ms, loss 0%</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ6</td><td>g1-g3-local.json</td></tr>
+        <tr><td class="id">N03</td><td>SSH ổn định 10 phút</td><td class="col-res">120/120 OK, disconnect 0%</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>n03-ssh-stability.txt</td></tr>
+        <tr><td class="id">N04</td><td>Cổng TCP</td><td class="col-res">8457 Open; tipa 8457/22 Open; 5432 Closed</td><td>8457 Open</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>g1-g3-local.json</td></tr>
+        <tr><td class="id">S01</td><td>Health HTTP</td><td class="col-res">p50 2ms, p95 38ms (20×)</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>g1-g3-local.json</td></tr>
+        <tr><td class="id">S02</td><td>Container</td><td class="col-res">5/5 healthy, 0 restart</td><td>5/5 healthy</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>docker-ps.txt</td></tr>
+        <tr><td class="id">S03</td><td>Postgres</td><td class="col-res">OK; schemas: mdp_data, mdp_staging, public</td><td>OK</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>g1-g3-local.json</td></tr>
+        <tr><td class="id">S04</td><td>Oracle reachable</td><td class="col-res">—</td><td class="col-res">1521 Open · SELECT dual OK (mock Free)</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ6</td><td>g7-results/s04-*.txt</td></tr>
+        <tr><td class="id">S05</td><td>Cold start</td><td class="col-res">healthy sau <b>23.3s</b> (3× health 200)</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>s05-coldstart.txt</td></tr>
+        <tr><td class="id">A01</td><td>Inbound 1 bản</td><td class="col-res">HTTP 200, code=0, 67ms</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>g1-g3-local.json</td></tr>
+        <tr><td class="id">A03</td><td>Latency inbound</td><td class="col-res">p50 68ms, p95 75ms</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>g1-g3-local.json</td></tr>
+        <tr><td class="id">A04</td><td>Latency outbound</td><td class="col-res">p50 23ms, p95 31ms</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>g1-g3-local.json</td></tr>
+        <tr><td class="id">A05</td><td>Auth deny</td><td class="col-res">401 no key / bad key</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ5</td><td>g1-g3-local.json</td></tr>
+        <tr><td class="id">L01</td><td>T1 smoke</td><td class="col-res">p95 17.5ms, fail 0%, 739 RPS</td><td class="col-res">p95 25.9ms, fail 0%</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>k6-t1-console.txt</td></tr>
+        <tr><td class="id">L02</td><td>T2 read 100VU</td><td class="col-res">p95 <b>2.26s</b>, fail 0.33%, 37 RPS</td><td class="col-res">p95 <b>2.69s</b>, fail 0.33%, 36 RPS</td><td><span class="st st-fail">FAIL</span></td><td class="col-qd"><b>QĐ2, QĐ3</b></td><td>k6-t2-console.txt · k6-t2-tipa-console.txt</td></tr>
+        <tr><td class="id">L03</td><td>T5 burst</td><td class="col-res">p95 732ms, fail 0%, 1000 OK</td><td class="col-res">p95 944ms, fail 0%, 1000 OK</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ1</td><td>k6-t5-console.txt · k6-t5-tipa-console-v2.txt</td></tr>
+        <tr><td class="id">L04</td><td>Throughput in</td><td class="col-res">~34 msg/s (unique OK)</td><td class="col-res">~30 msg/s</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ1</td><td>k6-t5-console.txt</td></tr>
+        <tr><td class="id">L09</td><td>Error rate</td><td class="col-res">T2: 75× non-2xx (0.33%)</td><td class="col-res">T2: 73× (0.33%)</td><td><span class="st st-fail">FAIL</span></td><td class="col-qd">QĐ2</td><td>k6-t2-console.txt</td></tr>
+        <tr><td class="id">D01</td><td>Mất mát</td><td class="col-res">1000 gửi / 1000 unique doc_no</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ1</td><td>SQL dm_loadtest_orders</td></tr>
+        <tr><td class="id">D02</td><td>Trùng lặp</td><td class="col-res">0 doc_no trùng (unique index doc_no)</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ5</td><td>SQL; 94 dup POST không sinh dòng mới</td></tr>
+        <tr><td class="id">D03</td><td>Idempotency 5×POST</td><td class="col-res">5 POST cùng payload → <b>1 row</b></td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ5</td><td>d03-idempotent.json</td></tr>
+        <tr><td class="id">B01</td><td>Top tables</td><td class="col-res">DB 25MB; top: transactions 9MB</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ3</td><td>db-idle.sql.out</td></tr>
+        <tr><td class="id">B08</td><td>EXPLAIN 5 query</td><td class="col-res">Seq Scan trên ~1k dòng (0.3–0.6ms); Index Scan doc_no</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ3</td><td>explain-*.txt (5 file)</td></tr>
+        <tr><td class="id">B04</td><td>Cache hit</td><td class="col-res">100%</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>SQL</td></tr>
+        <tr><td class="id">B05</td><td>Connections</td><td class="col-res">13 / max 100 (13%)</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">PgBouncer chưa cần</td><td>db-after-t2.sql.out</td></tr>
+        <tr><td class="id">R01</td><td>CPU T2</td><td class="col-res">backend peak ~57%, postgres ~11%</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ2</td><td>docker-stats-t2-*.txt</td></tr>
+        <tr><td class="id">R02</td><td>RAM</td><td class="col-res">backend ~95MB, postgres ~47MB @ T2</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>docker-stats-t2-*.txt</td></tr>
+        <tr><td class="id">C01</td><td>Secret</td><td class="col-res">Non-default .env local</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">—</td><td>checklist</td></tr>
+        <tr><td class="id">C02</td><td>Scope deny</td><td class="col-res">401</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ5</td><td>A05</td></tr>
+        <tr><td class="id">J01</td><td>Streaming bật</td><td class="col-res">—</td><td class="col-res">enabled · loop running · last_status=ok</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ6</td><td>g7-results (mock)</td></tr>
+        <tr><td class="id">J02</td><td>Sync lag</td><td class="col-res">—</td><td class="col-res"><b>~2s</b> insert→staging (run-once)</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ6</td><td>g7-results/j02-final.txt</td></tr>
+        <tr><td class="id">J03</td><td>Watermark</td><td class="col-res">—</td><td class="col-res">ILUKID 4002→5001→5002 tiến đều</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ6</td><td>g7-results/j03-final.txt</td></tr>
+        <tr><td class="id">J04</td><td>Audit date WM</td><td class="col-res">—</td><td class="col-res">N/A (mock sequence, không UPMJ)</td><td><span class="st st-na">N/A</span></td><td class="col-qd">QĐ6</td><td>cần JDE thật</td></tr>
+        <tr><td class="id">J05</td><td>Sync dưới tải T2</td><td class="col-res">—</td><td class="col-res">N/A (RAM tipa hạn chế)</td><td><span class="st st-na">N/A</span></td><td class="col-qd">QĐ6</td><td>—</td></tr>
+        <tr><td class="id">J06</td><td>1 chu kỳ sync</td><td class="col-res">—</td><td class="col-res">~2s / 1 dòng mới; full-load 5 rows ~31s</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ6</td><td>ora2pg success</td></tr>
+        <tr><td class="id">J07</td><td>Upsert / no-dup</td><td class="col-res">—</td><td class="col-res">7 total = 7 uniq; re-run +0 row</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ5/QĐ6</td><td>g7-results/j07-final.txt</td></tr>
+        <tr><td class="id">J08</td><td>Tải Oracle JDE</td><td class="col-res">—</td><td class="col-res">N/A (Oracle mock, không JDE)</td><td><span class="st st-na">N/A</span></td><td class="col-qd">QĐ6</td><td>cần DBA / JDE thật</td></tr>
+        <tr><td class="id">L07</td><td>T6 soak 30m</td><td class="col-res">p95 81ms, fail 0%, backend RAM ~90MB ổn định</td><td>—</td><td><span class="st st-pass">PASS</span></td><td class="col-qd">QĐ2</td><td>k6-t6-console.txt · docker-stats-t6.txt</td></tr>
+      </table>
+    </div>
+
+    <div class="callout red">
+      <b>Kết luận (cơ sở nâng cấp kiến trúc):</b>
+      Inbound burst chịu tốt · mất mát 0 · idempotency OK ·
+      <b>Outbound @100 VU là nút thắt</b> (local 2.26s / tipa 2.69s) → ưu tiên <b>QĐ2/QĐ3</b>.
+      G7 trên tipa với <b>Oracle Docker mock</b>: plumbing streaming PASS (lag ~2s, watermark tiến, không trùng) —
+      <b>chưa thay</b> số JDE PROD (J04/J08 vẫn N/A; cần Oracle JDE thật cho baseline cuối).
+      DB tipa MDP = 43MB — <b>không đụng</b> volume PROD 80GB.
+    </div>
+  </div>
+</section>
+
+<section id="g1">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">G1</span><h2>Mạng · Ping · SSH · Kết nối</h2></div>
+    <p class="sec-desc">Đo đường đi laptop → MDP local → máy JDE. Nếu nhóm này FAIL, mọi số latency API phía sau đều vô nghĩa (không biết lỗi ở mạng hay ở app).</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr>
+          <th>ID</th><th>Chỉ số</th><th>Cách đo</th><th>Công cụ</th><th>Tiêu chí ĐẠT</th><th>Ưu tiên</th><th>Ghi chú</th>
+        </tr>
+        <tr>
+          <td class="id">N01</td>
+          <td class="col-metric"><span class="tag t-net">NET</span><br><b>Ping MDP local</b><br>RTT localhost</td>
+          <td class="col-how">Ping vòng lặp tới <code>127.0.0.1</code> và hostname container/Caddy (nếu có).</td>
+          <td><code>ping</code></td>
+          <td class="col-pass">Loss = 0% · RTT trung bình &lt; 1ms (loopback)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Baseline “không mạng” — tách delay app khỏi delay mạng.</td>
+        </tr>
+        <tr>
+          <td class="id">N02</td>
+          <td><span class="tag t-net">NET</span><br><b>Ping / RTT tới máy JDE</b></td>
+          <td>Ping IP máy JDE (từ laptop hoặc từ host SSH). Ghi min/avg/max/loss trên ≥50 gói.</td>
+          <td><code>ping -n 50</code></td>
+          <td>Loss &lt; 1% · avg RTT ghi nhận (không có ngưỡng tuyệt đối — <b>ghi sổ</b>)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>RTT cao → sync JDE sẽ chậm dù MDP tối ưu.</td>
+        </tr>
+        <tr>
+          <td class="id">N03</td>
+          <td><span class="tag t-net">NET</span><br><b>SSH ổn định</b></td>
+          <td>Mở SSH, giữ session 10 phút, chạy lệnh lặp; đo disconnect/reconnect.</td>
+          <td><code>ssh</code> · <code>ssh -v</code></td>
+          <td>Không đứt trong 10 phút idle/active test</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Nếu SSH flaky, mọi đo DB-link/ora2pg không tin được.</td>
+        </tr>
+        <tr>
+          <td class="id">N04</td>
+          <td><span class="tag t-net">NET</span><br><b>Cổng TCP mở</b></td>
+          <td>Kiểm tra cổng MDP (Caddy), Postgres local, Oracle JDE (thường 1521), SSH (22).</td>
+          <td><code>Test-NetConnection</code> · <code>nc</code>/<code>telnet</code></td>
+          <td>Cổng cần thiết = Open; cổng không cần = Closed</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Ghi danh sách cổng thật vào biên bản (không publish IP nội bộ lên public).</td>
+        </tr>
+        <tr>
+          <td class="id">N05</td>
+          <td><span class="tag t-net">NET</span><br><b>DNS / hostname</b></td>
+          <td>Resolve hostname MDP, máy JDE, DB alias.</td>
+          <td><code>nslookup</code> · <code>Resolve-DnsName</code></td>
+          <td>Resolve đúng IP kỳ vọng</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Hosts file sai → đo nhầm máy.</td>
+        </tr>
+        <tr>
+          <td class="id">N06</td>
+          <td><span class="tag t-net">NET</span><br><b>Bandwidth thô</b> (tuỳ chọn)</td>
+          <td>Đo tốc độ truyền file nhỏ laptop ↔ máy JDE qua SCP/SSH.</td>
+          <td><code>scp</code> · <code>iperf3</code> nếu có</td>
+          <td>Ghi sổ MB/s — đủ cho sync delta (không cần cực cao)</td>
+          <td><span class="pri p2">P2</span></td>
+          <td>Chỉ cần nếu sync full-reload bảng lớn chậm bất thường.</td>
+        </tr>
+        <tr>
+          <td class="id">N07</td>
+          <td><span class="tag t-net">NET</span><br><b>TLS / chứng chỉ</b> (nếu HTTPS)</td>
+          <td>Gọi health qua HTTPS; kiểm tra self-signed / hết hạn / CN.</td>
+          <td>browser · <code>curl -vk</code></td>
+          <td>Kết nối được; ghi rõ có bỏ qua verify cert không</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Client iHUB hay lỗi vì cert — ghi lại.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- G2 -->
+<section id="g2">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">G2</span><h2>Sống còn · Smoke · Khởi động</h2></div>
+    <p class="sec-desc">Hệ “sống” và ổn định trước khi bắn tải. Đo cả thời gian khởi động — quan trọng khi restart/deploy.</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr><th>ID</th><th>Chỉ số</th><th>Cách đo</th><th>Công cụ</th><th>Tiêu chí ĐẠT</th><th>Ưu tiên</th><th>Ghi chú</th></tr>
+        <tr>
+          <td class="id">S01</td>
+          <td><span class="tag t-api">API</span><br><b>Health HTTP</b></td>
+          <td><code>GET /api/health</code> (qua Caddy). Lặp 20 lần.</td>
+          <td>curl · Invoke-WebRequest · k6 T1</td>
+          <td>100% status 200 · body có <code>status=ok</code> · p95 &lt; 100ms (local)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Cổng Caddy local — xác nhận khi anh đưa link.</td>
+        </tr>
+        <tr>
+          <td class="id">S02</td>
+          <td><span class="tag t-res">RES</span><br><b>Container lên đủ</b></td>
+          <td><code>docker compose ps</code> — backend, frontend, caddy, postgres (nếu có) = running/healthy.</td>
+          <td>Docker</td>
+          <td>0 container restart liên tục; healthcheck pass</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Restart loop = chưa đo tiếp.</td>
+        </tr>
+        <tr>
+          <td class="id">S03</td>
+          <td><span class="tag t-db">DB</span><br><b>Postgres sẵn sàng</b></td>
+          <td>Kết nối DB, <code>SELECT 1</code>, kiểm tra schema chính tồn tại.</td>
+          <td>psql · DBeaver · docker exec</td>
+          <td>Kết nối OK · schema metadata/staging/data tồn tại</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Liệt kê schema thật vào biên bản.</td>
+        </tr>
+        <tr>
+          <td class="id">S04</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Oracle nguồn reachable</b></td>
+          <td>Từ MDP (hoặc host SSH) mở session Oracle / query đơn giản <code>SELECT 1 FROM DUAL</code>.</td>
+          <td>sqlplus · connection test trong Admin (cẩn thận SSRF)</td>
+          <td>Kết nối thành công trong &lt; 3s</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Không đo = không tin được streaming.</td>
+        </tr>
+        <tr>
+          <td class="id">S05</td>
+          <td><span class="tag t-res">RES</span><br><b>Cold start time</b></td>
+          <td><code>compose down</code> → <code>up</code> → đo đến lúc health 200 liên tục 3 lần.</td>
+          <td>đồng hồ · script</td>
+          <td>Ghi sổ (mục tiêu tham khảo: &lt; 2 phút trên laptop)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Ảnh hưởng downtime khi deploy.</td>
+        </tr>
+        <tr>
+          <td class="id">S06</td>
+          <td><span class="tag t-api">API</span><br><b>Admin UI mở được</b></td>
+          <td>Mở trang login, đăng nhập, vào 1 trang Data Models.</td>
+          <td>Browser</td>
+          <td>Login OK · không lỗi JS chặn thao tác</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Cần UI để tạo model/key test.</td>
+        </tr>
+        <tr>
+          <td class="id">S07</td>
+          <td><span class="tag t-api">API</span><br><b>OpenAPI /docs</b></td>
+          <td>Mở <code>/docs</code> hoặc <code>/openapi.json</code>.</td>
+          <td>Browser · curl</td>
+          <td>200 · có endpoint inbound/outbound/health</td>
+          <td><span class="pri p2">P2</span></td>
+          <td>Đối chiếu contract API.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- G3 -->
+<section id="g3">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">G3</span><h2>API chức năng · Latency đơn lẻ</h2></div>
+    <p class="sec-desc">Trước khi load: chứng minh 1 request đúng. Đo latency “yên tĩnh” (không cạnh tranh) làm baseline tách biệt với latency lúc tải cao.</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr><th>ID</th><th>Chỉ số</th><th>Cách đo</th><th>Công cụ</th><th>Tiêu chí ĐẠT</th><th>Ưu tiên</th><th>Ghi chú</th></tr>
+        <tr>
+          <td class="id">A01</td>
+          <td><span class="tag t-api">API</span><br><b>Inbound 1 bản ghi</b></td>
+          <td><code>POST /api/inbound/{model}</code> 1 JSON hợp lệ + API key inbound.</td>
+          <td>curl · Postman</td>
+          <td>HTTP 2xx · envelope <code>code=0</code> · có trong outbound</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Model test riêng (vd <code>loadtest_orders</code>).</td>
+        </tr>
+        <tr>
+          <td class="id">A02</td>
+          <td><span class="tag t-api">API</span><br><b>Outbound đọc danh sách</b></td>
+          <td><code>GET /api/outbound/{model}?limit=100</code></td>
+          <td>curl</td>
+          <td>2xx · <code>code=0</code> · trả đúng số dòng vừa ghi (hoặc ≥)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">A03</td>
+          <td><span class="tag t-api">API</span><br><b>Latency inbound yên tĩnh</b></td>
+          <td>20 lần POST tuần tự, nghỉ 200ms; lấy p50/p95.</td>
+          <td>curl loop · k6 1 VU</td>
+          <td>p95 ghi sổ (mục tiêu local tham khảo &lt; 300ms)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>So với p95 lúc burst (G4).</td>
+        </tr>
+        <tr>
+          <td class="id">A04</td>
+          <td><span class="tag t-api">API</span><br><b>Latency outbound yên tĩnh</b></td>
+          <td>20 lần GET limit=100.</td>
+          <td>curl · k6</td>
+          <td>p95 ghi sổ (mục tiêu local &lt; 200ms nếu bảng nhỏ)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Trên bảng lớn (JDE staging) ngưỡng khác — ghi riêng.</td>
+        </tr>
+        <tr>
+          <td class="id">A05</td>
+          <td><span class="tag t-api">API</span><br><b>Auth từ chối đúng</b></td>
+          <td>Gọi inbound/outbound không key / sai key / sai scope.</td>
+          <td>curl</td>
+          <td>401/403 · không lộ dữ liệu</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Scope rỗng phải từ chối (hành vi v2.x).</td>
+        </tr>
+        <tr>
+          <td class="id">A06</td>
+          <td><span class="tag t-api">API</span><br><b>Payload lỗi</b></td>
+          <td>Gửi JSON thiếu field / sai kiểu / body quá lớn.</td>
+          <td>curl</td>
+          <td>4xx có message rõ · không 500 nuốt lỗi</td>
+          <td><span class="pri p1">P1</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">A07</td>
+          <td><span class="tag t-api">API</span><br><b>Pagination</b></td>
+          <td>GET với limit/offset; so khớp tổng qua nhiều trang.</td>
+          <td>curl · script</td>
+          <td>Không trùng/mất dòng giữa các trang (cùng snapshot)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Biết P2 “pagination không deterministic” — ghi nếu gặp.</td>
+        </tr>
+        <tr>
+          <td class="id">A08</td>
+          <td><span class="tag t-api">API</span><br><b>Function outbound</b></td>
+          <td>Gọi <code>?function=aggregate|timeseries|top|aging|breakdown</code> trên model phù hợp.</td>
+          <td>curl</td>
+          <td>2xx · kết quả hợp lý · p95 ghi sổ</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Chỉ khi model/cột đủ điều kiện function.</td>
+        </tr>
+        <tr>
+          <td class="id">A09</td>
+          <td><span class="tag t-api">API</span><br><b>Envelope chuẩn</b></td>
+          <td>Mọi response inbound/outbound đều <code>{code,message,data}</code>.</td>
+          <td>quan sát JSON</td>
+          <td>100% response đúng phong bì</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Contract cho TIPA/iHUB.</td>
+        </tr>
+        <tr>
+          <td class="id">A10</td>
+          <td><span class="tag t-api">API</span><br><b>request_id / transaction log</b></td>
+          <td>1 inbound → tìm dòng trong trang Transactions / bảng log.</td>
+          <td>Admin UI · SQL</td>
+          <td>Có bản ghi tương ứng, tra được theo thời gian/model</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Cần cho đối soát mất mát.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- G4 -->
+<section id="g4">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">G4</span><h2>Load · Throughput · Độ trễ lúc tải cao</h2></div>
+    <p class="sec-desc">Dùng bộ script sẵn trong <code>TIPA_Architecture/loadtest/</code>. VU = virtual user. Luôn ghi kèm cấu hình máy (CPU/RAM) và số replica.</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr><th>ID</th><th>Chỉ số</th><th>Cách đo</th><th>Công cụ</th><th>Tiêu chí ĐẠT</th><th>Ưu tiên</th><th>Ghi chú</th></tr>
+        <tr>
+          <td class="id">L01</td>
+          <td><span class="tag t-api">LOAD</span><br><b>T1 Smoke load</b></td>
+          <td>10 VU × 1 phút GET health.</td>
+          <td><code>k6-t1-health.js</code></td>
+          <td>http_req_failed &lt; 0.1% · p95 &lt; 100ms</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Cổng vào mọi bài load.</td>
+        </tr>
+        <tr>
+          <td class="id">L02</td>
+          <td><span class="tag t-api">LOAD</span><br><b>T2 Outbound read load</b></td>
+          <td>Ramp 20→100 VU × ~10 phút GET outbound.</td>
+          <td><code>k6-t2-outbound-read.js</code></td>
+          <td>lỗi &lt; 1% · p95 &lt; 500ms (điều chỉnh nếu bảng rất lớn)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Mô phỏng nhiều consumer đọc.</td>
+        </tr>
+        <tr>
+          <td class="id">L03</td>
+          <td><span class="tag t-api">LOAD</span><br><b>T5 Inbound burst</b></td>
+          <td>~1000 bản ghi, 20 VU, gửi trùng cố ý 10%.</td>
+          <td><code>k6-t5-inbound-burst.js</code></td>
+          <td>lỗi &lt; 1% · p95 &lt; 1s · (toàn vẹn xem G5)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Bài quan trọng nhất cho nguồn MES/OCR.</td>
+        </tr>
+        <tr>
+          <td class="id">L04</td>
+          <td><span class="tag t-api">LOAD</span><br><b>Throughput inbound</b></td>
+          <td>Từ kết quả T5: bản ghi OK / giây.</td>
+          <td>k6 summary</td>
+          <td>Ghi sổ msg/s · so với nhu cầu 10k–100k/ngày (~1–2/s trung bình; burst cao hơn)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Tính theo đỉnh, không chỉ trung bình ngày.</td>
+        </tr>
+        <tr>
+          <td class="id">L05</td>
+          <td><span class="tag t-api">LOAD</span><br><b>Throughput outbound</b></td>
+          <td>Từ T2: request/s đạt được khi còn đạt ngưỡng p95.</td>
+          <td>k6</td>
+          <td>Ghi sổ RPS tại điểm vẫn ĐẠT p95</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>“Ceiling” trước khi hệ bắt đầu lỗi.</td>
+        </tr>
+        <tr>
+          <td class="id">L06</td>
+          <td><span class="tag t-api">LOAD</span><br><b>Mixed read/write</b></td>
+          <td>70% đọc + 30% ghi, 10–20 VU, 15–30 phút (bản rút của T6).</td>
+          <td><code>k6-t6-soak.js</code> rút ngắn</td>
+          <td>lỗi &lt; 1% · p95 đọc &lt; 800ms · p95 ghi &lt; 1.5s</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Gần thực tế hơn T2/T5 đơn lẻ.</td>
+        </tr>
+        <tr>
+          <td class="id">L07</td>
+          <td><span class="tag t-api">LOAD</span><br><b>T6 Soak 4–8h</b></td>
+          <td>Tải trung bình dài hạn; theo dõi RAM.</td>
+          <td>k6-t6 + docker stats</td>
+          <td>lỗi &lt; 0.5% · RAM không tăng đơn điệu</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Chạy buổi riêng, không ngày đầu.</td>
+        </tr>
+        <tr>
+          <td class="id">L08</td>
+          <td><span class="tag t-api">LOAD</span><br><b>Dashboard-like / function load</b></td>
+          <td>N VU gọi outbound + <code>?function=</code> / đọc curated nặng.</td>
+          <td>k6 script bổ sung</td>
+          <td>p95 &lt; 2s · lỗi &lt; 1%</td>
+          <td><span class="pri p2">P2</span></td>
+          <td>Sau khi có curated/matview trên môi trường test.</td>
+        </tr>
+        <tr>
+          <td class="id">L09</td>
+          <td><span class="tag t-api">LOAD</span><br><b>Error rate theo mã</b></td>
+          <td>Phân loại 4xx / 5xx / timeout trong mọi bài k6.</td>
+          <td>k6 thresholds + log</td>
+          <td>5xx ≈ 0 · timeout ≈ 0 ở tải mục tiêu</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>4xx do test sai key không tính “hệ hỏng”.</td>
+        </tr>
+        <tr>
+          <td class="id">L10</td>
+          <td><span class="tag t-api">LOAD</span><br><b>Điểm gãy (breaking point)</b></td>
+          <td>Tăng VU dần đến khi lỗi &gt; 5% hoặc p95 &gt; 3s.</td>
+          <td>k6 stages</td>
+          <td>Ghi sổ VU/RPS tại điểm gãy — không cần “đạt”</td>
+          <td><span class="pri p2">P2</span></td>
+          <td>Biết trần máy test; so sau khi thêm replica/index.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- G5 -->
+<section id="g5">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">G5</span><h2>Toàn vẹn dữ liệu · Mất mát · Trùng lặp</h2></div>
+    <p class="sec-desc">Load “xanh” mà dữ liệu sai vẫn là FAIL. Đây là nhóm quyết định việc phát hành upsert (v2.3.0).</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr><th>ID</th><th>Chỉ số</th><th>Cách đo</th><th>Công cụ</th><th>Tiêu chí ĐẠT</th><th>Ưu tiên</th><th>Ghi chú</th></tr>
+        <tr>
+          <td class="id">D01</td>
+          <td><span class="tag t-data">DATA</span><br><b>Độ mất mát inbound</b></td>
+          <td>Sau T5: đếm unique <code>doc_no</code> theo <code>run_id</code> qua outbound vs số gửi OK.</td>
+          <td><code>verify_loss.py</code></td>
+          <td><b>mất = 0</b></td>
+          <td><span class="pri p0">P0</span></td>
+          <td>P0 kiến trúc.</td>
+        </tr>
+        <tr>
+          <td class="id">D02</td>
+          <td><span class="tag t-data">DATA</span><br><b>Độ trùng lặp</b></td>
+          <td>Cùng script: số <code>doc_no</code> xuất hiện &gt; 1 lần (sau khi cố ý gửi trùng 10%).</td>
+          <td><code>verify_loss.py</code></td>
+          <td><b>trùng = 0</b> nếu đã upsert; nếu chưa upsert → ghi số trùng làm bằng chứng</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Trên bản chưa upsert, kỳ vọng trùng ≈ số lần gửi lại.</td>
+        </tr>
+        <tr>
+          <td class="id">D03</td>
+          <td><span class="tag t-data">DATA</span><br><b>Idempotency thủ công</b></td>
+          <td>POST cùng payload 5 lần liên tiếp.</td>
+          <td>curl</td>
+          <td>1 bản ghi duy nhất (hoặc version mới nhất) theo business key</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Bổ sung cho D02.</td>
+        </tr>
+        <tr>
+          <td class="id">D04</td>
+          <td><span class="tag t-data">DATA</span><br><b>Thứ tự / đúng payload</b></td>
+          <td>Ghi N bản có <code>seq</code> tăng; đọc lại so khớp field.</td>
+          <td>script Python</td>
+          <td>100% field khớp (amount, seq, run_id)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Bắt lỗi cắt/làm tròn số.</td>
+        </tr>
+        <tr>
+          <td class="id">D05</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Đối soát count staging vs nguồn</b></td>
+          <td>Chọn 1–2 bảng nhỏ: <code>COUNT(*)</code> Oracle vs Postgres staging (sau sync).</td>
+          <td>SQL 2 phía</td>
+          <td>Khớp trong dung sai đã thống nhất (hoặc MATCH như verify UI)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Bảng khổng lồ: dùng sample/watermark window, không full count mỗi lần.</td>
+        </tr>
+        <tr>
+          <td class="id">D06</td>
+          <td><span class="tag t-data">DATA</span><br><b>Transaction log khớp</b></td>
+          <td>Số giao dịch success trong log ≈ số inbound OK của đợt test.</td>
+          <td>SQL / UI</td>
+          <td>Chênh lệch giải thích được (retry trùng…)</td>
+          <td><span class="pri p2">P2</span></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- G6 -->
+<section id="g6">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">G6</span><h2>Database · Query · Index · Pool</h2></div>
+    <p class="sec-desc">Dùng <code>loadtest/measure_db.sql</code>. Đo <b>trước</b> và <b>trong</b> lúc load (T2/T5) để thấy nghẽn thật.</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr><th>ID</th><th>Chỉ số</th><th>Cách đo</th><th>Công cụ</th><th>Tiêu chí ĐẠT</th><th>Ưu tiên</th><th>Ghi chú</th></tr>
+        <tr>
+          <td class="id">B01</td>
+          <td><span class="tag t-db">DB</span><br><b>Kích thước bảng Top</b></td>
+          <td>Query size + live rows top 20.</td>
+          <td><code>measure_db.sql</code> §1</td>
+          <td>Ghi sổ — biết bảng nào nguy hiểm</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Căn cứ retention/index.</td>
+        </tr>
+        <tr>
+          <td class="id">B02</td>
+          <td><span class="tag t-db">DB</span><br><b>Seq scan trên bảng lớn</b></td>
+          <td>Bảng &gt; 100k dòng mà seq_scan &gt;&gt; idx_scan.</td>
+          <td>measure_db §2</td>
+          <td>Liệt kê ứng viên index; sau khi thêm index, seq_scan giảm</td>
+          <td><span class="pri p0">P0</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">B03</td>
+          <td><span class="tag t-db">DB</span><br><b>Index thừa</b></td>
+          <td>idx_scan = 0 trên index lớn.</td>
+          <td>measure_db §3</td>
+          <td>Danh sách ứng viên gỡ (không gỡ vội unique/PK)</td>
+          <td><span class="pri p2">P2</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">B04</td>
+          <td><span class="tag t-db">DB</span><br><b>Cache hit ratio</b></td>
+          <td>pg_stat_database blks_hit/(hit+read).</td>
+          <td>measure_db §4</td>
+          <td>≥ 99% (nếu thấp kéo dài → thiếu RAM/index)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Laptop RAM thấp có thể &lt; 99% — ghi rõ.</td>
+        </tr>
+        <tr>
+          <td class="id">B05</td>
+          <td><span class="tag t-db">DB</span><br><b>Số kết nối</b></td>
+          <td>Đếm <code>pg_stat_activity</code> lúc nghỉ và lúc T2 100 VU.</td>
+          <td>measure_db §5</td>
+          <td>Connections &lt; 70% max_connections</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Kích hoạt xem xét PgBouncer nếu vượt.</td>
+        </tr>
+        <tr>
+          <td class="id">B06</td>
+          <td><span class="tag t-db">DB</span><br><b>Query chạy lâu</b></td>
+          <td>Query active &gt; 5s trong lúc load.</td>
+          <td>measure_db §6</td>
+          <td>0 query &gt; 30s không giải thích được</td>
+          <td><span class="pri p0">P0</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">B07</td>
+          <td><span class="tag t-db">DB</span><br><b>Top query tốn thời gian</b></td>
+          <td>Bật <code>pg_stat_statements</code>, xếp total_exec_time.</td>
+          <td>measure_db §7</td>
+          <td>Có top 20; mỗi query có kế hoạch (index/matview/rewrite)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Cần extension — làm 1 lần trên DB test.</td>
+        </tr>
+        <tr>
+          <td class="id">B08</td>
+          <td><span class="tag t-db">DB</span><br><b>EXPLAIN ANALYZE query chính</b></td>
+          <td>Chạy EXPLAIN (ANALYZE, BUFFERS) cho 5 query outbound/curated đại diện.</td>
+          <td>psql</td>
+          <td>Ghi trước/sau; không Seq Scan vô cớ trên bảng lớn</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Bám workstream anh Hiếu.</td>
+        </tr>
+        <tr>
+          <td class="id">B09</td>
+          <td><span class="tag t-db">DB</span><br><b>Matview refresh duration</b></td>
+          <td>Đo thời gian REFRESH (hoặc xem log refresher) 1–2 matview.</td>
+          <td>SQL · log</td>
+          <td>Ghi sổ; refresh không block đọc quá lâu (CONCURRENTLY)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Nếu có matview trên môi trường test.</td>
+        </tr>
+        <tr>
+          <td class="id">B10</td>
+          <td><span class="tag t-db">DB</span><br><b>Locks / blocking</b></td>
+          <td>Trong lúc refresh + load, kiểm tra blocked queries.</td>
+          <td>pg_locks · pg_stat_activity</td>
+          <td>Không có blocking kéo dài &gt; 30s ảnh hưởng API</td>
+          <td><span class="pri p1">P1</span></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- G7 -->
+<section id="g7">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">G7</span><h2>JDE Streaming · Watermark · Độ trễ đồng bộ</h2></div>
+    <p class="sec-desc">Đặc thù môi trường test của anh: MDP local SSH/DB tới máy JDE. Đo sync lag là bắt buộc nếu muốn kết luận “tươi vài phút”.</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr><th>ID</th><th>Chỉ số</th><th>Cách đo</th><th>Công cụ</th><th>Tiêu chí ĐẠT</th><th>Ưu tiên</th><th>Ghi chú</th></tr>
+        <tr>
+          <td class="id">J01</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Streaming bật &amp; chạy</b></td>
+          <td>Trang Migration/Streaming: trạng thái enabled, last run, không last_error kéo dài.</td>
+          <td>Admin UI</td>
+          <td>≥1 bảng quan trọng sync thành công trong phiên test</td>
+          <td><span class="pri p0">P0</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">J02</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Sync lag (độ trễ đồng bộ)</b></td>
+          <td>Chèn/đợi dòng mới phía JDE (hoặc quan sát watermark tiến) → đo thời gian đến khi thấy ở staging/outbound.</td>
+          <td>đồng hồ · SQL 2 phía · UI watermark</td>
+          <td>Làn nhanh: ≤ 5 phút · Làn thường: theo cấu hình (ghi sổ)</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Chỉ số then chốt cho R4 “tươi vài phút”.</td>
+        </tr>
+        <tr>
+          <td class="id">J03</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Watermark tiến đều</b></td>
+          <td>Ghi watermark trước/sau 15–30 phút; không đứng yên khi nguồn có dữ liệu mới.</td>
+          <td>UI · SQL streaming_configs</td>
+          <td>Watermark tăng khi nguồn có thay đổi</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Đứng yên + có data mới = FAIL / cảnh báo.</td>
+        </tr>
+        <tr>
+          <td class="id">J04</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Audit watermark ngày</b></td>
+          <td>Liệt kê bảng dùng date/UPMJ; kiểm tra có giá trị ngày tương lai trên cột watermark không.</td>
+          <td>SQL discovery</td>
+          <td>Không dùng date watermark khi đã có sequence; future-date được ghi nhận &amp; loại khỏi watermark</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>P0 latent bug đã biết.</td>
+        </tr>
+        <tr>
+          <td class="id">J05</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Sync dưới tải API</b></td>
+          <td>Chạy T2 (đọc) song song; quan sát J02/J03 có xấu đi không.</td>
+          <td>k6 + UI</td>
+          <td>Lag không vượt quá 2× lúc nghỉ (hoặc vẫn trong SLA 5 phút)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Xem API có “cướp” worker streaming không.</td>
+        </tr>
+        <tr>
+          <td class="id">J06</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Thời gian 1 chu kỳ sync bảng</b></td>
+          <td>Đo duration 1 lần pull+upsert cho bảng nhỏ và 1 bảng lớn (nếu an toàn).</td>
+          <td>log streaming · UI</td>
+          <td>Ghi sổ; bảng lớn không làm API chết (timeout đồng loạt)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Cẩn thận full-reload bảng rất lớn trên test.</td>
+        </tr>
+        <tr>
+          <td class="id">J07</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Upsert / PK sync</b></td>
+          <td>Cập nhật 1 dòng đã sync phía nguồn → chạy sync → kiểm tra staging đổi đúng, không nhân đôi.</td>
+          <td>SQL</td>
+          <td>1 dòng · giá trị mới</td>
+          <td><span class="pri p0">P0</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">J08</td>
+          <td><span class="tag t-jde">JDE</span><br><b>Tải lên Oracle lúc sync</b></td>
+          <td>Quan sát CPU/session Oracle (nếu được quyền) khi tăng chu kỳ làn nhanh.</td>
+          <td>Oracle AWR/session · hỏi DBA</td>
+          <td>Không làm chậm nghiệp vụ JDE rõ rệt (ngưỡng do DBA)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Điều kiện để mở rộng làn nhanh.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- G8 -->
+<section id="g8">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">G8</span><h2>Tài nguyên máy · Ổn định lâu dài</h2></div>
+    <p class="sec-desc">Đo song song mọi bài load. Không có nhóm này thì không biết hệ chậm vì app hay vì máy hết tài nguyên.</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr><th>ID</th><th>Chỉ số</th><th>Cách đo</th><th>Công cụ</th><th>Tiêu chí ĐẠT</th><th>Ưu tiên</th><th>Ghi chú</th></tr>
+        <tr>
+          <td class="id">R01</td>
+          <td><span class="tag t-res">RES</span><br><b>CPU container</b></td>
+          <td>Theo dõi lúc nghỉ / T2 / T5.</td>
+          <td><code>docker stats</code></td>
+          <td>Không kịch 100% kéo dài &gt; 2 phút ở tải mục tiêu</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Ghi % backend vs postgres.</td>
+        </tr>
+        <tr>
+          <td class="id">R02</td>
+          <td><span class="tag t-res">RES</span><br><b>RAM container</b></td>
+          <td>Như trên; đặc biệt soak.</td>
+          <td>docker stats</td>
+          <td>Không tăng đơn điệu (leak); không OOM kill</td>
+          <td><span class="pri p0">P0</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">R03</td>
+          <td><span class="tag t-res">RES</span><br><b>Disk free</b></td>
+          <td>Trước/sau test dài; tốc độ phình volume Postgres.</td>
+          <td>OS · docker system df</td>
+          <td>Còn &gt; 20% trống sau test</td>
+          <td><span class="pri p1">P1</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">R04</td>
+          <td><span class="tag t-res">RES</span><br><b>Restart / OOM count</b></td>
+          <td>Đếm restart container trong phiên test.</td>
+          <td>docker ps -a · events</td>
+          <td>0 restart ngoài chủ đích</td>
+          <td><span class="pri p0">P0</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">R05</td>
+          <td><span class="tag t-res">RES</span><br><b>Laptop host pressure</b></td>
+          <td>Task Manager: CPU/RAM host khi Docker + k6 cùng chạy.</td>
+          <td>Task Manager</td>
+          <td>Ghi sổ — nếu host swap nặng, kết quả load không tin</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Baseline local bị nhiễu nếu máy yếu.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- G9 -->
+<section id="g9">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">G9</span><h2>Bảo mật cơ bản · Cấu hình an toàn (checklist đo được)</h2></div>
+    <p class="sec-desc">Không phải pentest đầy đủ — chỉ các mục “đo/quan sát được trong 1 buổi” liên quan readiness. Chi tiết lỗ hổng không ghi vào bản public.</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr><th>ID</th><th>Chỉ số</th><th>Cách đo</th><th>Công cụ</th><th>Tiêu chí ĐẠT</th><th>Ưu tiên</th><th>Ghi chú</th></tr>
+        <tr>
+          <td class="id">C01</td>
+          <td><span class="tag t-sec">SEC</span><br><b>Secret không default</b></td>
+          <td>Kiểm tra env: JWT secret, mật khẩu admin khởi tạo, khóa mã hóa API key đã đổi so với mặc định tài liệu.</td>
+          <td>checklist thủ công</td>
+          <td>Không còn giá trị mặc định đã biết trong tài liệu nội bộ</td>
+          <td><span class="pri p0">P0</span></td>
+          <td>Không ghi giá trị secret vào báo cáo.</td>
+        </tr>
+        <tr>
+          <td class="id">C02</td>
+          <td><span class="tag t-sec">SEC</span><br><b>API key scope denial</b></td>
+          <td>Key không gán model/scope → gọi API.</td>
+          <td>curl</td>
+          <td>Từ chối</td>
+          <td><span class="pri p0">P0</span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="id">C03</td>
+          <td><span class="tag t-sec">SEC</span><br><b>Rate limit / max limit</b></td>
+          <td>GET outbound limit cực lớn; POST dồn dập vượt mức.</td>
+          <td>curl · k6</td>
+          <td>Bị chặn hoặc cắt về trần an toàn (không đơ máy)</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Nếu chưa có rate limit → ghi GAP.</td>
+        </tr>
+        <tr>
+          <td class="id">C04</td>
+          <td><span class="tag t-sec">SEC</span><br><b>Query timeout</b></td>
+          <td>Tạo/đòi query nặng cố ý; xem có timeout không.</td>
+          <td>SQL · API</td>
+          <td>Có giới hạn thời gian hoặc hủy được; không treo vô hạn</td>
+          <td><span class="pri p1">P1</span></td>
+          <td>Workstream hardening API.</td>
+        </tr>
+        <tr>
+          <td class="id">C05</td>
+          <td><span class="tag t-sec">SEC</span><br><b>CORS / origin</b></td>
+          <td>Kiểm tra cấu hình CORS môi trường test.</td>
+          <td>env · browser network</td>
+          <td>Không mở <code>*</code> trên môi trường giống prod</td>
+          <td><span class="pri p2">P2</span></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- MATRIX -->
+<section id="matrix">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">DoD</span><h2>Ma trận hoàn thành phiên đo baseline</h2></div>
+    <p class="sec-desc">Phiên đo được coi là “đủ để lên plan” khi các ô P0 dưới đây có số liệu (ĐẠT hoặc FAIL có bằng chứng).</p>
+    <div class="card" style="padding:0;overflow:auto">
+      <table class="m">
+        <tr>
+          <th>Nhóm</th>
+          <th>P0 tối thiểu phải có số</th>
+          <th>Output lưu vào báo cáo</th>
+        </tr>
+        <tr>
+          <td><b>G1 Mạng</b></td>
+          <td>N01–N04</td>
+          <td>Bảng RTT/loss/cổng Open</td>
+        </tr>
+        <tr>
+          <td><b>G2 Sống còn</b></td>
+          <td>S01–S04</td>
+          <td>Screenshot/log health + DB + Oracle OK</td>
+        </tr>
+        <tr>
+          <td><b>G3 API</b></td>
+          <td>A01–A05</td>
+          <td>p50/p95 yên tĩnh inbound &amp; outbound</td>
+        </tr>
+        <tr>
+          <td><b>G4 Load</b></td>
+          <td>L01–L04, L09</td>
+          <td>File summary k6 T1/T2/T5</td>
+        </tr>
+        <tr>
+          <td><b>G5 Toàn vẹn</b></td>
+          <td>D01–D03, D05</td>
+          <td>Output verify_loss + count đối soát 1 bảng</td>
+        </tr>
+        <tr>
+          <td><b>G6 DB</b></td>
+          <td>B01, B02, B05, B06, B08</td>
+          <td>Kết quả SQL + 5 EXPLAIN</td>
+        </tr>
+        <tr>
+          <td><b>G7 JDE</b></td>
+          <td>J01–J04, J07</td>
+          <td>Sync lag đo được + kết quả audit watermark</td>
+        </tr>
+        <tr>
+          <td><b>G8 Tài nguyên</b></td>
+          <td>R01, R02, R04</td>
+          <td>Ảnh/log docker stats lúc T2/T5</td>
+        </tr>
+        <tr>
+          <td><b>G9 Bảo mật</b></td>
+          <td>C01, C02</td>
+          <td>Checklist tick (không kèm secret)</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="callout green">
+      <b>Trạng thái DoD P0 (27/08/2026):</b> G1–G6, G8, G9 local <b>đã có số</b> · L07 soak 30m <b>PASS</b>.
+      tipa: T1/T5 PASS; T2 FAIL p95 2.69s. G7 mock Oracle: J01/J02/J03/J06/J07 <b>PASS</b>; J04/J05/J08 <b>N/A</b> (cần JDE thật).
+      Xem <a href="#baseline">Baseline đã đo</a>.
+    </div>
+    <div class="callout">
+      <b>File liên quan:</b>
+      <code>TIPA_Architecture/loadtest/</code> ·
+      <code>benchmark-results/20260827/</code> ·
+      tài liệu quyết định <code>architecture-upgrade-proposal.html</code> (cập nhật sau khi review baseline HTML).
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>Avenue MDP — Danh mục Chỉ số Đo &amp; Tiêu chí Đánh giá · v1.1 baseline</div>
+    <div>68 chỉ số · 9 nhóm · Baseline đo 27/08/2026 · Evidence benchmark-results/20260827/</div>
+  </div>
+</footer>
+
+</body>
+</html>

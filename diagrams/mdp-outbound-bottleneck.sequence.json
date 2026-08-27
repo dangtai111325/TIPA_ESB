@@ -13,7 +13,7 @@
     ]
   },
   "participants": [
-    { "id": "client", "type": "external", "label": "Client", "sublabel": "k6" },
+    { "id": "client", "type": "external", "label": "E2 iHub", "sublabel": "k6" },
     { "id": "caddy", "type": "cloud", "label": "Caddy", "sublabel": ":8457" },
     { "id": "api", "type": "backend", "label": "Backend×1", "sublabel": "API" },
     { "id": "pg", "type": "database", "label": "Postgres", "sublabel": "DB" }

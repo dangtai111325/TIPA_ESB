@@ -73,7 +73,7 @@
     {
       "id": "client",
       "type": "external",
-      "label": "TIPA client",
+      "label": "E2 iHub",
       "sublabel": "đọc outbound",
       "stage": 0,
       "row": 3
